@@ -1,17 +1,28 @@
 import { Layout } from 'components/layout/layout'
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import localFont from 'next/font/local'
+import TelegramProvider from 'providers/TelegramProvider'
 
 import './globals.css'
 
-const geistSans = Geist({
-	variable: '--font-geist-sans',
-	subsets: ['latin']
-})
-
-const geistMono = Geist_Mono({
-	variable: '--font-geist-mono',
-	subsets: ['latin']
+const Gotham = localFont({
+	src: [
+		{
+			path: '../fonts/Gotham-Book.woff2',
+			weight: '400',
+			style: 'normal'
+		},
+		{
+			path: '../fonts/Gotham-Medium.woff2',
+			weight: '500',
+			style: 'normal'
+		},
+		{
+			path: '../fonts/Gotham-bold.woff2',
+			weight: '700',
+			style: 'normal'
+		}
+	]
 })
 
 export const metadata: Metadata = {
@@ -26,8 +37,10 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang='en'>
-			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-				<Layout>{children}</Layout>
+			<body className={`${Gotham.className} antialiased`}>
+				<TelegramProvider>
+					<Layout>{children}</Layout>
+				</TelegramProvider>
 			</body>
 		</html>
 	)
