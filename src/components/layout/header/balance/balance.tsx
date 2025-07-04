@@ -17,7 +17,7 @@ export const Balance = ({ balance }: BalanceProps) => {
 					height={16}
 					alt='flame'
 				/>
-				<span>{formattedBalance}</span>
+				<span className='text-sm'>{formattedBalance}</span>
 			</div>
 
 			<div className='flex items-center justify-center w-10 h-10 rounded-full bg-blue-bg-transparency-12'>
