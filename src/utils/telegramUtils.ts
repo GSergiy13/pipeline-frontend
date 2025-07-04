@@ -30,8 +30,7 @@ export const initializeTelegram = () => {
 		tg.ready()
 		const user = tg.initDataUnsafe?.user || null
 
-		console.log('Telegram WebApp initialized:', tg)
-
+		console.log('Telegram WebApp initialized:', user)
 		if (user?.username) {
 			// dispatch(updateUserName(user.username))
 		}
