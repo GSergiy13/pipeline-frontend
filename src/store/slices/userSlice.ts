@@ -6,8 +6,6 @@ export interface UserState {
 		name: string | null
 		photo: string | null
 		username: string | null
-		languageCode: string | null
-		allowPm: boolean
 	} | null
 }
 
@@ -27,20 +25,15 @@ const userSlice = createSlice({
 				last_name?: string
 				username?: string
 				photo_url?: string
-				language_code?: string
-				allows_write_to_pm?: boolean
 			}>
 		) {
-			const { id, first_name, last_name, username, photo_url, language_code, allows_write_to_pm } =
-				action.payload
+			const { id, first_name, last_name, username, photo_url } = action.payload
 
 			state.user = {
 				id,
 				name: [first_name, last_name].filter(Boolean).join(' '),
 				username: username || null,
-				photo: photo_url || null,
-				languageCode: language_code || null,
-				allowPm: !!allows_write_to_pm
+				photo: photo_url || null
 			}
 		},
 		clearUserData(state) {
