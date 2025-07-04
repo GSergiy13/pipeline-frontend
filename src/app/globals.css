@@ -26,5 +26,5 @@ body {
 	color: var(--foreground);
 	font-family: Gotham, sans-serif;
 
-	padding-top: calc(var(--tg-safe-area-inset-top) + 20px);
+	padding-top: calc(var(--tg-safe-area-inset-top) + 32px);
 }
