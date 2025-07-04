@@ -16,7 +16,6 @@ export const getTelegram = () => {
 
 export const isMobileDevice = (): boolean => {
 	if (typeof navigator === 'undefined') return false
-
 	return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 }
 
@@ -25,9 +24,11 @@ export const initializeTelegram = (dispatch: Dispatch<any>) => {
 
 	if (tg) {
 		tg.ready()
-		const user = tg.initDataUnsafe?.user || null
+		const user = tg.initDataUnsafe?.user
 
-		dispatch(setUserData(user))
+		if (user) {
+			dispatch(setUserData(user))
+		}
 
 		tg.expand()
 

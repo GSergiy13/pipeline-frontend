@@ -1,43 +1,53 @@
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
 
-export interface UserItem {
-	key: string
-	value: string | number
-}
-
-interface UserState {
-	data: UserItem[] | null
+export interface UserState {
+	user: {
+		id: number | null
+		name: string | null
+		photo: string | null
+		username: string | null
+		languageCode: string | null
+		allowPm: boolean
+	} | null
 }
 
 const initialState: UserState = {
-	data: null
+	user: null
 }
 
 const userSlice = createSlice({
 	name: 'user',
 	initialState,
 	reducers: {
-		setUserData(state, action: PayloadAction<UserItem[]>) {
-			state.data = action.payload
+		setUserData(
+			state,
+			action: PayloadAction<{
+				id: number
+				first_name: string
+				last_name?: string
+				username?: string
+				photo_url?: string
+				language_code?: string
+				allows_write_to_pm?: boolean
+			}>
+		) {
+			const { id, first_name, last_name, username, photo_url, language_code, allows_write_to_pm } =
+				action.payload
+
+			state.user = {
+				id,
+				name: [first_name, last_name].filter(Boolean).join(' '),
+				username: username || null,
+				photo: photo_url || null,
+				languageCode: language_code || null,
+				allowPm: !!allows_write_to_pm
+			}
 		},
 		clearUserData(state) {
-			state.data = null
-		},
-		updateUserItem(state, action: PayloadAction<{ key: string; value: string | number }>) {
-			if (!Array.isArray(state.data)) return
-
-			const index = state.data.findIndex(item => item.key === action.payload.key)
-			if (index !== -1) {
-				state.data[index].value = action.payload.value
-			} else {
-				state.data.push({
-					key: action.payload.key,
-					value: action.payload.value
-				})
-			}
+			state.user = null
 		}
 	}
 })
 
-export const { setUserData, clearUserData, updateUserItem } = userSlice.actions
+export const { setUserData, clearUserData } = userSlice.actions
 export default userSlice.reducer
