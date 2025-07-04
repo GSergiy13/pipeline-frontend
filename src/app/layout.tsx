@@ -41,6 +41,8 @@ export default function RootLayout({
 				<TelegramProvider>
 					<Layout>{children}</Layout>
 				</TelegramProvider>
+
+				<script src='https://telegram.org/js/telegram-web-app.js?58'></script>
 			</body>
 		</html>
 	)
