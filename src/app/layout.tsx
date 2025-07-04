@@ -18,7 +18,7 @@ const Gotham = localFont({
 			style: 'normal'
 		},
 		{
-			path: '../fonts/Gotham-bold.woff2',
+			path: '../fonts/Gotham-Bold.woff2',
 			weight: '700',
 			style: 'normal'
 		}
