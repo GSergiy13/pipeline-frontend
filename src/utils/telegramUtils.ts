@@ -24,6 +24,8 @@ export const isMobileDevice = (): boolean => {
 export const initializeTelegram = () => {
 	const tg = getTelegram()
 
+	console.log('Initializing Telegram WebApp...')
+
 	if (tg) {
 		tg.ready()
 		const user = tg.initDataUnsafe?.user || null
