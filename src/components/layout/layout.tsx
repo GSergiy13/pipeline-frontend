@@ -1,3 +1,5 @@
+import { TelegramInitializer } from 'components/TelegramInitializer'
+
 import { Header } from './header/header'
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -5,6 +7,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 		<>
 			<Header />
 			<main>{children}</main>
+
+			<TelegramInitializer />
 		</>
 	)
 }

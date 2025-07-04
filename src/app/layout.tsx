@@ -1,7 +1,7 @@
 import { Layout } from 'components/layout/layout'
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import TelegramProvider from 'providers/TelegramProvider'
+import { AppProviders } from 'providers/AppProviders'
 
 import './globals.css'
 
@@ -38,9 +38,9 @@ export default function RootLayout({
 	return (
 		<html lang='en'>
 			<body className={`${Gotham.className} antialiased`}>
-				<TelegramProvider>
+				<AppProviders>
 					<Layout>{children}</Layout>
-				</TelegramProvider>
+				</AppProviders>
 
 				<script src='https://telegram.org/js/telegram-web-app.js?58'></script>
 			</body>
