@@ -1,5 +1,6 @@
 'use client'
 
+import cn from 'clsx'
 import type { ModelGenerateItem } from 'constants/modelgenerate.const'
 import Image from 'next/image'
 import { useState } from 'react'
@@ -38,7 +39,9 @@ export const DropDown = ({ data }: DropDownProps) => {
 				/>
 				<span className='text-sm'>{active.name}</span>
 				<Image
-					className='ml-auto'
+					className={cn('ml-auto transition-all duration-300', {
+						'rotate-180': show
+					})}
 					src={'/icons/dropdown.svg'}
 					width={24}
 					height={42}
