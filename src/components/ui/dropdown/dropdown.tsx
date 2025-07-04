@@ -4,6 +4,7 @@ import cn from 'clsx'
 import type { ModelGenerateItem } from 'constants/modelgenerate.const'
 import Image from 'next/image'
 import { useState } from 'react'
+import { handleVibrate } from 'utils/handleVibrate'
 
 import { DropDownList } from './dropdownList'
 
@@ -17,11 +18,13 @@ export const DropDown = ({ data }: DropDownProps) => {
 
 	const toggleShow = () => {
 		setShow(!show)
+		handleVibrate('light', 100)
 	}
 
 	const handleSelect = (item: ModelGenerateItem) => {
 		setActive(item)
 		setShow(false)
+		handleVibrate('light', 100)
 	}
 
 	return (
