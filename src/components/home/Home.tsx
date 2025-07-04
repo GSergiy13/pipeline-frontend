@@ -6,6 +6,8 @@ import type { RootState } from 'store/store'
 export const HomePage = () => {
 	const userData = useSelector((state: RootState) => state.user.data)
 
+	console.log('User Data:', userData)
+
 	return (
 		<div className='w-full h-[100vh] flex flex-col items-center justify-center'>
 			<h1>Welcome to the Home Page</h1>
@@ -14,13 +16,6 @@ export const HomePage = () => {
 			{userData && (
 				<div className='mt-4'>
 					<h2>User Data:</h2>
-					<ul>
-						{userData.map(item => (
-							<li key={item.key}>
-								<strong>{item.key}:</strong> {item.value}
-							</li>
-						))}
-					</ul>
 				</div>
 			)}
 		</div>
