@@ -3,6 +3,7 @@
 import cn from 'clsx'
 import Image from 'next/image'
 import { useState } from 'react'
+import { handleVibrate } from 'utils/handleVibrate'
 import { transformBalance } from 'utils/transform-balance'
 
 interface BalanceProps {
@@ -15,6 +16,7 @@ export const Balance = ({ balance }: BalanceProps) => {
 
 	const handleMouseEnter = () => {
 		setShow(!show)
+		handleVibrate('light', 100)
 	}
 
 	return (
