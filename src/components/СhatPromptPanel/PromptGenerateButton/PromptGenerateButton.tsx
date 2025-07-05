@@ -16,7 +16,7 @@ export const PromptGenerateButton = () => {
 				<span className='text-sm text-primary-blue font-medium'>40</span>
 			</div>
 
-			<i className='w-[1px] h-full bg-primary-blue/40'></i>
+			<i className='w-[1px] h-[18px] bg-primary-blue/40'></i>
 
 			<div className='flex items-center gap-1'>
 				<span className='text-sm text-primary-blue font-medium'>Generated</span>
