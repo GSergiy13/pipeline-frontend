@@ -5,7 +5,7 @@ export const UserInfoPanel = () => {
 	const userData = useSelector((state: RootState) => state.user)
 
 	return (
-		<div className='flex gap-2 items-center justify-between mb-8'>
+		<div className='flex gap-2 items-center justify-between mb-8 px-3'>
 			<span className='text-wight-bg-transparency-60 text-sm'>
 				{userData.user?.name || 'User Name'}
 			</span>
