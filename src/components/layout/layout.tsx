@@ -1,7 +1,7 @@
 import { FixTelegramViewport } from 'components/FixTelegramViewport'
 import { TelegramInitializer } from 'components/TelegramInitializer'
 
-import { Header } from './header/header'
+import { Header } from './Header/Header'
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
 	return (

@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { handleVibrate } from 'utils/handleVibrate'
 
-import { DropDownList } from './dropdownList'
+import { DropDownList } from './DropDownList'
 
 interface DropDownProps {
 	data: ModelGenerateItem[]

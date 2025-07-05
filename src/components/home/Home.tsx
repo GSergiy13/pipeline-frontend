@@ -1,15 +1,16 @@
 'use client'
 
+import { ChatPromptPanel } from 'components/СhatPromptPanel/СhatPromptPanel'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
 
-import { ButtonBasic } from '@/ui/buttonBasic/buttonBasic'
+import { ButtonBasic } from '@/ui/ButtonBasic/ButtonBasic'
 
 export const HomePage = () => {
 	const userData = useSelector((state: RootState) => state.user)
 
 	return (
-		<div className='relative w-[calc(100vw-8px)] px-3 py-4 mx-auto h-[85vh] flex flex-col items-center justify-center bg-chat-gradient rounded-t-[32px]'>
+		<div className='relative w-[calc(100vw-8px)] flex flex-col px-3 py-4 mx-auto h-[85vh] flex flex-col items-center justify-center bg-chat-gradient rounded-t-[32px]'>
 			{userData.user ? (
 				<div className='mt-4'>
 					<h2>User Information:</h2>
@@ -26,6 +27,8 @@ export const HomePage = () => {
 				className='mt-5'
 				onClick={() => console.log('Button clicked!')}
 			/>
+
+			<ChatPromptPanel />
 		</div>
 	)
 }
