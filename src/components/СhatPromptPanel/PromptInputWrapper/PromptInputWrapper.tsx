@@ -1,5 +1,7 @@
 import { useRef, useState } from 'react'
 
+import { PromptSettingsRow } from '../PromptSettingsRow/PromptSettingsRow'
+
 import { ExpandInputButton } from './ExpandInputButton/ExpandInputButton'
 import { PromptInputField } from './PromptInputField/PromptInputField'
 
@@ -19,7 +21,7 @@ export const PromptInputWrapper = () => {
 				onExpand={handleExpand}
 				isExpanded={isExpanded}
 			/>
-			filters
+			<PromptSettingsRow />
 		</div>
 	)
 }
