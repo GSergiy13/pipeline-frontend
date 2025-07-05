@@ -49,7 +49,7 @@ export const Balance = ({ balance }: BalanceProps) => {
 
 			<div
 				className={cn(
-					'absolute top-12 right-0 min-w-[215px]  flex flex-col gap-3 p-3 rounded-3xl bg-wight-bg-transparency-04 backdrop-blur-[90px] transition-all duration-300 ease-in-out',
+					'absolute top-12 right-0 min-w-[215px]  flex flex-col gap-3 p-3 rounded-3xl bg-wight-bg-transparency-04 backdrop-blur-[90px] transition-all duration-300 ease-in-out z-20',
 					{
 						'opacity-0 pointer-events-none -translate-y-2': !show,
 						'opacity-100 pointer-events-auto translate-y-0': show

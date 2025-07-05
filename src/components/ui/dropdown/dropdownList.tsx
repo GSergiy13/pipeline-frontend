@@ -43,15 +43,17 @@ export const DropDownList = ({ data, show, active, handleSelect }: DropDownListP
 					<div className='flex flex-col gap-1'>
 						<span className='text-sm'>{item.name}</span>
 
-						<div className='flex items-center gap-0.5'>
-							<Image
-								src={'/icons/flame.svg'}
-								width={12}
-								height={12}
-								alt='Model logo'
-							/>
-							<span className='text-xs'>{item.price}</span>
-						</div>
+						{item.price !== 0 && (
+							<div className='flex items-center gap-0.5'>
+								<Image
+									src={'/icons/flame.svg'}
+									width={12}
+									height={12}
+									alt='Model logo'
+								/>
+								<span className='text-xs'>{item.price}</span>
+							</div>
+						)}
 					</div>
 				</li>
 			))}
