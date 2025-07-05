@@ -7,7 +7,6 @@ export const ChatPromptPanel = () => {
 		<div className='absolute bottom-6 left-0 flex flex-col mt-auto w-full z-40 transition-all duration-150'>
 			<UserInfoPanel />
 			<PromptInputWrapper />
-
 			<PromptGenerateButton />
 		</div>
 	)
