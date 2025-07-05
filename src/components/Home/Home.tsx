@@ -4,7 +4,7 @@ import { ChatPromptPanel } from 'components/СhatPromptPanel/СhatPromptPanel'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
 
-import { ButtonBasic } from '@/ui/ButtonBasic/ButtonBasic'
+import { ButtonBasic } from '@/ui/ButtonBasic/buttonBasic'
 
 export const HomePage = () => {
 	const userData = useSelector((state: RootState) => state.user)
