@@ -1,11 +1,19 @@
 import Image from 'next/image'
 
-export const ExpandInputButton = () => {
+interface ExpandInputButtonProps {
+	onExpand: () => void
+	isExpanded: boolean
+}
+
+export const ExpandInputButton = ({ onExpand, isExpanded }: ExpandInputButtonProps) => {
 	return (
-		<button className='absolute right-2 top-2 bg-transparent border-none'>
+		<button
+			onClick={onExpand}
+			className='absolute right-2 top-2 bg-transparent border-none'
+		>
 			<Image
-				src={'/icons/expand.svg'}
-				alt='Expand input'
+				src={isExpanded ? '/icons/minimize.svg' : '/icons/expand.svg'}
+				alt={isExpanded ? 'minimize input' : 'Expand input'}
 				width={20}
 				height={20}
 			/>

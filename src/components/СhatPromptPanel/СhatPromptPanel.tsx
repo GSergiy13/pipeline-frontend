@@ -4,7 +4,7 @@ import { UserInfoPanel } from './UserInfoPanel/UserInfoPanel'
 
 export const ChatPromptPanel = () => {
 	return (
-		<div className='flex flex-col mt-auto w-full'>
+		<div className=' absolute bottom-0 left-0 flex flex-col mt-auto w-full z-40 transition-all duration-150'>
 			<UserInfoPanel />
 			<PromptInputWrapper />
 
