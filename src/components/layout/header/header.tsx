@@ -1,9 +1,9 @@
 import { modelgenerate } from 'constants/modelgenerate.const'
 
-import { DropDown } from '@/ui/DropDown/DropDown'
+import { DropDown } from '@/ui/DropDown/dropdown'
 
-import { Balance } from './Balance/Balance'
-import { MarqueeText } from './MarqueeText/MarqueeText'
+import { Balance } from './Balance/balance'
+import { MarqueeText } from './MarqueeText/marqueetext'
 
 export const Header = () => {
 	return (
