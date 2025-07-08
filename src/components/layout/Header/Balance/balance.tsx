@@ -3,6 +3,7 @@
 import cn from 'clsx'
 import Image from 'next/image'
 import { useState } from 'react'
+import { handleVibrate } from 'utils/handleVibrate'
 import { transformBalance } from 'utils/transform-balance'
 
 interface BalanceProps {
@@ -13,10 +14,10 @@ export const Balance = ({ balance }: BalanceProps) => {
 	const [show, setShow] = useState(false)
 	const formattedBalance = transformBalance(balance)
 
-	// const handleMouseEnter = () => {
-	// 	setShow(!show)
-	// 	handleVibrate('light', 100)
-	// }
+	const handleMouseEnter = () => {
+		setShow(!show)
+		handleVibrate('light', 100)
+	}
 
 	return (
 		<div className='relative flex items-center gap-1'>
@@ -32,7 +33,7 @@ export const Balance = ({ balance }: BalanceProps) => {
 
 			<div
 				className='flex items-center justify-center w-10 h-10 rounded-full bg-blue-bg-transparency-12'
-				// onClick={handleMouseEnter}
+				onClick={handleMouseEnter}
 			>
 				<Image
 					className={cn('transition-transform duration-300 ease-in-out', {
