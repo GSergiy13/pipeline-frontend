@@ -1,6 +1,8 @@
 import type { OptionSelectType } from 'constants/optionselect.const'
 import Image from 'next/image'
 
+import { OptionSelectList } from './OptionSelectList'
+
 interface OptionSelectProps {
 	data: OptionSelectType
 }
@@ -21,7 +23,7 @@ export const OptionSelect = ({ data }: OptionSelectProps) => {
 					/>
 					<span>{group.options[0].name}</span>
 
-					{/* <OptionSelectList group={group} /> */}
+					<OptionSelectList group={group} />
 				</div>
 			))}
 		</>

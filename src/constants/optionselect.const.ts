@@ -38,7 +38,7 @@ export const OPTION_SELECT = {
 		options: [
 			{ id: 'k2', name: '480p', value: '480' },
 			{ id: 'l3', name: '720p', value: '720' },
-			{ id: 'l3', name: '1080p', value: '1080' },
+			{ id: 'l5', name: '1080p', value: '1080' },
 			{ id: 'd2', name: '3K', value: '3000' }
 		]
 	}
