@@ -18,32 +18,43 @@ export const PromptInputField = forwardRef<Imperative, Props>(
 
 		const [isExpanded, setIsExpanded] = useState(false)
 		const [height, setHeight] = useState<number>(minHeight)
-		const [keyboardVisible, setKeyboardVisible] = useState(false)
 
-		/* -------------------------------------------------- helpers */
-		const getKeyboardHeight = () => {
-			const vv = window.visualViewport
-			if (!vv) return 0
-			const viewportBottom = vv.height + vv.offsetTop
-			return Math.max(0, window.innerHeight - viewportBottom)
-		}
+		/* ---------- helpers ---------- */
+		const isKeyboardOpen = (vv: VisualViewport) => window.innerHeight - vv.height > 100 // ≈ 100 px — поріг безпечний для всіх iPhone
 
-		/* -------------------------------------------------- viewport listener */
+		const getStableViewport = (() => {
+			let raf = 0
+			let latest: VisualViewport | null = window.visualViewport ?? null
+			return (cb: (vv: VisualViewport) => void) => {
+				cancelAnimationFrame(raf)
+				raf = requestAnimationFrame(() => {
+					latest = window.visualViewport ?? latest
+					if (latest) cb(latest)
+				})
+			}
+		})()
+
+		/* ---------- viewport listener ---------- */
 		useEffect(() => {
 			const handleGeometry = () => {
-				const kbHeight = getKeyboardHeight()
-				setKeyboardVisible(kbHeight > window.innerHeight * 0.15)
+				getStableViewport(vv => {
+					const keyboard = isKeyboardOpen(vv)
 
-				if (kbHeight && document.activeElement === textareaRef.current && !isExpanded) {
-					setHeight(Math.min((window.visualViewport?.height ?? maxHeight) * 0.4, maxHeight))
-				}
+					if (keyboard && document.activeElement === textareaRef.current && !isExpanded) {
+						setHeight(Math.min(vv.height * 0.4, maxHeight))
+					}
+
+					if (!keyboard && !isExpanded) {
+						setHeight(minHeight)
+					}
+				})
 			}
 
 			window.visualViewport?.addEventListener('geometrychange', handleGeometry)
 			return () => window.visualViewport?.removeEventListener('geometrychange', handleGeometry)
-		}, [isExpanded, maxHeight])
+		}, [isExpanded, maxHeight, minHeight])
 
-		/* -------------------------------------------------- textarea auto-grow */
+		/* ---------- textarea auto-grow ---------- */
 		const autoGrow = () => {
 			const el = textareaRef.current
 			if (!el || isExpanded) return
@@ -51,7 +62,7 @@ export const PromptInputField = forwardRef<Imperative, Props>(
 			setHeight(Math.min(Math.max(el.scrollHeight, minHeight), maxHeight))
 		}
 
-		/* -------------------------------------------------- imperative handle */
+		/* ---------- imperative handle ---------- */
 		useImperativeHandle(ref, () => ({
 			toggleExpand: () => {
 				handleVibrate('light', 100)
@@ -59,15 +70,13 @@ export const PromptInputField = forwardRef<Imperative, Props>(
 					const next = !prev
 					onToggle?.(next)
 					setHeight(next ? maxExpandedHeight : minHeight)
-					if (!next) {
-						requestAnimationFrame(autoGrow)
-					}
+					if (!next) requestAnimationFrame(autoGrow)
 					return next
 				})
 			}
 		}))
 
-		/* -------------------------------------------------- render */
+		/* ---------- render ---------- */
 		return (
 			<motion.div
 				animate={{ height }}
@@ -80,12 +89,8 @@ export const PromptInputField = forwardRef<Imperative, Props>(
 					rows={1}
 					placeholder='Составьте промпт запрос'
 					className='w-full resize-none pl-2 pr-2 py-1 text-sm text-white placeholder:text-white/40
-                     bg-transparent focus:outline-none focus:ring-0'
-					style={{
-						height: 'auto',
-						maxHeight,
-						overflowY: 'auto'
-					}}
+                       bg-transparent focus:outline-none focus:ring-0'
+					style={{ height: 'auto', maxHeight, overflowY: 'auto' }}
 					onInput={autoGrow}
 					onFocus={autoGrow}
 					onBlur={() => !isExpanded && setHeight(minHeight)}
