@@ -1,4 +1,7 @@
+import { OPTION_SELECT } from 'constants/optionselect.const'
 import Image from 'next/image'
+
+import { OptionSelect } from '@/ui/OptionSelect/OptionSelect'
 
 interface PromptSettingsRowProps {
 	onFileSelect: (file: File) => void
@@ -6,7 +9,6 @@ interface PromptSettingsRowProps {
 
 export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 	const handleAttachClick = () => {
-		// Створюємо input елемент для вибору файлу
 		const input = document.createElement('input')
 		input.type = 'file'
 		input.accept = 'image/*'
@@ -33,9 +35,8 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 				/>
 			</button>
 
-			<div className='flex items-center gap-1'>
-				{/* <OptionSelect data={OPTION_SELECT} /> */}
-				filters
+			<div className=' flex items-center gap-1'>
+				<OptionSelect data={OPTION_SELECT} />
 			</div>
 		</div>
 	)
