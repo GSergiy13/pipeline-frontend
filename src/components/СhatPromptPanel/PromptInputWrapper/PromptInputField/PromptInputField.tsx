@@ -1,3 +1,5 @@
+'use client'
+
 import { motion, useWillChange } from 'framer-motion'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { handleVibrate } from 'utils/handleVibrate'
@@ -20,22 +22,30 @@ export const PromptInputField = forwardRef<Imperative, Props>(
 		const [height, setHeight] = useState<number>(minHeight)
 
 		/* ---------- helpers ---------- */
-		const isKeyboardOpen = (vv: VisualViewport) => window.innerHeight - vv.height > 100 // ≈ 100 px — поріг безпечний для всіх iPhone
+		const isKeyboardOpen = (vv: VisualViewport) =>
+			typeof window !== 'undefined' && window.innerHeight - vv.height > 100 // >100 px — гарантовано клавіатура
 
-		const getStableViewport = (() => {
+		/**
+		 * Повертає "стабілізований" VisualViewport (кадр через requestAnimationFrame),
+		 * але викликає колбек лише у браузері.
+		 */
+		const getStableViewport = (cb: (vv: VisualViewport) => void) => {
+			if (typeof window === 'undefined' || !window.visualViewport) return
+
 			let raf = 0
-			let latest: VisualViewport | null = window.visualViewport ?? null
-			return (cb: (vv: VisualViewport) => void) => {
-				cancelAnimationFrame(raf)
-				raf = requestAnimationFrame(() => {
-					latest = window.visualViewport ?? latest
-					if (latest) cb(latest)
-				})
+			const exec = () => {
+				const vv = window.visualViewport
+				if (vv) cb(vv)
 			}
-		})()
+
+			cancelAnimationFrame(raf)
+			raf = window.requestAnimationFrame(exec)
+		}
 
 		/* ---------- viewport listener ---------- */
 		useEffect(() => {
+			if (typeof window === 'undefined' || !window.visualViewport) return
+
 			const handleGeometry = () => {
 				getStableViewport(vv => {
 					const keyboard = isKeyboardOpen(vv)
@@ -44,14 +54,19 @@ export const PromptInputField = forwardRef<Imperative, Props>(
 						setHeight(Math.min(vv.height * 0.4, maxHeight))
 					}
 
+					// коли клавіатура закрилась і ми не у розгорнутому режимі
 					if (!keyboard && !isExpanded) {
 						setHeight(minHeight)
 					}
 				})
 			}
 
-			window.visualViewport?.addEventListener('geometrychange', handleGeometry)
-			return () => window.visualViewport?.removeEventListener('geometrychange', handleGeometry)
+			window.visualViewport.addEventListener('geometrychange', handleGeometry)
+			return () => {
+				if (window.visualViewport) {
+					window.visualViewport.removeEventListener('geometrychange', handleGeometry)
+				}
+			}
 		}, [isExpanded, maxHeight, minHeight])
 
 		/* ---------- textarea auto-grow ---------- */
@@ -89,7 +104,7 @@ export const PromptInputField = forwardRef<Imperative, Props>(
 					rows={1}
 					placeholder='Составьте промпт запрос'
 					className='w-full resize-none pl-2 pr-2 py-1 text-sm text-white placeholder:text-white/40
-                       bg-transparent focus:outline-none focus:ring-0'
+					             bg-transparent focus:outline-none focus:ring-0'
 					style={{ height: 'auto', maxHeight, overflowY: 'auto' }}
 					onInput={autoGrow}
 					onFocus={autoGrow}
