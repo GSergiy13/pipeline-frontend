@@ -9,7 +9,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 		<>
 			<div className='flex flex-col min-h-screen'>
 				<Header />
-				<main className='flex flex-grow w-full h-full'>{children}</main>
+				<main className='flex flex-grow w-full h-full px-1'>{children}</main>
 				<Footer />
 			</div>
 

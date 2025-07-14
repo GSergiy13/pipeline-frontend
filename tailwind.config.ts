@@ -23,6 +23,9 @@ export default {
 			backgroundImage: {
 				'chat-gradient':
 					'linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(15, 15, 20, 0.00) 100%)'
+			},
+			width: {
+				'vw-8': 'calc(100vw - 8px)'
 			}
 		}
 	},

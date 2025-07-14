@@ -39,6 +39,6 @@ body {
 
 @media screen and (max-width: 640px) {
 	.tg-header {
-		padding-top: calc(var(--tg-safe-area-inset-top) + 44px);
+		padding-top: calc(var(--tg-safe-area-inset-top) + 32px);
 	}
 }
