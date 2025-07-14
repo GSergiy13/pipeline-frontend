@@ -28,6 +28,9 @@ export default {
 			width: {
 				'vw-8': 'calc(100vw - 8px)'
 			}
+		},
+		screens: {
+			mobile: { max: '580px' }
 		}
 	},
 	plugins: []
