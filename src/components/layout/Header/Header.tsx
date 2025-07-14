@@ -7,7 +7,7 @@ import { MarqueeText } from './MarqueeText/MarqueeText'
 
 export const Header = () => {
 	return (
-		<header className='w-full py-3'>
+		<header className='w-full pb-3 tg-header'>
 			<div className='flex flex-col '>
 				<div className=' w-full flex items-center justify-between px-3 mb-2'>
 					<DropDown data={modelgenerate} />

@@ -24,6 +24,13 @@ html {
 	overscroll-behavior: none;
 }
 
+html,
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
 body {
 	background: var(--background);
 	color: var(--foreground);
@@ -31,7 +38,7 @@ body {
 }
 
 @media screen and (max-width: 640px) {
-	body {
-		padding-top: calc(var(--tg-safe-area-inset-top) + 32px);
+	.tg-header {
+		padding-top: calc(var(--tg-safe-area-inset-top) + 44px);
 	}
 }
