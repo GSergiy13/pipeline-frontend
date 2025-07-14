@@ -34,7 +34,7 @@ export const StatusPanel = ({ state }: { state: StatusState }) => {
 			<div className='h-full flex flex-col items-center text-center p-4 w-full max-w-[680px]'>
 				<GuidesCarousel />
 
-				<div className='flex flex-col items-center justify-center gap-3 text-center p-4 mt-8'>
+				<div className='flex flex-col items-center justify-center gap-3 text-center p-4 mt-4'>
 					<Spinner />
 
 					{state.averageWait && (
