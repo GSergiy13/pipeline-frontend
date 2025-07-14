@@ -1,8 +1,10 @@
 'use client'
 
+import { GuidesCarousel } from 'components/GuidesCarousel/GuidesCarousel'
 import Image from 'next/image'
 
 import { ButtonBasic } from '@/ui/ButtonBasic/buttonBasic'
+import { Spinner } from '@/ui/Spinner/Spinner'
 
 type StatusState =
 	| { type: 'insufficient_funds' }
@@ -29,13 +31,20 @@ export const StatusPanel = ({ state }: { state: StatusState }) => {
 
 	if (state.type === 'loading') {
 		return (
-			<div className='flex flex-col items-center justify-center gap-2 text-center p-4'>
-				<div className='animate-spin h-8 w-8 border-2 border-white/30 border-t-transparent rounded-full' />
-				{state.averageWait && (
-					<div className='text-white/60 text-sm'>Среднее время ожидания {state.averageWait}.</div>
-				)}
-				<div className='text-white text-base font-medium'>
-					Генерация {state.progress}/{state.total}
+			<div className='h-full flex flex-col items-center text-center p-4 w-full max-w-[680px]'>
+				<GuidesCarousel />
+
+				<div className='flex flex-col items-center justify-center gap-3 text-center p-4 mt-14'>
+					<Spinner />
+
+					{state.averageWait && (
+						<div className='text-white/60  font-bold max-w-[180px]'>
+							Среднее время ожидания {state.averageWait}.
+						</div>
+					)}
+					<div className='text-white'>
+						Генерация {state.progress}/{state.total}
+					</div>
 				</div>
 			</div>
 		)

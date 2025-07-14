@@ -5,23 +5,21 @@ import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-interface VideoPlayerProps {
+import { DownloadButton } from '@/ui/DownloadButton/DownloadButton'
+import VideoPlayer from '@/ui/VideoPlayer/VideoPlayer'
+
+interface MediaModalProps {
 	src: string
 	isOpen: boolean
 	onClose: () => void
 }
 
-export const VideoPlayer = ({ src, isOpen, onClose }: VideoPlayerProps) => {
+export const MediaModal = ({ src, isOpen, onClose }: MediaModalProps) => {
 	const [mounted, setMounted] = useState(false)
 
 	useEffect(() => {
 		setMounted(true)
-		if (isOpen) {
-			document.body.style.overflow = 'hidden'
-		} else {
-			document.body.style.overflow = ''
-		}
-
+		document.body.style.overflow = isOpen ? 'hidden' : ''
 		return () => {
 			document.body.style.overflow = ''
 		}
@@ -31,7 +29,7 @@ export const VideoPlayer = ({ src, isOpen, onClose }: VideoPlayerProps) => {
 
 	return createPortal(
 		<div
-			className='fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-lg'
+			className='fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-lg'
 			onClick={onClose}
 		>
 			<motion.div
@@ -42,21 +40,17 @@ export const VideoPlayer = ({ src, isOpen, onClose }: VideoPlayerProps) => {
 				className='relative w-full h-full px-4 flex items-center justify-center'
 				onClick={e => e.stopPropagation()}
 			>
-				<div className='absolute gap-2 top-5 w-full px-4 flex items-center'>
-					<div className='py-2 px-3 flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/5'>
-						<Image
-							src={'/icons/download.svg'}
-							alt='Download Icon'
-							width={16}
-							height={16}
-							className='pointer-events-auto'
-						/>
-					</div>
+				<div className='absolute gap-2 top-5 w-full px-4 flex items-center z-40'>
+					<DownloadButton
+						className='relative'
+						href='/video/scen_1.mp4'
+						fileName='Hailuo02.mp4'
+					/>
 
 					<div className='py-2 px-3 flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/5'>
 						<Image
 							src={'/icons/grow.svg'}
-							alt='Download Icon'
+							alt='Grow'
 							width={16}
 							height={16}
 							className='pointer-events-auto'
@@ -81,12 +75,7 @@ export const VideoPlayer = ({ src, isOpen, onClose }: VideoPlayerProps) => {
 					</button>
 				</div>
 
-				<video
-					src={src}
-					controls
-					autoPlay
-					className='rounded-2xl w-full h-full max-h-[90vh] object-contain'
-				/>
+				<VideoPlayer src={src} />
 			</motion.div>
 		</div>,
 		document.body

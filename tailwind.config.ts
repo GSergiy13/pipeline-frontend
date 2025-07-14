@@ -23,12 +23,23 @@ export default {
 			backgroundImage: {
 				'chat-gradient':
 					'linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, rgba(15, 15, 20, 0.00) 100%)',
-				'video-gradient': 'linear-gradient(180deg, rgba(15, 15, 20, 0.00) 0%, #0F0F14 100%)'
+				'video-gradient': 'linear-gradient(180deg, rgba(15, 15, 20, 0.00) 0%, #0F0F14 100%)',
+				'progress-bar-gradient': 'linear-gradient(90deg, rgba(15, 15, 20, 0.00) 0%, #FFF 100%);'
 			},
 			width: {
 				'vw-8': 'calc(100vw - 8px)'
+			},
+			animation: {
+				spinner: 'spinner 1.2s linear infinite'
+			},
+			keyframes: {
+				spinner: {
+					'0%': { opacity: '1' },
+					'100%': { opacity: '0' }
+				}
 			}
 		},
+
 		screens: {
 			mobile: { max: '580px' }
 		}
