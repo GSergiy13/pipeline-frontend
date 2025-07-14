@@ -1,6 +1,7 @@
 export type OptionGroup = {
 	id: string
 	name: string
+	icon?: string
 	options: readonly {
 		id: string
 		name: string
@@ -16,8 +17,8 @@ export const OPTION_SELECT = {
 		options: [
 			{ id: 'q1', name: '1', value: 1 },
 			{ id: 'q2', name: '2', value: 2 },
-			{ id: 'q3', name: '3', value: 3 },
-			{ id: 'q4', name: '4', value: 4 }
+			{ id: 'q4', name: '4', value: 4 },
+			{ id: 'q6', name: '6', value: 6 }
 		]
 	},
 	duration: {

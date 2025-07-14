@@ -11,7 +11,7 @@ type StatusState =
 export const StatusPanel = ({ state }: { state: StatusState }) => {
 	if (state.type === 'insufficient_funds') {
 		return (
-			<div className='flex flex-col items-center justify-center text-center p-4 w-full'>
+			<div className='flex flex-col items-center justify-center text-center p-4 w-full max-w-[400px] '>
 				<Image
 					src='/icons/warning.svg'
 					alt='Insufficient Funds'

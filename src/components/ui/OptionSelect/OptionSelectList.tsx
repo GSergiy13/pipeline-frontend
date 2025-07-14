@@ -1,14 +1,22 @@
 import cn from 'clsx'
 import type { OptionGroup } from 'constants/optionselect.const'
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
 interface OptionSelectListProps {
 	group: OptionGroup
 	anchorRect: DOMRect | null
+	selectedId: string
+	onSelect: (optionId: string) => void
 }
 
-export const OptionSelectList = ({ group, anchorRect }: OptionSelectListProps) => {
+export const OptionSelectList = ({
+	group,
+	anchorRect,
+	selectedId,
+	onSelect
+}: OptionSelectListProps) => {
 	const [mounted, setMounted] = useState(false)
 	const [visible, setVisible] = useState(false)
 
@@ -22,12 +30,12 @@ export const OptionSelectList = ({ group, anchorRect }: OptionSelectListProps) =
 
 	const dropdownWidth = 180
 	const dropdownHeight = 160
-	const spacing = 55
+	const spacing = 66
 
 	const left = anchorRect.left + anchorRect.width / 2 - dropdownWidth / 2 + window.scrollX
 	const top = anchorRect.top + window.scrollY - dropdownHeight - spacing
 
-	const safeLeft = Math.max(8, Math.min(left, window.innerWidth - dropdownWidth - 8))
+	const safeLeft = Math.max(8, Math.min(left, window.innerWidth - dropdownWidth - 20))
 
 	const styles: React.CSSProperties = {
 		position: 'absolute',
@@ -50,14 +58,38 @@ export const OptionSelectList = ({ group, anchorRect }: OptionSelectListProps) =
 		>
 			<h3 className='text-xs opacity-60 mb-2'>{group.name}</h3>
 
-			<ul className='flex flex-col'>
+			<ul className='flex flex-col gap-6'>
 				{group.options.map(option => (
 					<li
-						className='py-2 flex items-center justify-between gap-2'
 						key={option.id}
+						onClick={e => {
+							e.stopPropagation()
+							onSelect(option.id)
+						}}
+						className='flex items-center justify-between gap-2 cursor-pointer'
 					>
-						<span>{option.name}</span>
-						<div className='w-[16px] h-[16px] border border-white rounded-full' />
+						<div className='flex items-center gap-2'>
+							<Image
+								src={
+									group.id === 'quantity'
+										? `/icons/quantity/${option.value}.svg`
+										: group.icon || '/icons/quantity/1.svg'
+								}
+								alt={option.name}
+								width={24}
+								height={24}
+							/>
+
+							<span>{option.name}</span>
+						</div>
+						<div className='w-6 h-6 bg-dark-bg-transparency-4 flex items-center justify-center border border-white/20 rounded-full'>
+							<div
+								className={cn('w-1.5 h-1.5 rounded-full transition-colors', {
+									'bg-primary-blue': option.id === selectedId,
+									'bg-transparent': option.id !== selectedId
+								})}
+							/>
+						</div>
 					</li>
 				))}
 			</ul>
