@@ -17,10 +17,11 @@ export const GuidesCarousel = () => {
 	}, [])
 
 	return (
-		<div className='relative w-full overflow-hidden pt-10 min-h-[150px]'>
+		<div className='relative w-full overflow-hidden pt-5 min-h-[180px]'>
 			<AnimatePresence mode='wait'>
 				<motion.div
 					key={index}
+					className='absolute inset-0'
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
 					exit={{ opacity: 0, y: -10 }}
