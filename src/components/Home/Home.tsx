@@ -8,7 +8,7 @@ export const HomePage = () => {
 	const userData = useSelector((state: RootState) => state.user)
 
 	return (
-		<div className='relative w-[calc(100vw-8px)] flex flex-col px-3 py-4 mx-auto h-[80vh] items-center justify-center bg-chat-gradient rounded-t-[32px]'>
+		<div className='relative w-[calc(100vw-8px)] flex flex-col px-3 pt-4 pb-0 mx-auto h-[80vh] items-center justify-center bg-chat-gradient rounded-t-[32px]'>
 			<div className='flex flex-col items-center justify-center w-full max-w-2xl -translate-y-1/2'>
 				{userData.user ? (
 					<div className='mt-4'>
