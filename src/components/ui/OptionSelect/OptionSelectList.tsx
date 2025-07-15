@@ -49,7 +49,7 @@ export const OptionSelectList = ({
 		<div
 			style={styles}
 			className={cn(
-				'rounded-2xl bg-black/30 backdrop-blur-xl shadow-2xl text-white p-3 transition-all duration-300 transform',
+				'rounded-2xl bg-black/30 backdrop-blur-xl shadow-2xl text-white p-3 transition-all duration-300 transform isolate will-change-[transform,opacity,backdrop-filter]',
 				{
 					'opacity-0 translate-y-2 pointer-events-none': !visible,
 					'opacity-100 translate-y-0 pointer-events-auto': visible
@@ -82,7 +82,12 @@ export const OptionSelectList = ({
 
 							<span>{option.name}</span>
 						</div>
-						<div className='w-6 h-6 bg-dark-bg-transparency-4 flex items-center justify-center border border-white/20 rounded-full'>
+						<div
+							className={cn('w-6 h-6 flex items-center justify-center border  rounded-full', {
+								'bg-white/20 border-white/5': option.id === selectedId,
+								'bg-dark-bg-transparency-4 border-white/20': option.id !== selectedId
+							})}
+						>
 							<div
 								className={cn('w-1.5 h-1.5 rounded-full transition-colors', {
 									'bg-primary-blue': option.id === selectedId,
