@@ -1,9 +1,12 @@
 'use client'
 
+import cn from 'clsx'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useSelector } from 'react-redux'
+import type { RootState } from 'store/store'
 
 import { DownloadButton } from '@/ui/DownloadButton/DownloadButton'
 import VideoPlayer from '@/ui/VideoPlayer/VideoPlayer'
@@ -15,6 +18,7 @@ interface MediaModalProps {
 }
 
 export const MediaModal = ({ src, isOpen, onClose }: MediaModalProps) => {
+	const isMobileTelegram = useSelector((state: RootState) => state.user.isMobileTelegram)
 	const [mounted, setMounted] = useState(false)
 
 	useEffect(() => {
@@ -29,7 +33,12 @@ export const MediaModal = ({ src, isOpen, onClose }: MediaModalProps) => {
 
 	return createPortal(
 		<div
-			className='fixed inset-0 z-[999] tg-header flex items-center justify-center bg-black/80 backdrop-blur-lg'
+			className={cn(
+				`fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-lg`,
+				{
+					'tg-modal': isMobileTelegram
+				}
+			)}
 			onClick={onClose}
 		>
 			<motion.div
