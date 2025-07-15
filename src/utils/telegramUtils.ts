@@ -1,5 +1,5 @@
 import type { Dispatch } from '@reduxjs/toolkit'
-import { setPlatform, setUserData } from 'store/slices/userSlice'
+import { setIsMobileTelegram, setPlatform, setUserData } from 'store/slices/userSlice'
 
 declare global {
 	interface Window {
@@ -12,11 +12,6 @@ export const getTelegram = () => {
 		return window.Telegram.WebApp
 	}
 	return null
-}
-
-export const isMobileDevice = (): boolean => {
-	if (typeof navigator === 'undefined') return false
-	return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 }
 
 export const initializeTelegram = (dispatch: Dispatch<any>) => {
@@ -44,14 +39,15 @@ export const initializeTelegram = (dispatch: Dispatch<any>) => {
 				tg.disableVerticalSwipes()
 			}
 
-			dispatch(
-				setPlatform({
-					platform: tg.platform,
-					isMobileTelegram: ['android', 'ios'].includes(tg.platform) && window.innerWidth < 768
-				})
-			)
+			const isPhone =
+				['android', 'ios'].includes(tg.platform) &&
+				/Mobi|iPhone|Android(?!.*Tablet)/i.test(navigator.userAgent) &&
+				window.innerWidth < 768
 
-			if (isMobileDevice() && fullscreenSupported && typeof tg.requestFullscreen === 'function') {
+			dispatch(setPlatform(tg.platform))
+			dispatch(setIsMobileTelegram(isPhone))
+
+			if (isPhone && fullscreenSupported && typeof tg.requestFullscreen === 'function') {
 				tg.requestFullscreen()
 				tg.enableClosingConfirmation()
 			}

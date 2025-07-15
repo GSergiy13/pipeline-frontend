@@ -40,15 +40,19 @@ const userSlice = createSlice({
 				photo: photo_url || null
 			}
 		},
-		setPlatform(state, action: PayloadAction<{ platform: string; isMobileTelegram: boolean }>) {
-			state.platform = action.payload.platform
-			state.isMobileTelegram = action.payload.isMobileTelegram
+		setPlatform(state, action: PayloadAction<string>) {
+			state.platform = action.payload
+		},
+		setIsMobileTelegram(state, action: PayloadAction<boolean>) {
+			state.isMobileTelegram = action.payload
 		},
 		clearUserData(state) {
 			state.user = null
+			state.platform = null
+			state.isMobileTelegram = false
 		}
 	}
 })
 
-export const { setUserData, clearUserData, setPlatform } = userSlice.actions
+export const { setUserData, clearUserData, setPlatform, setIsMobileTelegram } = userSlice.actions
 export default userSlice.reducer
