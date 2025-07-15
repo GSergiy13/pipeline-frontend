@@ -86,7 +86,7 @@ const ControlPanel = ({
 	}, [dragging, seekFromClientX, onDragStateChange])
 
 	return (
-		<div className='absolute inset-x-0 bottom-4 px-4 flex flex-col items-center'>
+		<div className='absolute inset-x-0 z-10 bottom-4 px-4 flex flex-col items-center'>
 			<div
 				ref={barRef}
 				className='w-full h-0.5 bg-white/10 mb-4 rounded-lg cursor-pointer touch-none'
