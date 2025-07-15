@@ -18,7 +18,6 @@ export const GuideSlide = ({ guide }: GuideSlideProps) => (
 			className='rounded-2xl  object-contain'
 			priority
 			loading='eager'
-			placeholder='blur'
 		/>
 
 		<div className='w-full md:w-1/2 min-h-[72px]'>

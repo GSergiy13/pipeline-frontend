@@ -37,7 +37,7 @@ export const MediaModal = ({ src, isOpen, onClose }: MediaModalProps) => {
 				animate={{ opacity: 1, scale: 1 }}
 				exit={{ opacity: 0, scale: 0.95 }}
 				transition={{ duration: 0.2 }}
-				className='relative w-full h-full px-4 flex items-center justify-center pt-5'
+				className='relative w-full h-full px-4 flex items-center justify-center pt-5 pb-4'
 				onClick={e => e.stopPropagation()}
 			>
 				<div className='absolute gap-2 top-5 w-full px-4 flex items-center z-40'>
