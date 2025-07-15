@@ -25,7 +25,7 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 		<div className='flex items-center justify-between gap-1'>
 			<button
 				onClick={handleAttachClick}
-				className='flex items-center justify-center w-[30px] h-[30px] rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4'
+				className='flex items-center justify-center w-[30px] h-[30px] rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4 hover:bg-dark-bg-transparency-8 transition-colors duration-200'
 			>
 				<Image
 					src={'/icons/attach.svg'}
@@ -38,7 +38,7 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 			<div className='flex items-center gap-1'>
 				<OptionSelect data={OPTION_SELECT} />
 
-				<button className='flex items-center justify-center w-[30px] h-[30px] rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4'>
+				<button className='flex items-center justify-center w-[30px] h-[30px] rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4 hover:bg-dark-bg-transparency-8 transition-colors duration-200'>
 					<Image
 						src={'/icons/grow.svg'}
 						alt='Plus Icon'

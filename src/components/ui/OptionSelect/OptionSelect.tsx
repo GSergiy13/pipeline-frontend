@@ -44,7 +44,7 @@ export const OptionSelect = ({ data }: OptionSelectProps) => {
 					<div
 						key={key}
 						onClick={() => handleClick(group.id)}
-						className='relative flex gap-2 items-center justify-center p-2 h-[30px] w-auto rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4 cursor-pointer'
+						className='relative flex gap-2 items-center justify-center p-2 h-[30px] w-auto rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4 cursor-pointer hover:bg-dark-bg-transparency-8 transition-colors duration-200'
 					>
 						<Image
 							src={iconSrc}
