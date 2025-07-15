@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { handleVibrate } from 'utils/handleVibrate'
 
 import ControlPanel from './ControlPanel'
 
@@ -18,6 +19,7 @@ const VideoPlayer = ({ src }: VideoPlayerProps) => {
 	const togglePlay = () => {
 		const video = videoRef.current
 		if (!video) return
+		handleVibrate('light', 100)
 
 		if (video.paused) {
 			video.play()

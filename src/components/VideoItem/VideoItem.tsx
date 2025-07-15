@@ -22,10 +22,7 @@ export const VideoItem = () => {
 
 	return (
 		<>
-			<div
-				className='relative w-full h-full flex items-center justify-center cursor-pointer max-w-[640px] max-h-[480px] mobile:max-h-full'
-				onClick={handleOpen}
-			>
+			<div className='relative w-full h-full flex items-center justify-center cursor-pointer max-w-[640px] max-h-[480px] mobile:max-h-full'>
 				<Image
 					src={'/video/video_1.jpg'}
 					alt='Video Thumbnail'
@@ -42,7 +39,10 @@ export const VideoItem = () => {
 						fileName='Hailuo02.mp4'
 					/>
 
-					<div className='absolute left-1/2 top-1/2 py-5 px-5 flex items-center gap-2 rounded-full -translate-x-1/2 -translate-y-1/2 bg-white/5 backdrop-blur-md border border-white/5 hover:bg-white/10 transition-all duration-300 ease-in-out pointer-events-auto'>
+					<div
+						className='absolute left-1/2 top-1/2 py-5 px-5 flex items-center gap-2 rounded-full -translate-x-1/2 -translate-y-1/2 bg-white/5 backdrop-blur-md border border-white/5 hover:bg-white/10 transition-all duration-300 ease-in-out pointer-events-auto'
+						onClick={handleOpen}
+					>
 						<Image
 							src={'/icons/play.svg'}
 							alt='Play Icon'

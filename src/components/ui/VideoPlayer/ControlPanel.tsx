@@ -5,7 +5,7 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react'
 
 interface ControlPanelProps {
 	isPlaying: boolean
-	progress: number // 0‒100
+	progress: number
 	onTogglePlay: () => void
 	onSeek: (percent: number) => void
 	onDragStateChange: (dragging: boolean) => void
@@ -22,7 +22,6 @@ const ControlPanel = ({
 	const [animated, setAnimated] = useState(progress)
 	const [dragging, setDragging] = useState(false)
 
-	/* -------- плавна анімація прогрес-бару -------- */
 	useEffect(() => {
 		let frame = 0
 		const tick = () => {
@@ -37,7 +36,6 @@ const ControlPanel = ({
 		return () => cancelAnimationFrame(frame)
 	}, [progress])
 
-	/* --------- drag / seek logic --------- */
 	const seekFromClientX = useCallback(
 		(clientX: number) => {
 			const bar = barRef.current
@@ -55,7 +53,6 @@ const ControlPanel = ({
 		seekFromClientX(clientX)
 	}
 
-	/* mouse */
 	useEffect(() => {
 		const move = (e: MouseEvent) => dragging && seekFromClientX(e.clientX)
 		const up = () => {
@@ -72,7 +69,6 @@ const ControlPanel = ({
 		}
 	}, [dragging, seekFromClientX, onDragStateChange])
 
-	/* touch */
 	useEffect(() => {
 		const move = (e: TouchEvent) => dragging && seekFromClientX(e.touches[0].clientX)
 		const end = () => {
@@ -89,10 +85,8 @@ const ControlPanel = ({
 		}
 	}, [dragging, seekFromClientX, onDragStateChange])
 
-	/* ---------------- render ---------------- */
 	return (
 		<div className='absolute inset-x-0 bottom-4 px-4 flex flex-col items-center'>
-			{/* progress bar */}
 			<div
 				ref={barRef}
 				className='w-full h-0.5 bg-white/10 mb-4 rounded-lg cursor-pointer touch-none'
@@ -107,7 +101,6 @@ const ControlPanel = ({
 				</div>
 			</div>
 
-			{/* play / pause */}
 			<button
 				onClick={onTogglePlay}
 				className='w-16 h-16 flex items-center justify-center bg-white/5 hover:bg-white/10 border border-white/60 backdrop-blur-md rounded-full transition-colors'
