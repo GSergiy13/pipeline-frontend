@@ -37,7 +37,6 @@ export const OptionSelect = ({ data }: OptionSelectProps) => {
 				const selectedOption =
 					group.options.find(opt => opt.id === selectedOptions[group.id]) || group.options[0]
 
-				// 🔽 Динамічний вибір іконки для quantity
 				const iconSrc =
 					group.id === 'quantity' ? `/icons/quantity/${selectedOption.value}.svg` : group.icon || ''
 

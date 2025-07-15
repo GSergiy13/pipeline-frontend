@@ -1,5 +1,5 @@
 import type { Dispatch } from '@reduxjs/toolkit'
-import { setUserData } from 'store/slices/userSlice'
+import { setPlatform, setUserData } from 'store/slices/userSlice'
 
 declare global {
 	interface Window {
@@ -43,6 +43,8 @@ export const initializeTelegram = (dispatch: Dispatch<any>) => {
 			if (disableSwipesSupported && typeof tg.disableVerticalSwipes === 'function') {
 				tg.disableVerticalSwipes()
 			}
+
+			dispatch(setPlatform(tg.platform))
 
 			if (isMobileDevice() && fullscreenSupported && typeof tg.requestFullscreen === 'function') {
 				tg.requestFullscreen()

@@ -7,10 +7,14 @@ export interface UserState {
 		photo: string | null
 		username: string | null
 	} | null
+	platform: string | null
+	isMobileTelegram: boolean
 }
 
 const initialState: UserState = {
-	user: null
+	user: null,
+	platform: null,
+	isMobileTelegram: false
 }
 
 const userSlice = createSlice({
@@ -36,11 +40,15 @@ const userSlice = createSlice({
 				photo: photo_url || null
 			}
 		},
+		setPlatform(state, action: PayloadAction<string>) {
+			state.platform = action.payload
+			state.isMobileTelegram = ['android', 'ios'].includes(action.payload)
+		},
 		clearUserData(state) {
 			state.user = null
 		}
 	}
 })
 
-export const { setUserData, clearUserData } = userSlice.actions
+export const { setUserData, clearUserData, setPlatform } = userSlice.actions
 export default userSlice.reducer
