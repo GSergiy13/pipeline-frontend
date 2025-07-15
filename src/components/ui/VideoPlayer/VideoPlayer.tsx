@@ -63,7 +63,11 @@ const VideoPlayer = ({ src }: VideoPlayerProps) => {
 
 	return (
 		<div className='relative flex w-full h-full max-h-[90vh] items-center justify-center'>
-			{isLoading && <Spinner />}
+			{isLoading && (
+				<div className='w-full h-full flex items-center justify-center'>
+					<Spinner />
+				</div>
+			)}
 
 			<video
 				ref={videoRef}
