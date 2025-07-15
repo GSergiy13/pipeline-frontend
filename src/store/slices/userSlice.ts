@@ -41,8 +41,15 @@ const userSlice = createSlice({
 			}
 		},
 		setPlatform(state, action: PayloadAction<string>) {
-			state.platform = action.payload
-			state.isMobileTelegram = ['android', 'ios'].includes(action.payload)
+			const platform = action.payload
+			state.platform = platform
+
+			const isPhone =
+				['android', 'ios'].includes(platform) &&
+				typeof window !== 'undefined' &&
+				window.innerWidth < 768
+
+			state.isMobileTelegram = isPhone
 		},
 		clearUserData(state) {
 			state.user = null
