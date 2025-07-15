@@ -16,7 +16,7 @@ export const Header = () => {
 	return (
 		<header
 			className={cn(`w-full pb-3`, {
-				'tg-header': isMobileTelegram
+				'tg-safe-area': isMobileTelegram
 			})}
 		>
 			<div className='flex flex-col pt-3'>

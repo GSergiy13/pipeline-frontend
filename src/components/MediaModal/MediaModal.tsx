@@ -36,7 +36,7 @@ export const MediaModal = ({ src, isOpen, onClose }: MediaModalProps) => {
 			className={cn(
 				`fixed inset-0 z-[999] flex items-center justify-center bg-black/80 backdrop-blur-lg`,
 				{
-					'tg-modal': isMobileTelegram
+					'tg-safe-area': isMobileTelegram
 				}
 			)}
 			onClick={onClose}
