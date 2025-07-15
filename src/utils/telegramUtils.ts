@@ -44,7 +44,12 @@ export const initializeTelegram = (dispatch: Dispatch<any>) => {
 				tg.disableVerticalSwipes()
 			}
 
-			dispatch(setPlatform(tg.platform))
+			dispatch(
+				setPlatform({
+					platform: tg.platform,
+					isMobileTelegram: ['android', 'ios'].includes(tg.platform) && window.innerWidth < 768
+				})
+			)
 
 			if (isMobileDevice() && fullscreenSupported && typeof tg.requestFullscreen === 'function') {
 				tg.requestFullscreen()
