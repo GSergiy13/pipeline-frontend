@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { handleVibrate } from 'utils/handleVibrate'
 
+import { Spinner } from '../Spinner/Spinner'
+
 import ControlPanel from './ControlPanel'
 
 interface VideoPlayerProps {
@@ -15,6 +17,7 @@ const VideoPlayer = ({ src }: VideoPlayerProps) => {
 	const [isPlaying, setIsPlaying] = useState(false)
 	const [progress, setProgress] = useState(0)
 	const [isDragging, setIsDragging] = useState(false)
+	const [isLoading, setIsLoading] = useState(true)
 
 	const togglePlay = () => {
 		const video = videoRef.current
@@ -60,11 +63,14 @@ const VideoPlayer = ({ src }: VideoPlayerProps) => {
 
 	return (
 		<div className='relative flex w-full h-full max-h-[90vh] items-center justify-center'>
+			{isLoading && <Spinner />}
+
 			<video
 				ref={videoRef}
 				src={src}
 				playsInline
 				className='w-full h-full rounded-2xl object-contain'
+				onCanPlay={() => setIsLoading(false)}
 			/>
 
 			<ControlPanel
