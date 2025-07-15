@@ -35,8 +35,17 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 				/>
 			</button>
 
-			<div className=' flex items-center gap-1'>
+			<div className='flex items-center gap-1'>
 				<OptionSelect data={OPTION_SELECT} />
+
+				<button className='flex items-center justify-center w-[30px] h-[30px] rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4'>
+					<Image
+						src={'/icons/grow.svg'}
+						alt='Plus Icon'
+						width={20}
+						height={20}
+					/>
+				</button>
 			</div>
 		</div>
 	)
