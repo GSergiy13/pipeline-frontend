@@ -1,18 +1,19 @@
 'use client'
 
 import cn from 'clsx'
-import type { ModelGenerateItem } from 'constants/modelgenerate.const'
 import Image from 'next/image'
 import { useState } from 'react'
+import type { ModelGenerateItem } from 'types/ModelGenerate.type'
 import { handleVibrate } from 'utils/handleVibrate'
 
 import { DropDownList } from './DropDownList'
 
 interface DropDownProps {
 	data: ModelGenerateItem[]
+	onSelect: (item: ModelGenerateItem) => void
 }
 
-export const DropDown = ({ data }: DropDownProps) => {
+export const DropDown = ({ data, onSelect }: DropDownProps) => {
 	const [active, setActive] = useState(data[0])
 	const [show, setShow] = useState(false)
 
@@ -24,6 +25,7 @@ export const DropDown = ({ data }: DropDownProps) => {
 	const handleSelect = (item: ModelGenerateItem) => {
 		setActive(item)
 		setShow(false)
+		onSelect(item)
 		handleVibrate('light', 100)
 	}
 

@@ -1,14 +1,17 @@
 import type { OptionSelectType } from 'constants/optionselect.const'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
+import type { OptionGroup } from 'types/ModelGenerate.type'
 import { handleVibrate } from 'utils/handleVibrate'
 
 import { OptionSelectList } from './OptionSelectList'
 
 interface OptionSelectProps {
-	data: OptionSelectType
+	data: Record<string, OptionGroup>
+	onChange?: (groupId: string, value: string | number) => void
 }
-export const OptionSelect = ({ data }: OptionSelectProps) => {
+
+export const OptionSelect = ({ data, onChange }: OptionSelectProps) => {
 	const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null)
 	const [activeGroupName, setActiveGroupName] = useState<string | null>(null)
 	const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({})
@@ -26,9 +29,16 @@ export const OptionSelect = ({ data }: OptionSelectProps) => {
 	}
 
 	const handleOptionSelect = (groupName: string, optionId: string) => {
+		const group = data[groupName as keyof OptionSelectType]
+		const selected = group.options.find(opt => opt.id === optionId)
+
+		if (!selected) return
+
 		setSelectedOptions(prev => ({ ...prev, [groupName]: optionId }))
 		setActiveGroupName(null)
 		handleVibrate('light', 100)
+
+		onChange?.(groupName, selected.value)
 	}
 
 	return (

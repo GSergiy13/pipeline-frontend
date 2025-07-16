@@ -1,6 +1,6 @@
 import cn from 'clsx'
-import type { ModelGenerateItem } from 'constants/modelgenerate.const'
 import Image from 'next/image'
+import type { ModelGenerateItem } from 'types/ModelGenerate.type'
 
 interface DropDownListProps {
 	show: boolean

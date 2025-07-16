@@ -1,11 +1,11 @@
 import Image from 'next/image'
 
-interface ExpandInputButtonProps {
+interface ExpandButtonProps {
 	onExpand: () => void
 	isExpanded: boolean
 }
 
-export const ExpandInputButton = ({ onExpand, isExpanded }: ExpandInputButtonProps) => {
+export const ExpandButton = ({ onExpand, isExpanded }: ExpandButtonProps) => {
 	return (
 		<button
 			onClick={onExpand}

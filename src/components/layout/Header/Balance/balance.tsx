@@ -3,6 +3,8 @@
 import cn from 'clsx'
 import Image from 'next/image'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { increaseBalance } from 'store/slices/userSlice'
 import { handleVibrate } from 'utils/handleVibrate'
 import { transformBalance } from 'utils/transform-balance'
 
@@ -13,6 +15,7 @@ interface BalanceProps {
 }
 
 export const Balance = ({ balance }: BalanceProps) => {
+	const dispatch = useDispatch()
 	const [show, setShow] = useState(false)
 	const formattedBalance = transformBalance(balance)
 
@@ -61,7 +64,7 @@ export const Balance = ({ balance }: BalanceProps) => {
 			>
 				<p className='text-sm text-center'>Для пополнения баланса свяжитесь с менеджером</p>
 
-				<ButtonBasic>
+				<ButtonBasic onClick={() => dispatch(increaseBalance(12364))}>
 					<span className=' text-xs font-medium text-primary-blue'>Перейти</span>
 
 					<Image

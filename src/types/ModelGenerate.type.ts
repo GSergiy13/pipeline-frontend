@@ -1,0 +1,24 @@
+type OptionItem<T = string | number> = {
+	id: string
+	name: string
+	value: T
+}
+
+export type OptionGroup<T = string | number> = {
+	id: string
+	name: string
+	icon?: string
+	options: OptionItem<T>[]
+}
+
+export type ModelGenerateItem = {
+	id: number
+	type: string
+	name: string
+	price: number
+	options: {
+		quantity: OptionGroup<number>
+		duration: OptionGroup<number | 'auto'>
+		quality: OptionGroup<string>
+	}
+}

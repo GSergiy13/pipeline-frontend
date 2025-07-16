@@ -4,10 +4,10 @@ import { handleVibrate } from 'utils/handleVibrate'
 import { PromptAttachmentPreview } from '../PromptAttachmentPreview/PromptAttachmentPreview'
 import { PromptSettingsRow } from '../PromptSettingsRow/PromptSettingsRow'
 
-import { ExpandInputButton } from './ExpandInputButton/ExpandInputButton'
+import { ExpandButton } from './ExpandInputButton/ExpandInputButton'
 import { PromptInputField } from './PromptInputField/PromptInputField'
 
-export const PromptInputWrapper = () => {
+export const PromptWrapper = () => {
 	const inputRef = useRef<{ toggleExpand: () => void }>(null)
 	const [isExpanded, setIsExpanded] = useState(false)
 	const [attachment, setAttachment] = useState<File | null>(null)
@@ -37,7 +37,7 @@ export const PromptInputWrapper = () => {
 				/>
 			)}
 			<PromptInputField ref={inputRef} />
-			<ExpandInputButton
+			<ExpandButton
 				onExpand={handleExpand}
 				isExpanded={isExpanded}
 			/>
