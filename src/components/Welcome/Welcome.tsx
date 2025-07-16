@@ -21,7 +21,7 @@ export const Welcome = () => {
 			className={cn(
 				'min-h-screen w-full bg-primary-dark text-white pt-2 px-1 overflow-hidden flex items-center justify-center',
 				{
-					'tg-safe-area': isMobileTelegram
+					'tg-safe-area-welcome': isMobileTelegram
 				}
 			)}
 		>
@@ -32,9 +32,10 @@ export const Welcome = () => {
 					src='/wellcome.svg'
 					alt='Welcome Background'
 					className='absolute inset-0 w-full h-full object-cover opacity-20 z-0 rounded-[32px]'
+					priority={true}
 				/>
 
-				<div className='relative w-full min-w-full aspect-[4/1] max-w-xs flex items-center justify-center m-x-auto mt-5'>
+				<div className='relative w-full min-w-full aspect-[4/1] max-w-xs flex items-center justify-center m-x-auto mt-3'>
 					<Image
 						src='/sibrik-ai.svg'
 						alt='Sibrik AI Logo'

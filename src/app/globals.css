@@ -41,4 +41,7 @@ body {
 	.tg-safe-area {
 		padding-top: calc(var(--tg-safe-area-inset-top) + 32px);
 	}
+	.tg-safe-area-welcome {
+		padding-top: calc(var(--tg-safe-area-inset-top) + 42px);
+	}
 }
