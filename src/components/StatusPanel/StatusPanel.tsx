@@ -24,7 +24,9 @@ export const StatusPanel = ({ state }: { state: StatusState }) => {
 				<div className='text-white/60 leading-snug font-bold max-w-[220px] mb-10'>
 					Недостаточно средств Свяжитесь с менеджером
 				</div>
-				<ButtonBasic text='Пополнить'></ButtonBasic>
+				<ButtonBasic>
+					<span>Пополнить</span>
+				</ButtonBasic>
 			</div>
 		)
 	}

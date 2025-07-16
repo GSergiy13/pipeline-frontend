@@ -12,7 +12,7 @@ export const DropDownList = ({ data, show, active, handleSelect }: DropDownListP
 	return (
 		<ul
 			className={cn(
-				`absolute flex flex-col top-11 w-full rounded-xl bg-dark-bg-transparency-8 backdrop-blur-[30px] will-change-transform transform-gpu z-50 transition-all duration-400 overflow-hidden`,
+				`absolute flex flex-col top-11 w-full rounded-xl bg-dark-bg-transparency-8 backdrop-blur-[30px] will-change-transform transform-gpu z-50 transition-all duration-400 overflow-hidden max-h-[60vh] overflow-y-auto`,
 				{
 					'pointer-events-auto opacity-100 translate-y-0': show == true,
 					'pointer-events-none opacity-0 -translate-y-3': show == false

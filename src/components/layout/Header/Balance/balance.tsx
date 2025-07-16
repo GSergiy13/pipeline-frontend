@@ -6,6 +6,8 @@ import { useState } from 'react'
 import { handleVibrate } from 'utils/handleVibrate'
 import { transformBalance } from 'utils/transform-balance'
 
+import { ButtonBasic } from '@/ui/ButtonBasic/buttonBasic'
+
 interface BalanceProps {
 	balance: number
 }
@@ -28,6 +30,7 @@ export const Balance = ({ balance }: BalanceProps) => {
 					height={16}
 					alt='flame'
 				/>
+
 				<span className='text-sm'>{formattedBalance}</span>
 			</div>
 
@@ -58,10 +61,7 @@ export const Balance = ({ balance }: BalanceProps) => {
 			>
 				<p className='text-sm text-center'>Для пополнения баланса свяжитесь с менеджером</p>
 
-				<button
-					className='flex w-full items-center justify-center gap-2.5 p-3 rounded-[60px] bg-blue-bg-transparency-12 border border-primary-blue'
-					type='button'
-				>
+				<ButtonBasic>
 					<span className=' text-xs font-medium text-primary-blue'>Перейти</span>
 
 					<Image
@@ -70,7 +70,7 @@ export const Balance = ({ balance }: BalanceProps) => {
 						height={18}
 						alt='arrow right'
 					/>
-				</button>
+				</ButtonBasic>
 			</div>
 		</div>
 	)
