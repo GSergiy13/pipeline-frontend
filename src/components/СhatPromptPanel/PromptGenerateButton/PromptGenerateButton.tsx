@@ -2,7 +2,12 @@ import Image from 'next/image'
 import { useState } from 'react'
 import { handleVibrate } from 'utils/handleVibrate'
 
-export const PromptGenerateButton = () => {
+interface PromptGenerateButtonProps {
+	handleGenerate: () => void
+	disabled?: boolean
+}
+
+export const PromptGenerateButton = ({ handleGenerate, disabled }: PromptGenerateButtonProps) => {
 	const [isLoading, setIsLoading] = useState(false)
 
 	const handleClick = () => {
@@ -11,11 +16,13 @@ export const PromptGenerateButton = () => {
 		setTimeout(() => {
 			setIsLoading(false)
 		}, 4000)
+		handleGenerate()
 	}
 
 	return (
 		<button
 			onClick={handleClick}
+			disabled={disabled}
 			id='prompt-generate-button'
 			className='flex gap-3 items-center justify-center w-full border border-primary-blue py-[11px] px-6 bg-blue-bg-transparency-12 min-h-12 rounded-[40px] mt-1 hover:bg-blue-bg-transparency-16 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-bg-transparency-12 disabled:hover:border-primary-blue/40'
 		>

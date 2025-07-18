@@ -19,7 +19,7 @@ export interface UserState {
 const initialState: UserState = {
 	user: {
 		name: null,
-		balance: 0,
+		balance: 12353,
 		tg_data: null
 	},
 	platform: null,

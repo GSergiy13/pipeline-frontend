@@ -1,8 +1,10 @@
-import { modelgenerate } from 'constants/modelgenerate.const'
+'use client'
+
+import { ModelConfigurations } from 'constants/modelconfigurations.const'
 import Image from 'next/image'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setDuration, setQuality, setQuantity } from 'store/slices/generationSlice'
+import { setGenerationParams } from 'store/slices/generationSlice'
 import type { RootState } from 'store/store'
 
 import { OptionSelect } from '@/ui/OptionSelect/OptionSelect'
@@ -13,23 +15,26 @@ interface PromptSettingsRowProps {
 
 export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 	const dispatch = useDispatch()
-	const data_options = useSelector((state: RootState) => state.generation.selectedModel?.id)
-
-	const DATA = modelgenerate.find(item => item.id === data_options)
+	const selectedModelId = useSelector((state: RootState) => state.generation.selectedModel?.id)
+	const selectedModel = ModelConfigurations.find(model => model.id === selectedModelId)
 
 	useEffect(() => {
-		if (!DATA) return
+		if (!selectedModel) return
 
-		const quantity = DATA.options.quantity.options[0]?.value
-		const duration = DATA.options.duration.options[0]?.value
-		const quality = DATA.options.quality.options[0]?.value
+		const defaultQuantity = selectedModel.options.quantity.options[0]?.value
+		const defaultDuration = selectedModel.options.duration.options[0]?.value
+		const defaultQuality = selectedModel.options.quality.options[0]?.value
 
-		if (quantity != null) dispatch(setQuantity(quantity))
-		if (duration != null) dispatch(setDuration(duration))
-		if (quality != null) dispatch(setQuality(quality))
-	}, [DATA, dispatch])
+		dispatch(
+			setGenerationParams({
+				quantity: defaultQuantity,
+				duration: defaultDuration,
+				quality: defaultQuality
+			})
+		)
+	}, [selectedModel, dispatch])
 
-	const handleAttachClick = () => {
+	const handleFileUploadClick = () => {
 		const input = document.createElement('input')
 		input.type = 'file'
 		input.accept = 'image/*'
@@ -42,24 +47,25 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 		input.click()
 	}
 
-	const handleChange = (groupId: string, value: string | number) => {
-		if (groupId === 'quantity') dispatch(setQuantity(Number(value)))
-		if (groupId === 'duration') {
-			const val = value === 'auto' ? 'auto' : Number(value)
-			dispatch(setDuration(val))
-		}
-		if (groupId === 'quality') dispatch(setQuality(String(value)))
+	const handleOptionChange = (optionType: string, value: string | number) => {
+		const payload: Record<string, string | number> = {}
+
+		if (optionType === 'quantity') payload.quantity = Number(value)
+		if (optionType === 'duration') payload.duration = value === 'auto' ? 'auto' : Number(value)
+		if (optionType === 'quality') payload.quality = String(value)
+
+		dispatch(setGenerationParams(payload))
 	}
 
 	return (
 		<div className='flex items-center justify-between gap-1'>
 			<button
-				onClick={handleAttachClick}
+				onClick={handleFileUploadClick}
 				className='flex items-center justify-center w-[30px] h-[30px] rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4 hover:bg-dark-bg-transparency-8 transition-colors duration-200'
 			>
 				<Image
-					src={'/icons/attach.svg'}
-					alt='Plus Icon'
+					src='/icons/attach.svg'
+					alt='Attach Icon'
 					width={20}
 					height={20}
 				/>
@@ -67,14 +73,14 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 
 			<div className='flex items-center gap-1'>
 				<OptionSelect
-					data={DATA?.options || {}}
-					onChange={handleChange}
+					data={selectedModel?.options || {}}
+					onChange={handleOptionChange}
 				/>
 
 				<button className='flex items-center justify-center w-[30px] h-[30px] rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4 hover:bg-dark-bg-transparency-8 transition-colors duration-200'>
 					<Image
-						src={'/icons/grow.svg'}
-						alt='Plus Icon'
+						src='/icons/grow.svg'
+						alt='Grow Icon'
 						width={20}
 						height={20}
 					/>

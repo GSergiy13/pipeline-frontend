@@ -1,5 +1,5 @@
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
-import type { ModelGenerateItem } from 'types/ModelGenerate.type'
+import type { ModelGenerateItem } from 'types/ModelConfigurations.type'
 
 type QuantityType = number
 type DurationType = number | 'auto'
@@ -46,14 +46,19 @@ const generationSlice = createSlice({
 		setSelectedModel(state, action: PayloadAction<ModelGenerateItem>) {
 			state.selectedModel = action.payload
 		},
-		setAvailableOptions(state, action: PayloadAction<ModelOptions>) {
-			state.availableOptions = action.payload
 
-			const { quantities, durations, qualities } = action.payload
-
-			state.selectedParams.quantity = quantities[0] ?? null
-			state.selectedParams.duration = durations[0] ?? null
-			state.selectedParams.quality = qualities[0] ?? null
+		setGenerationParams(
+			state,
+			action: PayloadAction<{
+				quantity?: QuantityType
+				duration?: DurationType
+				quality?: QualityType
+			}>
+		) {
+			const { quantity, duration, quality } = action.payload
+			if (quantity !== undefined) state.selectedParams.quantity = quantity
+			if (duration !== undefined) state.selectedParams.duration = duration
+			if (quality !== undefined) state.selectedParams.quality = quality
 		},
 		setQuantity(state, action: PayloadAction<QuantityType>) {
 			state.selectedParams.quantity = action.payload
@@ -86,13 +91,13 @@ const generationSlice = createSlice({
 
 export const {
 	setSelectedModel,
-	setAvailableOptions,
 	setQuantity,
 	setDuration,
 	setQuality,
 	setPrompt,
 	setImage,
-	resetGeneration
+	resetGeneration,
+	setGenerationParams
 } = generationSlice.actions
 
 export default generationSlice.reducer

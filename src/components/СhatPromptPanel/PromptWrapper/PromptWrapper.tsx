@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef, useState } from 'react'
 import { handleVibrate } from 'utils/handleVibrate'
 
@@ -7,7 +9,12 @@ import { PromptSettingsRow } from '../PromptSettingsRow/PromptSettingsRow'
 import { ExpandButton } from './ExpandInputButton/ExpandInputButton'
 import { PromptInputField } from './PromptInputField/PromptInputField'
 
-export const PromptWrapper = () => {
+interface PromptWrapperProps {
+	prompt: string
+	setPrompt: (value: string) => void
+}
+
+export const PromptWrapper = ({ prompt, setPrompt }: PromptWrapperProps) => {
 	const inputRef = useRef<{ toggleExpand: () => void }>(null)
 	const [isExpanded, setIsExpanded] = useState(false)
 	const [attachment, setAttachment] = useState<File | null>(null)
@@ -36,7 +43,11 @@ export const PromptWrapper = () => {
 					onRemove={handleRemoveAttachment}
 				/>
 			)}
-			<PromptInputField ref={inputRef} />
+			<PromptInputField
+				ref={inputRef}
+				value={prompt}
+				onChange={setPrompt}
+			/>
 			<ExpandButton
 				onExpand={handleExpand}
 				isExpanded={isExpanded}

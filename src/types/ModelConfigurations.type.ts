@@ -11,7 +11,7 @@ export type OptionGroup<T = string | number> = {
 	options: OptionItem<T>[]
 }
 
-export type ModelGenerateItem = {
+export type ModelConfigurationsItem = {
 	id: number
 	type: string
 	name: string

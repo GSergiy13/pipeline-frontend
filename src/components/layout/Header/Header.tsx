@@ -1,7 +1,7 @@
 'use client'
 
 import cn from 'clsx'
-import { modelgenerate } from 'constants/modelgenerate.const'
+import { ModelConfigurations } from 'constants/modelconfigurations.const'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSelectedModel } from 'store/slices/generationSlice'
@@ -17,10 +17,10 @@ export const Header = () => {
 	const user_data = useSelector((state: RootState) => state.user)
 
 	useEffect(() => {
-		dispatch(setSelectedModel(modelgenerate[0]))
+		dispatch(setSelectedModel(ModelConfigurations[0]))
 	}, [dispatch])
 
-	const handleModelSelect = (model: (typeof modelgenerate)[number]) => {
+	const handleModelSelect = (model: (typeof ModelConfigurations)[number]) => {
 		dispatch(setSelectedModel(model))
 	}
 
@@ -33,7 +33,7 @@ export const Header = () => {
 			<div className='flex flex-col pt-3'>
 				<div className='w-full flex items-center justify-between px-3 mb-2'>
 					<DropDown
-						data={modelgenerate}
+						data={ModelConfigurations}
 						onSelect={handleModelSelect}
 					/>
 

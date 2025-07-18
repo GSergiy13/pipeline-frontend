@@ -1,5 +1,6 @@
 import { motion, useWillChange } from 'framer-motion'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import { debounce } from 'utils/debounce'
 import { handleVibrate } from 'utils/handleVibrate'
 
 interface PromptInputFieldProps {
@@ -7,24 +8,34 @@ interface PromptInputFieldProps {
 	maxExpandedHeight?: number
 	minHeight?: number
 	maxHeight?: number
+	value: string
+	onChange: (val: string) => void
 }
 
 export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptInputFieldProps>(
-	({ onToggle, maxExpandedHeight = 450, minHeight = 40, maxHeight = 300 }, ref) => {
+	(
+		{ onToggle, maxExpandedHeight = 450, minHeight = 40, maxHeight = 300, value, onChange },
+		ref
+	) => {
 		const textareaRef = useRef<HTMLTextAreaElement>(null)
 		const [isExpanded, setIsExpanded] = useState(false)
 		const [height, setHeight] = useState<number | string>(minHeight)
 		const willChange = useWillChange()
 		const [keyboardVisible, setKeyboardVisible] = useState(false)
+		const [localValue, setLocalValue] = useState(value)
+
+		const debouncedChange = useRef(debounce(onChange, 600)).current
+
+		useEffect(() => {
+			setLocalValue(value)
+		}, [value])
 
 		useEffect(() => {
 			const handleResize = () => {
 				if (!window.visualViewport) return
-
 				const viewportHeight = window.visualViewport.height
 				const screenHeight = window.innerHeight
 				const keyboardHeight = screenHeight - viewportHeight
-
 				setKeyboardVisible(keyboardHeight > screenHeight * 0.15)
 
 				if (
@@ -40,13 +51,11 @@ export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptI
 			return () => window.visualViewport?.removeEventListener('resize', handleResize)
 		}, [maxHeight])
 
-		const handleInput = () => {
+		const updateHeight = () => {
 			if (!textareaRef.current || isExpanded) return
-
 			const el = textareaRef.current
 			el.style.height = 'auto'
 			const scrollHeight = el.scrollHeight
-
 			const newHeight = Math.min(Math.max(scrollHeight, minHeight), maxHeight)
 			setHeight(newHeight)
 		}
@@ -68,7 +77,6 @@ export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptI
 		useImperativeHandle(ref, () => ({
 			toggleExpand: () => {
 				handleVibrate('light', 100)
-
 				setIsExpanded(prev => {
 					const newState = !prev
 					onToggle?.(newState)
@@ -78,7 +86,7 @@ export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptI
 						setTimeout(() => {
 							if (textareaRef.current) {
 								textareaRef.current.style.height = 'auto'
-								handleInput()
+								updateHeight()
 							}
 						}, 10)
 					}
@@ -87,25 +95,25 @@ export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptI
 			}
 		}))
 
+		const handleChange = (val: string) => {
+			setLocalValue(val)
+			debouncedChange(val)
+		}
+
 		return (
 			<motion.textarea
 				ref={textareaRef}
-				onInput={handleInput}
+				value={localValue}
+				onChange={e => handleChange(e.target.value)}
+				onInput={updateHeight}
 				onFocus={handleFocus}
 				onBlur={handleBlur}
 				className='w-full resize-none pl-2 pr-2 py-1 text-base text-white placeholder:text-white/40 bg-transparent focus:outline-none focus:ring-0'
 				placeholder='Составьте промпт запрос'
 				rows={1}
 				animate={{ height }}
-				transition={{
-					duration: 0.3,
-					ease: 'easeInOut',
-					bounce: 0.1
-				}}
-				style={{
-					overflowY: height === 'auto' ? 'hidden' : 'auto',
-					willChange
-				}}
+				transition={{ duration: 0.3, ease: 'easeInOut', bounce: 0.1 }}
+				style={{ overflowY: height === 'auto' ? 'hidden' : 'auto', willChange }}
 			/>
 		)
 	}

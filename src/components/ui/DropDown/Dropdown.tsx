@@ -2,39 +2,57 @@
 
 import cn from 'clsx'
 import Image from 'next/image'
-import { useState } from 'react'
-import type { ModelGenerateItem } from 'types/ModelGenerate.type'
+import { useEffect, useRef, useState } from 'react'
+import type { ModelConfigurationsItem } from 'types/ModelConfigurations.type'
 import { handleVibrate } from 'utils/handleVibrate'
 
 import { DropDownList } from './DropDownList'
 
 interface DropDownProps {
-	data: ModelGenerateItem[]
-	onSelect: (item: ModelGenerateItem) => void
+	data: ModelConfigurationsItem[]
+	onSelect: (item: ModelConfigurationsItem) => void
 }
 
 export const DropDown = ({ data, onSelect }: DropDownProps) => {
 	const [active, setActive] = useState(data[0])
 	const [show, setShow] = useState(false)
 
+	const ref = useRef<HTMLDivElement>(null)
+
 	const toggleShow = () => {
-		setShow(!show)
+		setShow(prev => !prev)
 		handleVibrate('light', 100)
 	}
 
-	const handleSelect = (item: ModelGenerateItem) => {
+	const handleSelect = (item: ModelConfigurationsItem) => {
 		setActive(item)
 		setShow(false)
 		onSelect(item)
 		handleVibrate('light', 100)
 	}
 
+	useEffect(() => {
+		const handleClickOutside = (event: MouseEvent) => {
+			if (ref.current && !ref.current.contains(event.target as Node)) {
+				setShow(false)
+			}
+		}
+
+		document.addEventListener('mousedown', handleClickOutside)
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside)
+		}
+	}, [])
+
 	return (
-		<div className='relative'>
+		<div
+			ref={ref}
+			className='relative'
+		>
 			<button
 				onClick={toggleShow}
 				className='flex items-center gap-1 py-1.5 px-2 border border-dark-bg-transparency-12 rounded-3xl min-w-[226px]'
-				aria-expanded='false'
+				aria-expanded={show}
 			>
 				<Image
 					src={`/models/${active.type}.svg`}
@@ -47,10 +65,10 @@ export const DropDown = ({ data, onSelect }: DropDownProps) => {
 					className={cn('ml-auto transition-all duration-300', {
 						'rotate-180': show
 					})}
-					src={'/icons/dropdown.svg'}
+					src='/icons/dropdown.svg'
 					width={24}
 					height={42}
-					alt='Model logo'
+					alt='Dropdown icon'
 				/>
 			</button>
 

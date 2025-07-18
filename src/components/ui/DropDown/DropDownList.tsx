@@ -1,12 +1,12 @@
 import cn from 'clsx'
 import Image from 'next/image'
-import type { ModelGenerateItem } from 'types/ModelGenerate.type'
+import type { ModelConfigurationsItem } from 'types/ModelConfigurations.type'
 
 interface DropDownListProps {
 	show: boolean
-	data: ModelGenerateItem[]
-	active: ModelGenerateItem
-	handleSelect: (item: ModelGenerateItem) => void
+	data: ModelConfigurationsItem[]
+	active: ModelConfigurationsItem
+	handleSelect: (item: ModelConfigurationsItem) => void
 }
 export const DropDownList = ({ data, show, active, handleSelect }: DropDownListProps) => {
 	return (
@@ -46,7 +46,7 @@ export const DropDownList = ({ data, show, active, handleSelect }: DropDownListP
 						{item.price !== 0 && (
 							<div className='flex items-center gap-0.5'>
 								<Image
-									src={'/icons/flame.svg'}
+									src={'/icons/flame-g.svg'}
 									width={12}
 									height={12}
 									alt='Model logo'
