@@ -1,5 +1,6 @@
 'use client'
 
+import cn from 'clsx'
 import { MediaModal } from 'components/MediaModal/MediaModal'
 import Image from 'next/image'
 import { useCallback, useState } from 'react'
@@ -7,7 +8,12 @@ import { handleVibrate } from 'utils/handleVibrate'
 
 import { DownloadButton } from '@/ui/DownloadButton/DownloadButton'
 
-export const VideoItem = () => {
+interface VideoItemProps {
+	className?: string
+	isCompactLayout?: boolean
+}
+
+export const VideoItem = ({ className, isCompactLayout = false }: VideoItemProps) => {
 	const [isPlaying, setIsPlaying] = useState(false)
 
 	const handleOpen = useCallback(() => {
@@ -22,7 +28,7 @@ export const VideoItem = () => {
 
 	return (
 		<>
-			<div className='relative w-full h-full flex items-center justify-center cursor-pointer max-w-[640px] max-h-[480px] mobile:max-h-full'>
+			<div className={cn('relative flex items-center justify-center cursor-pointer', className)}>
 				<Image
 					src={'/video/video_1.jpg'}
 					alt='Video Thumbnail'
@@ -40,7 +46,13 @@ export const VideoItem = () => {
 					/>
 
 					<div
-						className='absolute left-1/2 top-1/2 py-5 px-5 flex items-center gap-2 rounded-full -translate-x-1/2 -translate-y-1/2 bg-white/5 backdrop-blur-md border border-white/5 hover:bg-white/10 transition-all duration-300 ease-in-out pointer-events-auto'
+						className={cn(
+							'absolute left-1/2 top-1/2  flex items-center gap-2 rounded-full  bg-white/5 backdrop-blur-md border border-white/5 hover:bg-white/10 transition-all duration-300 ease-in-out pointer-events-auto',
+							{
+								'py-4 px-4 -translate-x-1/2 -translate-y-[60%]': isCompactLayout,
+								'py-5 px-5 -translate-x-1/2 -translate-y-1/2': !isCompactLayout
+							}
+						)}
 						onClick={handleOpen}
 					>
 						<Image
