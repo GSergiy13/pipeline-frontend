@@ -15,23 +15,25 @@ export const HomePage = () => {
 		}
 	}, [])
 
-	const videoItems = [1, 3, 4, 5]
+	const videoItems = [1, 3, 4, 5, 3]
 	const videoCount = videoItems.length
 	const isCompactLayout = videoItems.length > 2
 
 	return (
 		<div
-			className='relative flex flex-1 flex-col px-1 pt-1 mx-auto bg-chat-gradient rounded-t-[32px]'
+			className='relative px-1 pt-1 w-full bg-chat-gradient rounded-t-[32px]'
 			style={{ paddingBottom: `${height + 26}px` }}
 		>
 			<div
 				className={cn(
-					' w-full  overflow-y-auto min-h-[380px]',
+					' w-full overflow-y-auto min-h-[380px] max-h-full h-full',
 					videoCount > 2 ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col'
 				)}
-				style={{
-					height: `calc(100%  - ${height + 26}px)`
-				}}
+				style={
+					{
+						// height: `calc(100%  - ${height + 26}px)`
+					}
+				}
 			>
 				{videoItems.map((item, index) => (
 					<VideoItem
