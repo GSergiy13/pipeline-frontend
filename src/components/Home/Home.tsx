@@ -15,7 +15,7 @@ export const HomePage = () => {
 		}
 	}, [])
 
-	const videoItems = [1, 3, 4, 5, 3]
+	const videoItems = [1, 3, 4, 5]
 	const videoCount = videoItems.length
 	const isCompactLayout = videoItems.length > 2
 
