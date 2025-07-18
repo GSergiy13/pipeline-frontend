@@ -15,7 +15,7 @@ export const HomePage = () => {
 		}
 	}, [])
 
-	const videoItems = [1, 3, 4, 4, 5]
+	const videoItems = [1, 3, 4, 5, 3]
 	const videoCount = videoItems.length
 	const isCompactLayout = videoItems.length > 2
 
@@ -26,7 +26,10 @@ export const HomePage = () => {
 					'absolute left-0 right-0 overflow-y-auto',
 					videoCount > 2 ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col'
 				)}
-				style={{ height: `calc(100% - ${height + 26}px)` }}
+				style={{
+					height: `calc(100% - ${height + 26}px)`,
+					minHeight: `calc(100% - ${height + 26}px)`
+				}}
 			>
 				{videoItems.map((item, index) => (
 					<VideoItem
