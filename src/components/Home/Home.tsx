@@ -26,7 +26,7 @@ export const HomePage = () => {
 		>
 			<div
 				className={cn(
-					' w-full overflow-y-auto min-h-full max-h-full h-full',
+					' w-full overflow-y-auto min-h-[350px] max-h-full h-full',
 					videoCount > 2 ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col'
 				)}
 				style={
