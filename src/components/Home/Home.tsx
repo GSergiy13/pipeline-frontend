@@ -36,7 +36,7 @@ export const HomePage = () => {
 						key={index}
 						className={cn(
 							videoCount === 1 && 'w-full h-full',
-							videoCount === 2 && 'w-full h-1/2',
+							videoCount === 2 && 'w-full h-1/2 min-h-1/2',
 							videoCount > 2 && 'w-full'
 						)}
 						isCompactLayout={isCompactLayout}
