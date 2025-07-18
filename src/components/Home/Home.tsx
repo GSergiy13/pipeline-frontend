@@ -20,15 +20,17 @@ export const HomePage = () => {
 	const isCompactLayout = videoItems.length > 2
 
 	return (
-		<div className='relative flex flex-1 flex-col px-1 pt-1 mx-auto bg-chat-gradient rounded-t-[32px]'>
+		<div
+			className='relative flex flex-1 flex-col px-1 pt-1 mx-auto bg-chat-gradient rounded-t-[32px]'
+			style={{ paddingBottom: `calc(${height + 26}px)` }}
+		>
 			<div
 				className={cn(
 					'absolute left-0 right-0 overflow-y-auto',
 					videoCount > 2 ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col'
 				)}
 				style={{
-					height: `calc(100% - ${height + 26}px)`,
-					minHeight: `calc(100% - ${height + 26}px)`
+					height: `calc(100% - ${height + 26}px)`
 				}}
 			>
 				{videoItems.map((item, index) => (
@@ -36,7 +38,7 @@ export const HomePage = () => {
 						key={index}
 						className={cn(
 							videoCount === 1 && 'w-full h-full',
-							videoCount === 2 && 'w-full h-1/2 min-h-1/2',
+							videoCount === 2 && 'w-full h-1/2',
 							videoCount > 2 && 'w-full'
 						)}
 						isCompactLayout={isCompactLayout}
