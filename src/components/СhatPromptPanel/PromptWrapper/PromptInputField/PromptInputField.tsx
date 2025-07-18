@@ -86,7 +86,7 @@ export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptI
 						setTimeout(() => {
 							if (textareaRef.current) {
 								textareaRef.current.style.height = 'auto'
-								updateHeight()
+								// updateHeight()
 							}
 						}, 10)
 					}
@@ -105,9 +105,9 @@ export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptI
 				ref={textareaRef}
 				value={localValue}
 				onChange={e => handleChange(e.target.value)}
-				onInput={updateHeight}
-				onFocus={handleFocus}
-				onBlur={handleBlur}
+				// onInput={updateHeight}
+				// onFocus={handleFocus}
+				// onBlur={handleBlur}
 				className='w-full resize-none pl-2 pr-2 py-1 text-base text-white placeholder:text-white/40 bg-transparent focus:outline-none focus:ring-0'
 				placeholder='Составьте промпт запрос'
 				rows={1}
