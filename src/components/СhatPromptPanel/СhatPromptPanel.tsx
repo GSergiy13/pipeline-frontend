@@ -34,7 +34,7 @@ export const ChatPromptPanel = forwardRef<HTMLDivElement>((props, ref) => {
 	return (
 		<div
 			ref={ref}
-			className='flex flex-col mt-auto w-full z-40 transition-all duration-150 max-w-[640px] mx-auto px-3'
+			className=' absolute bottom-0 left-0 flex flex-col mt-auto w-full z-40 transition-all duration-150 max-w-[640px] mx-auto px-3'
 		>
 			<PromptWrapper
 				prompt={prompt}

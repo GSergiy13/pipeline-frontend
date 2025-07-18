@@ -26,7 +26,7 @@ export const Header = () => {
 
 	return (
 		<header
-			className={cn(`w-full pb-3 pt-24`, {
+			className={cn(`w-full pb-3`, {
 				'tg-safe-area': user_data.isMobileTelegram
 			})}
 		>

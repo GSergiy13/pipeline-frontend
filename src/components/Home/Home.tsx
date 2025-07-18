@@ -20,7 +20,10 @@ export const HomePage = () => {
 	const isCompactLayout = videoItems.length > 2
 
 	return (
-		<div className='relative flex flex-1 flex-col px-1 pt-1 mx-auto bg-chat-gradient rounded-t-[32px]'>
+		<div
+			className='relative flex flex-1 flex-col px-1 pt-1 mx-auto bg-chat-gradient rounded-t-[32px]'
+			style={{ paddingBottom: `${height + 26}px` }}
+		>
 			<div
 				className={cn(
 					' w-full  overflow-y-auto min-h-[380px]',
