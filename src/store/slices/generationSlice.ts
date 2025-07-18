@@ -1,5 +1,5 @@
 import { type PayloadAction, createSlice } from '@reduxjs/toolkit'
-import type { ModelGenerateItem } from 'types/ModelConfigurations.type'
+import type { ModelConfigurationsItem } from 'types/ModelConfigurations.type'
 
 type QuantityType = number
 type DurationType = number | 'auto'
@@ -12,7 +12,7 @@ interface ModelOptions {
 }
 
 interface GenerationState {
-	selectedModel: ModelGenerateItem | null
+	selectedModel: ModelConfigurationsItem | null
 	availableOptions: ModelOptions
 	selectedParams: {
 		quantity: QuantityType | null
@@ -43,7 +43,7 @@ const generationSlice = createSlice({
 	name: 'generation',
 	initialState,
 	reducers: {
-		setSelectedModel(state, action: PayloadAction<ModelGenerateItem>) {
+		setSelectedModel(state, action: PayloadAction<ModelConfigurationsItem>) {
 			state.selectedModel = action.payload
 		},
 
