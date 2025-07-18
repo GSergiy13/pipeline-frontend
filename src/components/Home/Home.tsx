@@ -23,7 +23,7 @@ export const HomePage = () => {
 		<div className='relative flex flex-1 flex-col px-1 pt-1 mx-auto bg-chat-gradient rounded-t-[32px]'>
 			<div
 				className={cn(
-					'overflow-y-auto min-h-[400px]',
+					'overflow-y-auto min-h-[380px]',
 					videoCount > 2 ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col'
 				)}
 				style={{
