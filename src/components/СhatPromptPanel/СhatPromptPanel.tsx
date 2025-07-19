@@ -1,5 +1,6 @@
 import { forwardRef, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { generateT2VService } from 'services/gnerate-t2v.service'
 import type { RootState } from 'store/store'
 
 import { PromptGenerateButton } from './PromptGenerateButton/PromptGenerateButton'
@@ -12,23 +13,33 @@ export const ChatPromptPanel = forwardRef<HTMLDivElement>((props, ref) => {
 
 	const telegramId = useSelector((state: RootState) => state.user.user?.tg_data?.id)
 
-	const handleGenerate = () => {
-		if (!selectedModel || !prompt.trim()) {
-			console.warn('Missing data to generate')
-			return
-		}
+	const handleGenerate = async () => {
+		// if (!selectedModel || !prompt.trim()) {
+		// 	console.warn('Missing data to generate')
+		// 	return
+		// }
+		// const payload = {
+		// 	model: selectedModel.type,
+		// 	quantity: selectedParams.quantity,
+		// 	duration: selectedParams.duration,
+		// 	quality: selectedParams.quality,
+		// 	prompt: prompt.trim(),
+		// 	image: selectedParams.image || null,
+		// 	telegramId: telegramId || 'user_id'
+		// }
+		// console.log('Send to backend:', payload)
 
-		const payload = {
-			model: selectedModel.type,
-			quantity: selectedParams.quantity,
-			duration: selectedParams.duration,
-			quality: selectedParams.quality,
-			prompt: prompt.trim(),
-			image: selectedParams.image || null,
-			telegramId: telegramId || 'user_id'
-		}
+		try {
+			const response = await generateT2VService.postExploreVideos()
+			console.log('Генерація надіслана:', response)
 
-		console.log('Send to backend:', payload)
+			const generationId = response.generations[0]?.generationId
+			console.log('ID генерації:', generationId)
+
+			// Можна тут зберегти ID в Redux або почати polling
+		} catch (error) {
+			console.error('Помилка при генерації:', error)
+		}
 	}
 
 	return (
