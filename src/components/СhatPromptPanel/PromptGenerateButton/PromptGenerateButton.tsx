@@ -44,6 +44,9 @@ export const PromptGenerateButton = ({ handleGenerate, disabled }: PromptGenerat
 
 					<div className='flex items-center gap-1'>
 						<span className='text-sm text-primary-blue font-medium'>Generated</span>
+
+						{/* Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iste reprehenderit ut itaque enim doloribus mollitia! Culpa fugit, vel quis placeat repudiandae provident est nam magni suscipit, modi voluptates tenetur quisquam. */}
+
 						<Image
 							src='/icons/magic-stick.svg'
 							alt='magic stick'
