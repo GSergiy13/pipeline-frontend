@@ -17,8 +17,8 @@ export type ModelConfigurationsItem = {
 	name: string
 	price: number
 	options: {
-		quantity: OptionGroup<number>
+		quantity: OptionGroup<number> | null
 		duration: OptionGroup<number | 'auto'>
-		quality: OptionGroup<string>
+		quality: OptionGroup<string> | null
 	}
 }

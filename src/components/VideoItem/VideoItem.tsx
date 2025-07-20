@@ -2,6 +2,7 @@
 
 import cn from 'clsx'
 import { MediaModal } from 'components/MediaModal/MediaModal'
+import { useVideoThumbnail } from 'hooks/useVideoThumbnail'
 import Image from 'next/image'
 import { useCallback, useState } from 'react'
 import { handleVibrate } from 'utils/handleVibrate'
@@ -10,11 +11,16 @@ import { DownloadButton } from '@/ui/DownloadButton/DownloadButton'
 
 interface VideoItemProps {
 	className?: string
+	videoUrl?: string
 	isCompactLayout?: boolean
 }
 
-export const VideoItem = ({ className, isCompactLayout = false }: VideoItemProps) => {
+export const VideoItem = ({ className, videoUrl, isCompactLayout = false }: VideoItemProps) => {
 	const [isPlaying, setIsPlaying] = useState(false)
+
+	const actualVideoUrl = `https://api.sibrik.io/${videoUrl}`
+	const proxyUrl = `/api/video-proxy?url=${encodeURIComponent(actualVideoUrl)}`
+	const { thumbnail } = useVideoThumbnail(proxyUrl)
 
 	const handleOpen = useCallback(() => {
 		setIsPlaying(true)
@@ -26,11 +32,13 @@ export const VideoItem = ({ className, isCompactLayout = false }: VideoItemProps
 		handleVibrate('light', 100)
 	}, [])
 
+	console.log('VideoItem rendered with videoUrl:', thumbnail)
+
 	return (
 		<>
 			<div className={cn('relative flex items-center justify-center cursor-pointer', className)}>
 				<Image
-					src={'/video/video_1.jpg'}
+					src={thumbnail || '/video/video_1.jpg'}
 					alt='Video Thumbnail'
 					fill
 					className='object-cover rounded-[32px] will-change-transform'
@@ -41,7 +49,7 @@ export const VideoItem = ({ className, isCompactLayout = false }: VideoItemProps
 				<div className='absolute inset-0 bg-video-gradient flex items-center justify-center will-change-transform rounded-[30px] pointer-events-none'>
 					<DownloadButton
 						className='absolute left-3 top-3'
-						href='/video/scen_1.mp4'
+						href={`https://api.sibrik.io/${videoUrl}`}
 						fileName='Hailuo02.mp4'
 					/>
 
@@ -71,7 +79,7 @@ export const VideoItem = ({ className, isCompactLayout = false }: VideoItemProps
 			</div>
 
 			<MediaModal
-				src='/video/scen_1.mp4'
+				src={`https://api.sibrik.io/${videoUrl}`}
 				isOpen={isPlaying}
 				onClose={handleClose}
 			/>

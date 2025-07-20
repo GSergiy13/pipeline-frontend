@@ -31,18 +31,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 					{ id: 'd4', name: 'Auto', value: 'auto' }
 				]
 			},
-			quality: {
-				id: 'quality',
-				name: 'Quality',
-				icon: '/icons/diamond.svg',
-				options: [
-					{ id: 'q480', name: '480p', value: '480' },
-					{ id: 'q720', name: '720p', value: '720' },
-					{ id: 'q1080', name: '1080p', value: '1080' },
-
-					{ id: 'q2k', name: '2K', value: '2K' }
-				]
-			}
+			quality: null
 		}
 	},
 
