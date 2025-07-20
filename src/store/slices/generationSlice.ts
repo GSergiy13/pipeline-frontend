@@ -21,6 +21,7 @@ interface GenerationState {
 		prompt: string
 		image: File | null
 	}
+	videoCollectionIds: string[]
 }
 
 const initialState: GenerationState = {
@@ -36,7 +37,8 @@ const initialState: GenerationState = {
 		quality: null,
 		prompt: '',
 		image: null
-	}
+	},
+	videoCollectionIds: []
 }
 
 const generationSlice = createSlice({
@@ -46,7 +48,6 @@ const generationSlice = createSlice({
 		setSelectedModel(state, action: PayloadAction<ModelConfigurationsItem>) {
 			state.selectedModel = action.payload
 		},
-
 		setGenerationParams(
 			state,
 			action: PayloadAction<{
@@ -85,6 +86,17 @@ const generationSlice = createSlice({
 				prompt: '',
 				image: null
 			}
+		},
+		clearVideoCollection(state) {
+			state.videoCollectionIds = []
+		},
+		addVideoToCollection(state, action: PayloadAction<string>) {
+			if (!state.videoCollectionIds.includes(action.payload)) {
+				state.videoCollectionIds.push(action.payload)
+			}
+		},
+		addVideosToCollection(state, action: PayloadAction<string[]>) {
+			state.videoCollectionIds = [...new Set([...state.videoCollectionIds, ...action.payload])]
 		}
 	}
 })
@@ -97,7 +109,10 @@ export const {
 	setPrompt,
 	setImage,
 	resetGeneration,
-	setGenerationParams
+	setGenerationParams,
+	addVideoToCollection,
+	addVideosToCollection,
+	clearVideoCollection
 } = generationSlice.actions
 
 export default generationSlice.reducer

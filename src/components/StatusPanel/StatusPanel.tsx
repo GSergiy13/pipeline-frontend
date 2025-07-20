@@ -6,9 +6,7 @@ import Image from 'next/image'
 import { ButtonBasic } from '@/ui/ButtonBasic/buttonBasic'
 import { Spinner } from '@/ui/Spinner/Spinner'
 
-type StatusState =
-	| { type: 'insufficient_funds' }
-	| { type: 'loading'; progress: number; total: number; averageWait?: string }
+type StatusState = { type: 'insufficient_funds' } | { type: 'loading' }
 
 export const StatusPanel = ({ state }: { state: StatusState }) => {
 	if (state.type === 'insufficient_funds') {
@@ -39,14 +37,7 @@ export const StatusPanel = ({ state }: { state: StatusState }) => {
 				<div className='flex flex-col items-center justify-center gap-3 text-center p-4 mt-4'>
 					<Spinner />
 
-					{state.averageWait && (
-						<div className='text-white/60  font-bold max-w-[180px]'>
-							Среднее время ожидания {state.averageWait}.
-						</div>
-					)}
-					<div className='text-white'>
-						Генерация {state.progress}/{state.total}
-					</div>
+					<div className='text-white/60  font-bold max-w-[180px]'>Среднее время ожидания 3мин.</div>
 				</div>
 			</div>
 		)

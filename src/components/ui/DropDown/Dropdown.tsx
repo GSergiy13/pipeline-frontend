@@ -55,7 +55,7 @@ export const DropDown = ({ data, onSelect }: DropDownProps) => {
 				aria-expanded={show}
 			>
 				<Image
-					src={`/models/${active.type}.svg`}
+					src={`/models/${active.type_icon}.svg`}
 					width={16}
 					height={16}
 					alt='Model logo'

@@ -10,7 +10,7 @@ export function useVideoThumbnail(videoUrl: string, captureTimeSec = 1) {
 		video.src = videoUrl
 		video.crossOrigin = 'anonymous'
 		video.preload = 'auto'
-		video.muted = true // Safari: потрібно для роботи з відео
+		video.muted = true
 		video.playsInline = true
 
 		const canvas = document.createElement('canvas')
@@ -27,25 +27,16 @@ export function useVideoThumbnail(videoUrl: string, captureTimeSec = 1) {
 		}
 
 		const handleLoadedMetadata = () => {
-			// гарантуємо, що метадані вже є, тоді seek
-			if (video.duration < captureTimeSec) {
-				video.currentTime = 0.1
-			} else {
-				video.currentTime = captureTimeSec
-			}
+			video.currentTime = Math.min(video.duration, captureTimeSec)
 		}
 
 		video.addEventListener('loadedmetadata', handleLoadedMetadata)
 		video.addEventListener('seeked', handleSeeked)
-
-		// Підкидуємо у DOM для Safari, хоча можна не додавати
-		document.body.appendChild(video)
 		video.load()
 
 		return () => {
 			video.removeEventListener('loadedmetadata', handleLoadedMetadata)
 			video.removeEventListener('seeked', handleSeeked)
-			document.body.removeChild(video)
 		}
 	}, [videoUrl, captureTimeSec])
 

@@ -3,30 +3,47 @@ import type { GenerationDetails } from 'types/IVideo.type'
 
 const POLL_INTERVAL = 30000
 
-export async function waitUntilAnyVideoReady(ids: string[]): Promise<GenerationDetails> {
-	return new Promise((resolve, reject) => {
-		const intervalIds: NodeJS.Timeout[] = []
-		let resolved = false
+export function waitUntilAnyVideoReady(
+	ids: string[],
+	tg_id: number | string,
+	onReady: (id: string, generation: GenerationDetails) => void
+) {
+	let cancelled = false
+	const checkedSet = new Set<string>()
 
-		const checkStatus = async (id: string) => {
-			try {
-				const res = await generateT2VService.getGenerationInfo(id)
-				const status = res.generation.status
+	const check = async () => {
+		if (cancelled) return
 
-				if (status === 'completed' && !resolved) {
-					resolved = true
-					intervalIds.forEach(clearInterval)
-					resolve(res.generation)
+		const pendingIds = ids.filter(id => !checkedSet.has(id))
+		if (!pendingIds.length) return
+
+		const results = await Promise.all(
+			pendingIds.map(async id => {
+				try {
+					const res = await generateT2VService.getGenerationInfo(id, tg_id.toString())
+					return { id, generation: res.generation }
+				} catch (err) {
+					console.error(`❌ Помилка перевірки статусу ${id}:`, err)
+					return null
 				}
-			} catch (err) {
-				console.error(`Помилка перевірки статусу генерації ${id}:`, err)
+			})
+		)
+
+		for (const result of results) {
+			if (!result) continue
+			const { id, generation } = result
+			if (generation.status === 'completed') {
+				checkedSet.add(id)
+				onReady(id, generation)
 			}
 		}
 
-		for (const id of ids) {
-			checkStatus(id)
-			const intervalId = setInterval(() => checkStatus(id), POLL_INTERVAL)
-			intervalIds.push(intervalId)
-		}
-	})
+		setTimeout(check, POLL_INTERVAL)
+	}
+
+	check()
+
+	return () => {
+		cancelled = true
+	}
 }

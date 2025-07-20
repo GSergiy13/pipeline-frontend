@@ -1,10 +1,12 @@
-// app/api/generate/[id]/route.ts
 import axios from 'axios'
 import { NextRequest, NextResponse } from 'next/server'
 import type { GetGenerationError, GetGenerationResponse } from 'types/IVideo.type'
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-	const generationId = params.id
+export const dynamic = 'force-dynamic'
+
+export async function GET(req: NextRequest, context: { params: { id: string } }) {
+	const generationId = context.params.id
+	const telegramId = req.headers.get('x-telegram-id') ?? ''
 
 	if (!generationId) {
 		const error: GetGenerationError = {
@@ -20,7 +22,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 			{
 				headers: {
 					'Content-Type': 'application/json',
-					'X-Telegram-ID': '5621694270' // або динамічно з сесії
+					'X-Telegram-ID': telegramId
 				}
 			}
 		)

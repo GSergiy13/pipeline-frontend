@@ -32,10 +32,15 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 		if (quantityOption) payload.quantity = quantityOption.value
 
 		const durationOption = selectedModel.options.duration?.options?.[0]
-		if (durationOption) payload.duration = durationOption.value
-
+		if (durationOption) {
+			if (typeof durationOption.value === 'number' || durationOption.value === 'auto') {
+				payload.duration = durationOption.value
+			} else {
+				payload.duration = 'auto'
+			}
+		}
 		const qualityOption = selectedModel.options.quality?.options?.[0]
-		if (qualityOption) payload.quality = qualityOption.value
+		if (qualityOption) payload.quality = qualityOption.name
 
 		dispatch(setGenerationParams(payload))
 	}, [selectedModel, dispatch])

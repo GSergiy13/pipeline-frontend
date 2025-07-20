@@ -1,86 +1,78 @@
 'use client'
 
 import cn from 'clsx'
+import { StatusPanel } from 'components/StatusPanel/StatusPanel'
 import { VideoItem } from 'components/VideoItem/VideoItem'
 import { ChatPromptPanel } from 'components/СhatPromptPanel/СhatPromptPanel'
-import { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useGenerations } from 'hooks/useGenerations'
+import { useHeight } from 'hooks/useHeight'
+import { memo, useMemo, useRef } from 'react'
+import { shallowEqual, useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import type { GenerationDetails } from 'types/IVideo.type'
-import { waitUntilAnyVideoReady } from 'utils/waitUntilAnyVideoReady'
 
-export const HomePage = () => {
-	const ref = useRef<HTMLDivElement>(null)
-	const [height, setHeight] = useState(150)
-	const [firstReadyGeneration, setFirstReadyGeneration] = useState<GenerationDetails | null>(null)
+import { EmptyStub } from './EmptyStub/EmptyStub'
+import { SkeletonItem } from './SkeletonItem/SkeletonItem'
 
-	const quantity = useSelector((state: RootState) => state.generation.selectedParams.quantity)
+export const HomePage = memo(() => {
+	const promptRef = useRef<HTMLDivElement>(null)
+	const promptHeight = useHeight(promptRef, 150)
 
-	useEffect(() => {
-		if (ref.current) {
-			setHeight(ref.current.offsetHeight)
-		}
-	}, [])
-
-	const videoItems = Array.from(
-		{ length: typeof quantity === 'number' && quantity > 0 ? quantity : 0 },
-		(_, i) => i + 1
+	const { user, videoCollectionIds } = useSelector(
+		(s: RootState) => ({
+			user: s.user.user,
+			videoCollectionIds: s.generation.videoCollectionIds
+		}),
+		shallowEqual
 	)
-	const videoCount = videoItems.length
-	const isCompactLayout = videoItems.length > 2
 
-	useEffect(() => {
-		const generationIds = ['687b905dbabf9d0584a0aad7']
+	const videoCount = videoCollectionIds.length
+	const isCompactLayout = videoCount > 2
+	const tgId = user?.tg_data?.id ?? '5621694270'
 
-		let cancelled = false
+	const readyMap = useGenerations(videoCollectionIds, tgId)
+	const hasReady = !!Object.keys(readyMap).length
+	const balanceEmpty = user?.balance === 0
 
-		const fetchFirstReady = async () => {
-			try {
-				const firstReady = await waitUntilAnyVideoReady(generationIds)
-				if (!cancelled) {
-					setFirstReadyGeneration(firstReady)
-					console.log('Перше готове відео:', firstReady.resultUrl)
-				}
-			} catch (err) {
-				console.error('Помилка очікування генерацій:', err)
-			}
-		}
+	const content = useMemo(() => {
+		if (!videoCount) return <EmptyStub />
+		if (balanceEmpty) return <StatusPanel state={{ type: 'insufficient_funds' }} />
+		if (!hasReady) return <StatusPanel state={{ type: 'loading' }} />
 
-		fetchFirstReady()
-
-		return () => {
-			cancelled = true
-		}
-	}, [])
-
-	console.log('HomePage rendered with videoCount:', firstReadyGeneration)
+		return videoCollectionIds.map(id =>
+			readyMap[id] ? (
+				<VideoItem
+					key={id}
+					data={readyMap[id]}
+					isCompactLayout={isCompactLayout}
+					className={cn(
+						videoCount === 1 && 'w-full h-full',
+						videoCount === 2 && 'w-full h-1/2',
+						videoCount > 2 && 'w-full'
+					)}
+				/>
+			) : (
+				<SkeletonItem
+					key={id}
+					videoCount={videoCount}
+				/>
+			)
+		)
+	}, [videoCount, balanceEmpty, hasReady, readyMap, isCompactLayout, videoCollectionIds])
 
 	return (
 		<div
-			className='relative px-1 pt-1 w-full bg-chat-gradient rounded-t-[32px]'
-			style={{ paddingBottom: `${height + 26}px` }}
+			className='relative px-1 pt-1 w-full bg-chat-gradient rounded-t-[32px] max-w-[640px] mx-auto'
+			style={{ paddingBottom: `${promptHeight + 26}px` }}
 		>
 			<div
 				className={cn(
 					'w-full overflow-y-auto min-h-[350px] max-h-full h-full',
-					videoCount > 2 ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col'
+					isCompactLayout ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col gap-1.5'
 				)}
 			>
-				{videoItems.map((item, index) => (
-					<VideoItem
-						key={index}
-						videoUrl={firstReadyGeneration?.downloadUrl || ''}
-						className={cn(
-							videoCount === 1 && 'w-full h-full',
-							videoCount === 2 && 'w-full h-1/2',
-							videoCount > 2 && 'w-full'
-						)}
-						isCompactLayout={isCompactLayout}
-					/>
-				))}
+				{content}
 			</div>
-
-			<ChatPromptPanel ref={ref} />
+			<ChatPromptPanel ref={promptRef} />
 		</div>
 	)
-}
+})
