@@ -34,10 +34,13 @@ const HomePage = memo(() => {
 	const balanceEmpty = balance === 0
 	const videoCount = videoIds.length
 	const isCompactLayout = videoCount > 2
-	const isLoadingArray = Object.entries(isLoadingState).map(([id, status]) => ({
-		id,
-		status
-	}))
+	const isLoadingArray =
+		isLoadingState && typeof isLoadingState === 'object'
+			? Object.entries(isLoadingState).map(([id, status]) => ({
+					id,
+					status
+				}))
+			: []
 
 	return (
 		<div
