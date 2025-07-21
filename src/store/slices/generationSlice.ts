@@ -22,6 +22,7 @@ interface GenerationState {
 		prompt: string
 	}
 	videoCollectionIds: string[]
+	videoLoadingMap: Record<string, boolean>
 }
 export type SelectedParams = GenerationState['selectedParams']
 
@@ -39,7 +40,8 @@ const initialState: GenerationState = {
 		seed: null,
 		prompt: ''
 	},
-	videoCollectionIds: []
+	videoCollectionIds: [],
+	videoLoadingMap: {}
 }
 
 const generationSlice = createSlice({
@@ -103,6 +105,13 @@ const generationSlice = createSlice({
 		},
 		addVideosToCollection(state, action: PayloadAction<string[]>) {
 			state.videoCollectionIds = [...new Set([...state.videoCollectionIds, ...action.payload])]
+		},
+		setVideoLoading(state, action: PayloadAction<{ videoId: string; isLoading: boolean }>) {
+			const { videoId, isLoading } = action.payload
+			state.videoLoadingMap[videoId] = isLoading
+		},
+		clearAllVideoLoading(state) {
+			state.videoLoadingMap = {}
 		}
 	}
 })
@@ -119,7 +128,9 @@ export const {
 	setGenerationParams,
 	addVideoToCollection,
 	addVideosToCollection,
-	clearVideoCollection
+	clearVideoCollection,
+	setVideoLoading,
+	clearAllVideoLoading
 } = generationSlice.actions
 
 export default generationSlice.reducer

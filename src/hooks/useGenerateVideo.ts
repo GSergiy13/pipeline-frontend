@@ -6,8 +6,10 @@ import { generateT2VService } from 'services/gnerate.service'
 import {
 	type SelectedParams,
 	addVideosToCollection,
+	clearAllVideoLoading,
 	clearSeed,
-	clearVideoCollection
+	clearVideoCollection,
+	setVideoLoading
 } from 'store/slices/generationSlice'
 import { decreaseBalance } from 'store/slices/userSlice'
 import type { T2VRequest } from 'types/IVideo.type'
@@ -60,6 +62,7 @@ export const useGenerateVideo = ({ telegramId, selectedModel, selectedParams }: 
 		try {
 			dispatch(clearVideoCollection())
 			dispatch(clearSeed())
+			dispatch(clearAllVideoLoading())
 
 			const res = await generateT2VService.postExploreVideos(payload, telegramId, isImageMode)
 
@@ -67,15 +70,19 @@ export const useGenerateVideo = ({ telegramId, selectedModel, selectedParams }: 
 				isImageMode ? res.generations.map(g => g.id) : res.generations.map(g => g.generationId)
 			).filter(Boolean)
 
-			ids.length
-				? dispatch(addVideosToCollection(ids))
-				: toast.error('ID not found in response', toastStyle)
+			if (ids.length) {
+				ids.forEach(id => {
+					dispatch(setVideoLoading({ videoId: id, isLoading: true }))
+				})
+				dispatch(addVideosToCollection(ids))
+			} else {
+				toast.error('ID not found in response', toastStyle)
+			}
 		} catch (err) {
 			toast.error('Error during generation', toastStyle)
 			console.error(err)
 		} finally {
 			setPrompt('')
-
 			setAttachmentFilename(null)
 		}
 	}, [prompt, attachmentFilename, selectedModel, selectedParams, telegramId, price, dispatch])

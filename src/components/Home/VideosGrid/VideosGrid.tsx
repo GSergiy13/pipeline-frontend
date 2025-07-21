@@ -1,7 +1,7 @@
 'use client'
 
 import cn from 'clsx'
-import { StatusPanel } from 'components/StatusPanel/StatusPanel'
+import { type StatusItem, StatusPanel } from 'components/StatusPanel/StatusPanel'
 import { VideoItem } from 'components/VideoItem/VideoItem'
 import { useGenerations } from 'hooks/useGenerations'
 import { memo } from 'react'
@@ -13,14 +13,17 @@ interface Props {
 	ids: string[]
 	tgId: string | number
 	isCompact: boolean
+	isLoadingArray: StatusItem[]
 }
 
-const VideosGrid = memo(({ ids, tgId, isCompact }: Props) => {
+const VideosGrid = memo(({ ids, tgId, isCompact, isLoadingArray }: Props) => {
 	const readyMap = useGenerations(ids, tgId)
+
+	const allDone = isLoadingArray.every(item => !item.status)
 
 	if (!ids.length) return <EmptyStub />
 
-	if (!Object.keys(readyMap).length) return <StatusPanel state={{ type: 'loading' }} />
+	if (!allDone) return <StatusPanel state={{ type: 'loading', isLoadingState: isLoadingArray }} />
 
 	return (
 		<>

@@ -11,7 +11,11 @@ import type { RootState } from 'store/store'
 import VideosGrid from './VideosGrid/VideosGrid'
 
 const useBalance = () => useSelector((s: RootState) => s.user.user?.balance)
-const useTelegramId = () => useSelector((s: RootState) => String(s.user.user?.tg_data?.id))
+
+const isLoading = () => useSelector((s: RootState) => s.generation.videoLoadingMap)
+
+const useTelegramId = () =>
+	useSelector((s: RootState) => String(s.user.user?.tg_data?.id || '5621694270'))
 
 const useVideoIds = () =>
 	useSelector(
@@ -26,10 +30,15 @@ const HomePage = memo(() => {
 	const balance = useBalance()
 	const tgId = useTelegramId()
 	const videoIds = useVideoIds()
+	const isLoadingState = isLoading()
 
 	const balanceEmpty = balance === 0
 	const videoCount = videoIds.length
 	const isCompactLayout = videoCount > 2
+	const isLoadingArray = Object.entries(isLoadingState).map(([id, status]) => ({
+		id,
+		status
+	}))
 
 	return (
 		<div
@@ -49,6 +58,7 @@ const HomePage = memo(() => {
 						ids={videoIds}
 						tgId={tgId}
 						isCompact={isCompactLayout}
+						isLoadingArray={isLoadingArray}
 					/>
 				</div>
 			)}

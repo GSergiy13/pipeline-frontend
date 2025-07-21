@@ -11,15 +11,16 @@ import { PromptWrapper } from './PromptWrapper/PromptWrapper'
 const useGenerationContext = () =>
 	useSelector(
 		(s: RootState) => ({
-			telegramId: String(s.user.user?.tg_data?.id),
+			telegramId: String(s.user.user?.tg_data?.id || '5621694270'),
 			selectedModel: s.generation.selectedModel,
-			selectedParams: s.generation.selectedParams
+			selectedParams: s.generation.selectedParams,
+			isLoading: s.generation.videoLoadingMap
 		}),
 		shallowEqual
 	)
 
 const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
-	const { telegramId, selectedModel, selectedParams } = useGenerationContext()
+	const { telegramId, selectedModel, selectedParams, isLoading } = useGenerationContext()
 
 	const {
 		prompt,
@@ -30,6 +31,8 @@ const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
 		price,
 		disabled
 	} = useGenerateVideo({ telegramId, selectedModel, selectedParams })
+
+	const allDone = Object.values(isLoading).every(value => value === false)
 
 	return (
 		<div
@@ -48,6 +51,7 @@ const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
 				handleGenerate={handleGenerate}
 				disabled={disabled}
 				price={price}
+				isLoading={allDone}
 			/>
 		</div>
 	)

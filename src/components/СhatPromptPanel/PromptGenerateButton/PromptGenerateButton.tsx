@@ -1,37 +1,32 @@
 import Image from 'next/image'
-import { useState } from 'react'
 import { handleVibrate } from 'utils/handleVibrate'
 
 interface PromptGenerateButtonProps {
 	handleGenerate: () => void
 	disabled?: boolean
 	price?: number
+	isLoading?: boolean
 }
 
 export const PromptGenerateButton = ({
 	handleGenerate,
 	disabled,
-	price
+	price,
+	isLoading = false
 }: PromptGenerateButtonProps) => {
-	const [isLoading, setIsLoading] = useState(false)
-
 	const handleClick = () => {
-		setIsLoading(true)
 		handleVibrate('light', 100)
-		setTimeout(() => {
-			setIsLoading(false)
-		}, 4000)
 		handleGenerate()
 	}
 
 	return (
 		<button
 			onClick={handleClick}
-			disabled={disabled}
+			disabled={disabled && isLoading}
 			id='prompt-generate-button'
 			className='flex gap-3 items-center justify-center w-full border border-primary-blue py-[11px] px-6 bg-blue-bg-transparency-12 min-h-12 rounded-[40px] mt-1 hover:bg-blue-bg-transparency-16 transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-bg-transparency-12 disabled:hover:border-primary-blue/40'
 		>
-			{isLoading ? (
+			{!isLoading ? (
 				<span className='text-sm text-primary-blue/65 font-medium'>Please waiting...</span>
 			) : (
 				<>

@@ -31,8 +31,6 @@ export const MediaModal = ({ isOpen, onClose, data }: MediaModalProps) => {
 		}
 	}, [isOpen])
 
-	console.log('data:', data)
-
 	if (!mounted || !isOpen) return null
 
 	return createPortal(
