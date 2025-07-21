@@ -52,7 +52,7 @@ const HomePage = memo(() => {
 			) : (
 				<div
 					className={cn(
-						'w-full overflow-y-auto min-h-[350px] max-h-full h-full',
+						`w-full overflow-y-auto min-h-[350px] max-h-[calc(100%-${promptHeight}px)] h-full`,
 						isCompactLayout ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col gap-1.5'
 					)}
 				>

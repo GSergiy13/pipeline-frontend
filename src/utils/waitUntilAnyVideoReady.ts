@@ -25,8 +25,8 @@ export function waitUntilAnyVideoReady(
 					const res = await generateT2VService.getGenerationInfo(id, tg_id.toString())
 					return { id, generation: res.generation }
 				} catch (err) {
-					console.error(`❌ Помилка перевірки статусу ${id}:`, err)
-					toast.error(`❌ Помилка перевірки статусу ${id}:`, toastStyle)
+					console.error(`❌ Помилка перевірки статусу ${id}`, err)
+					toast.error(`❌ ${err}`, toastStyle)
 					return null
 				}
 			})
