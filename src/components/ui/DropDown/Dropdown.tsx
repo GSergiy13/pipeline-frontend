@@ -51,7 +51,7 @@ export const DropDown = ({ data, onSelect }: DropDownProps) => {
 		>
 			<button
 				onClick={toggleShow}
-				className='flex items-center gap-1 py-1.5 px-2 border border-dark-bg-transparency-12 rounded-3xl min-w-[226px]'
+				className='flex items-center gap-1 py-1.5 px-2 border border-dark-bg-transparency-12 rounded-3xl transition-all duration-300'
 				aria-expanded={show}
 			>
 				<Image

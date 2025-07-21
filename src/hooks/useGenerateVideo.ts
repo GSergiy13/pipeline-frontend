@@ -1,4 +1,3 @@
-// hooks/useGenerateVideo.ts
 import { usePrice } from 'hooks/usePrice'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -37,7 +36,6 @@ export const useGenerateVideo = ({ telegramId, selectedModel, selectedParams }: 
 		let modelType = selectedModel.type
 		if (opts?.quality && quality) modelType += `-${quality}`
 
-		// списання коштів одразу – UI відреагує миттєво
 		dispatch(decreaseBalance(price))
 
 		const base: Partial<T2VRequest> = { model: modelType }
@@ -72,9 +70,8 @@ export const useGenerateVideo = ({ telegramId, selectedModel, selectedParams }: 
 			toast.error('Error during generation', toastStyle)
 			console.error(err)
 		} finally {
-			// очищаємо поля лише після відповіді,
-			// щоб юзер міг повторно відправити, якщо сталася помилка
 			setPrompt('')
+
 			setAttachmentFilename(null)
 		}
 	}, [prompt, attachmentFilename, selectedModel, selectedParams, telegramId, price, dispatch])

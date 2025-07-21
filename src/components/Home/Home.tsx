@@ -4,7 +4,7 @@ import cn from 'clsx'
 import { StatusPanel } from 'components/StatusPanel/StatusPanel'
 import { ChatPromptPanel } from 'components/СhatPromptPanel/СhatPromptPanel'
 import { useInitialHeight } from 'hooks/useInitialHeight'
-import { memo, useEffect, useRef } from 'react'
+import { memo, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
 
@@ -31,12 +31,12 @@ const HomePage = memo(() => {
 	const videoCount = videoIds.length
 	const isCompactLayout = videoCount > 2
 
-	useEffect(() => {
-		console.log('HomePage rendered', {
-			videoCount,
-			balanceEmpty
-		})
-	})
+	// useEffect(() => {
+	// 	console.log('HomePage rendered', {
+	// 		videoCount,
+	// 		balanceEmpty
+	// 	})
+	// })
 
 	return (
 		<div

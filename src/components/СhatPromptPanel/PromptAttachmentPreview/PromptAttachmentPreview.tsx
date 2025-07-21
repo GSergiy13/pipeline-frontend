@@ -11,7 +11,7 @@ export const PromptAttachmentPreview = ({ url, onRemove }: PromptAttachmentPrevi
 	return (
 		<div className='relative overflow-hidden rounded-xl w-[60px] h-[60px]'>
 			<img
-				src={url}
+				src={`${url}`}
 				alt='Attachment Preview'
 				className='max-h-32 max-w-full rounded-lg object-contain'
 			/>

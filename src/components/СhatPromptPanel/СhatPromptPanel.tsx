@@ -44,6 +44,7 @@ const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
 				prompt={prompt}
 				telegramId={telegramId}
 				setPrompt={setPrompt}
+				attachmentFilename={attachmentFilename}
 				setAttachmentFilename={setAttachmentFilename}
 			/>
 			<PromptGenerateButton

@@ -89,6 +89,7 @@ export const OptionSelect = ({ data, onChange }: OptionSelectProps) => {
 								height={20}
 							/>
 							<span
+								className='text-xs'
 								ref={el => {
 									spanRefs.current[groupId] = el
 								}}

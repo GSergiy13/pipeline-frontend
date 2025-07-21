@@ -1,8 +1,6 @@
+import axios from 'axios'
+import FormData from 'form-data'
 import { NextRequest, NextResponse } from 'next/server'
-import path from 'path'
-import { v4 as uuidv4 } from 'uuid'
-
-import fs from 'fs/promises'
 
 export async function POST(req: NextRequest) {
 	try {
@@ -18,29 +16,23 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json({ success: false, message: 'Image not provided' }, { status: 400 })
 		}
 
+		// Читання файла в buffer
 		const arrayBuffer = await file.arrayBuffer()
 		const buffer = Buffer.from(arrayBuffer)
 
-		const ext = file.name.split('.').pop()
-		const filename = `image_${Date.now()}_${uuidv4()}.${ext}`
-		const uploadDir = path.join(process.cwd(), 'public', 'uploads', telegramId)
+		const forwardForm = new FormData()
+		forwardForm.append('image', buffer, file.name)
 
-		await fs.mkdir(uploadDir, { recursive: true })
-
-		const filePath = path.join(uploadDir, filename)
-		await fs.writeFile(filePath, buffer)
-
-		const relativeUrl = `/uploads/${telegramId}/${filename}`
-		const fullUrl = `${process.env.API_URL}${relativeUrl}`
-
-		return NextResponse.json({
-			success: true,
-			message: 'Успішно завантажено зображення',
-			url: fullUrl,
-			filename: `${telegramId}/${filename}`
+		const { data } = await axios.post(`${process.env.API_URL}/api/images/upload`, forwardForm, {
+			headers: {
+				...forwardForm.getHeaders(),
+				'X-Telegram-ID': telegramId
+			}
 		})
-	} catch (error) {
-		console.error('Upload error:', error)
-		return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 })
+
+		return NextResponse.json(data, { status: 200 })
+	} catch (err: any) {
+		console.error('Forward upload error:', err.message)
+		return NextResponse.json({ success: false, message: 'Upload failed' }, { status: 500 })
 	}
 }

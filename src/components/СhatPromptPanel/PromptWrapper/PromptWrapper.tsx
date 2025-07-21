@@ -14,6 +14,7 @@ interface PromptWrapperProps {
 	prompt: string
 	telegramId: string
 	setPrompt: (value: string) => void
+	attachmentFilename: string | null
 	setAttachmentFilename: (filename: string | null) => void
 }
 
@@ -21,11 +22,11 @@ export const PromptWrapper = ({
 	prompt,
 	setPrompt,
 	telegramId,
+	attachmentFilename,
 	setAttachmentFilename
 }: PromptWrapperProps) => {
 	const inputRef = useRef<{ toggleExpand: () => void }>(null)
 	const [isExpanded, setIsExpanded] = useState(false)
-	const [attachmentUrl, setAttachmentUrl] = useState<string | null>(null)
 
 	const handleExpand = () => {
 		inputRef.current?.toggleExpand()
@@ -38,8 +39,8 @@ export const PromptWrapper = ({
 		if (!telegramId) return console.warn('Missing telegramId')
 
 		try {
-			const { url, filename } = await generateT2VService.uploadImage(file, telegramId)
-			setAttachmentUrl(url)
+			const { url } = await generateT2VService.uploadImage(file, telegramId)
+
 			setAttachmentFilename(url)
 		} catch (err) {
 			console.error('Upload failed:', err)
@@ -47,16 +48,15 @@ export const PromptWrapper = ({
 	}
 
 	const handleRemoveAttachment = () => {
-		setAttachmentUrl(null)
 		setAttachmentFilename(null)
 		handleVibrate('light', 100)
 	}
 
 	return (
 		<div className='relative flex flex-col gap-2 mt-auto w-full min-h-20 backdrop-blur-[30px] bg-dark-bg-transparency-8 rounded-[24px] p-2'>
-			{attachmentUrl && (
+			{attachmentFilename && (
 				<PromptAttachmentPreview
-					url={attachmentUrl}
+					url={attachmentFilename}
 					onRemove={handleRemoveAttachment}
 				/>
 			)}
