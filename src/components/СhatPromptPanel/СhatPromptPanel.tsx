@@ -32,7 +32,10 @@ const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
 		disabled
 	} = useGenerateVideo({ telegramId, selectedModel, selectedParams })
 
-	const allDone = Object.values(isLoading).every(value => value === false)
+	const allDone =
+		isLoading && typeof isLoading === 'object'
+			? Object.values(isLoading).every(value => value === false)
+			: true
 
 	return (
 		<div
