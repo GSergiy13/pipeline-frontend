@@ -55,13 +55,16 @@ class GenerateT2VService {
 		const formData = new FormData()
 		formData.append('image', file)
 
-		const res = await fetch('/api/images/upload', {
-			method: 'POST',
-			headers: {
-				'X-Telegram-ID': telegramId
-			},
-			body: formData
-		})
+		const res = await fetch(
+			'https://pipeline-frontend-cpz2ms32f-gsergiy13s-projects.vercel.app/api/images/upload',
+			{
+				method: 'POST',
+				headers: {
+					'X-Telegram-ID': telegramId
+				},
+				body: formData
+			}
+		)
 
 		const data = (await res.json()) as ImageUploadResponse | ImageUploadError
 
