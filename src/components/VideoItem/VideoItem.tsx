@@ -9,6 +9,8 @@ import { handleVibrate } from 'utils/handleVibrate'
 
 import { DownloadButton } from '@/ui/DownloadButton/DownloadButton'
 
+import { VideoPreview } from './VideoPreview/VideoPreview'
+
 interface VideoItemProps {
 	className?: string
 	isCompactLayout?: boolean
@@ -31,11 +33,7 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 	return (
 		<>
 			<div className={cn('relative flex items-center justify-center cursor-pointer', className)}>
-				<video
-					src={`${process.env.NEXT_PUBLIC_API_URL}/${data.downloadUrl}`}
-					controls={false}
-					className='object-cover w-full h-full rounded-[32px] will-change-transform'
-				></video>
+				<VideoPreview videoUrl={`${process.env.NEXT_PUBLIC_API_URL}/${data.downloadUrl}`} />
 
 				<div className='absolute inset-0 bg-video-gradient flex items-center justify-center will-change-transform rounded-[30px] pointer-events-none'>
 					<DownloadButton
