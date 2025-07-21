@@ -7,7 +7,7 @@ interface Props {
 	videoCount: number
 }
 
-export const SkeletonItem = memo(({ videoCount }: Props) => (
+const SkeletonItem = memo(({ videoCount }: Props) => (
 	<div
 		className={cn(
 			'relative rounded-[30px] p-5 bg-white/10 animate-pulse',
@@ -23,3 +23,5 @@ export const SkeletonItem = memo(({ videoCount }: Props) => (
 		</div>
 	</div>
 ))
+
+export default SkeletonItem

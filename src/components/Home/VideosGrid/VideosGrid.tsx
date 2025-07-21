@@ -6,8 +6,8 @@ import { VideoItem } from 'components/VideoItem/VideoItem'
 import { useGenerations } from 'hooks/useGenerations'
 import { memo } from 'react'
 
-import { EmptyStub } from '../EmptyStub/EmptyStub'
-import { SkeletonItem } from '../SkeletonItem/SkeletonItem'
+import EmptyStub from '../EmptyStub/EmptyStub'
+import SkeletonItem from '../SkeletonItem/SkeletonItem'
 
 interface Props {
 	ids: string[]
@@ -15,7 +15,7 @@ interface Props {
 	isCompact: boolean
 }
 
-export const VideosGrid = memo(({ ids, tgId, isCompact }: Props) => {
+const VideosGrid = memo(({ ids, tgId, isCompact }: Props) => {
 	const readyMap = useGenerations(ids, tgId)
 
 	if (!ids.length) return <EmptyStub />
@@ -46,3 +46,5 @@ export const VideosGrid = memo(({ ids, tgId, isCompact }: Props) => {
 		</>
 	)
 })
+
+export default VideosGrid

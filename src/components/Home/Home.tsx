@@ -8,7 +8,7 @@ import { memo, useEffect, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
 
-import { VideosGrid } from './VideosGrid/VideosGrid'
+import VideosGrid from './VideosGrid/VideosGrid'
 
 const useBalance = () => useSelector((s: RootState) => s.user.user?.balance)
 const useTelegramId = () => useSelector((s: RootState) => s.user.user?.tg_data?.id ?? '5621694270')
@@ -19,7 +19,7 @@ const useVideoIds = () =>
 		(a, b) => a.length === b.length && a.every((id, i) => id === b[i])
 	)
 
-export const HomePage = memo(() => {
+const HomePage = memo(() => {
 	const promptRef = useRef<HTMLDivElement>(null)
 	const promptHeight = useInitialHeight(promptRef, 150)
 
@@ -64,3 +64,5 @@ export const HomePage = memo(() => {
 		</div>
 	)
 })
+
+export default HomePage
