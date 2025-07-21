@@ -1,7 +1,10 @@
+import toast from 'react-hot-toast'
 import { generateT2VService } from 'services/gnerate.service'
 import type { GenerationDetails } from 'types/IVideo.type'
 
 const POLL_INTERVAL = 30000
+const toastStyle = { style: { borderRadius: '10px', background: '#333', color: '#fff' } }
+
 export function waitUntilAnyVideoReady(
 	ids: string[],
 	tg_id: number | string,
@@ -23,6 +26,7 @@ export function waitUntilAnyVideoReady(
 					return { id, generation: res.generation }
 				} catch (err) {
 					console.error(`❌ Помилка перевірки статусу ${id}:`, err)
+					toast.error(`❌ Помилка перевірки статусу ${id}:`, toastStyle)
 					return null
 				}
 			})
@@ -37,7 +41,7 @@ export function waitUntilAnyVideoReady(
 				onReady(id, generation)
 			} else if (generation.status === 'failed') {
 				checkedSet.add(id)
-				console.warn(`⚠️ Генерація з ID ${id} завершилась з помилкою.`)
+				toast.error(`⚠️ Генерація з ID ${id} завершилась з помилкою.`, toastStyle)
 			}
 		}
 

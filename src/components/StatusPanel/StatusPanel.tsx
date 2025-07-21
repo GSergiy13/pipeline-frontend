@@ -4,7 +4,6 @@ import { GuidesCarousel } from 'components/GuidesCarousel/GuidesCarousel'
 import Image from 'next/image'
 
 import { ButtonBasic } from '@/ui/ButtonBasic/buttonBasic'
-import { Spinner } from '@/ui/Spinner/Spinner'
 
 type StatusState = { type: 'insufficient_funds' } | { type: 'loading' }
 
@@ -31,13 +30,16 @@ export const StatusPanel = ({ state }: { state: StatusState }) => {
 
 	if (state.type === 'loading') {
 		return (
-			<div className='h-full flex flex-col items-center text-center p-4 w-full max-w-[680px]'>
+			<div className='h-full flex flex-col items-center text-center p-4 w-full'>
 				<GuidesCarousel />
 
-				<div className='flex flex-col items-center justify-center gap-3 text-center p-4 mt-4'>
-					<Spinner />
+				<div className=' flex flex-col items-center justify-center text-center  mt-14 w-full'>
+					<div className='mb-8'>Генерация 2/5</div>
+					<div className='relative w-full bg-dark-bg-transparency-12 rounded h-2 overflow-hidden mb-2'>
+						<div className='w-[33%] h-full bg-primary-blue'></div>
+					</div>
 
-					<div className='text-white/60  font-bold max-w-[180px]'>Среднее время ожидания 3мин.</div>
+					<div className='text-white/60 font-bold '>Среднее время ожидания 4мин.</div>
 				</div>
 			</div>
 		)

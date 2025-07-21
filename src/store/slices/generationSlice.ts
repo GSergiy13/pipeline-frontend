@@ -18,8 +18,8 @@ interface GenerationState {
 		quantity: QuantityType | null
 		duration: DurationType | null
 		quality: QualityType | null
+		seed: number | null
 		prompt: string
-		image: File | null
 	}
 	videoCollectionIds: string[]
 }
@@ -36,8 +36,8 @@ const initialState: GenerationState = {
 		quantity: null,
 		duration: null,
 		quality: null,
-		prompt: '',
-		image: null
+		seed: null,
+		prompt: ''
 	},
 	videoCollectionIds: []
 }
@@ -55,12 +55,14 @@ const generationSlice = createSlice({
 				quantity?: QuantityType
 				duration?: DurationType
 				quality?: QualityType
+				seed?: number
 			}>
 		) {
-			const { quantity, duration, quality } = action.payload
+			const { quantity, duration, quality, seed } = action.payload
 			if (quantity !== undefined) state.selectedParams.quantity = quantity
 			if (duration !== undefined) state.selectedParams.duration = duration
 			if (quality !== undefined) state.selectedParams.quality = quality
+			if (seed !== undefined) state.selectedParams.seed = seed
 		},
 		setQuantity(state, action: PayloadAction<QuantityType>) {
 			state.selectedParams.quantity = action.payload
@@ -71,11 +73,14 @@ const generationSlice = createSlice({
 		setQuality(state, action: PayloadAction<QualityType>) {
 			state.selectedParams.quality = action.payload
 		},
+		setSeed(state, action: PayloadAction<number | null>) {
+			state.selectedParams.seed = action.payload
+		},
+		clearSeed(state) {
+			state.selectedParams.seed = null
+		},
 		setPrompt(state, action: PayloadAction<string>) {
 			state.selectedParams.prompt = action.payload
-		},
-		setImage(state, action: PayloadAction<File | null>) {
-			state.selectedParams.image = action.payload
 		},
 		resetGeneration(state) {
 			state.selectedModel = null
@@ -84,8 +89,8 @@ const generationSlice = createSlice({
 				quantity: null,
 				duration: null,
 				quality: null,
-				prompt: '',
-				image: null
+				seed: null,
+				prompt: ''
 			}
 		},
 		clearVideoCollection(state) {
@@ -107,8 +112,9 @@ export const {
 	setQuantity,
 	setDuration,
 	setQuality,
+	setSeed,
+	clearSeed,
 	setPrompt,
-	setImage,
 	resetGeneration,
 	setGenerationParams,
 	addVideoToCollection,

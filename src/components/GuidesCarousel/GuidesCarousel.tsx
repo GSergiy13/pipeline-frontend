@@ -17,7 +17,7 @@ export const GuidesCarousel = () => {
 	}, [])
 
 	return (
-		<div className='relative w-full overflow-hidden pt-5 min-h-[180px]'>
+		<div className='relative w-full overflow-hidden pt-5 min-h-[160px]'>
 			<AnimatePresence mode='wait'>
 				<motion.div
 					key={index}

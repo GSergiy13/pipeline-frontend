@@ -10,6 +10,7 @@ import type { RootState } from 'store/store'
 import type { GenerationDetails } from 'types/IVideo.type'
 
 import { DownloadButton } from '@/ui/DownloadButton/DownloadButton'
+import { ButtonBox } from '@/ui/Seed/SeedBox'
 import VideoPlayer from '@/ui/VideoPlayer/VideoPlayer'
 
 interface MediaModalProps {
@@ -59,15 +60,9 @@ export const MediaModal = ({ isOpen, onClose, data }: MediaModalProps) => {
 						fileName='Hailuo02.mp4'
 					/>
 
-					<div className='py-2 px-3 flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/5'>
-						<Image
-							src={'/icons/grow.svg'}
-							alt='Grow'
-							width={16}
-							height={16}
-							className='pointer-events-auto'
-						/>
-					</div>
+					{data.seed !== null && data.seed !== undefined && data.seed !== 0 && (
+						<ButtonBox seed={data.seed} />
+					)}
 
 					<div>
 						<h2 className='text-xs text-white/80 mb-1 max-w-[150px] truncate'>

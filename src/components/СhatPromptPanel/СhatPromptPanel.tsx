@@ -1,7 +1,7 @@
 'use client'
 
 import { useGenerateVideo } from 'hooks/useGenerateVideo'
-import { type Ref, forwardRef, memo, useEffect } from 'react'
+import { type Ref, forwardRef, memo } from 'react'
 import { shallowEqual, useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
 
@@ -11,7 +11,7 @@ import { PromptWrapper } from './PromptWrapper/PromptWrapper'
 const useGenerationContext = () =>
 	useSelector(
 		(s: RootState) => ({
-			telegramId: String(s.user.user?.tg_data?.id ?? '5621694270'),
+			telegramId: String(s.user.user?.tg_data?.id),
 			selectedModel: s.generation.selectedModel,
 			selectedParams: s.generation.selectedParams
 		}),
@@ -31,10 +31,6 @@ const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
 		disabled
 	} = useGenerateVideo({ telegramId, selectedModel, selectedParams })
 
-	useEffect(() => {
-		console.log('ChatPromptPanelInner mounted')
-	}, [])
-
 	return (
 		<div
 			ref={ref}
@@ -47,6 +43,7 @@ const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
 				attachmentFilename={attachmentFilename}
 				setAttachmentFilename={setAttachmentFilename}
 			/>
+
 			<PromptGenerateButton
 				handleGenerate={handleGenerate}
 				disabled={disabled}

@@ -11,7 +11,7 @@ import type { RootState } from 'store/store'
 import VideosGrid from './VideosGrid/VideosGrid'
 
 const useBalance = () => useSelector((s: RootState) => s.user.user?.balance)
-const useTelegramId = () => useSelector((s: RootState) => s.user.user?.tg_data?.id ?? '5621694270')
+const useTelegramId = () => useSelector((s: RootState) => String(s.user.user?.tg_data?.id))
 
 const useVideoIds = () =>
 	useSelector(
@@ -30,13 +30,6 @@ const HomePage = memo(() => {
 	const balanceEmpty = balance === 0
 	const videoCount = videoIds.length
 	const isCompactLayout = videoCount > 2
-
-	// useEffect(() => {
-	// 	console.log('HomePage rendered', {
-	// 		videoCount,
-	// 		balanceEmpty
-	// 	})
-	// })
 
 	return (
 		<div

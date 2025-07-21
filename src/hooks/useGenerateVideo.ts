@@ -6,6 +6,7 @@ import { generateT2VService } from 'services/gnerate.service'
 import {
 	type SelectedParams,
 	addVideosToCollection,
+	clearSeed,
 	clearVideoCollection
 } from 'store/slices/generationSlice'
 import { decreaseBalance } from 'store/slices/userSlice'
@@ -29,7 +30,7 @@ export const useGenerateVideo = ({ telegramId, selectedModel, selectedParams }: 
 		const text = prompt.trim()
 		if (!selectedModel || !text) return
 
-		const { quantity, duration, quality } = selectedParams
+		const { quantity, duration, quality, seed } = selectedParams
 		const opts = selectedModel.options
 		const isImageMode = Boolean(attachmentFilename)
 
@@ -45,17 +46,20 @@ export const useGenerateVideo = ({ telegramId, selectedModel, selectedParams }: 
 					...base,
 					pairs: [{ seedPrompt: text, imageUrl: attachmentFilename! }],
 					...(opts?.duration && duration != null && { duration }),
-					...(opts?.quality && quality != null && { quality })
+					...(opts?.quality && quality != null && { quality }),
+					...(seed != null && { seed })
 				}
 			: {
 					...base,
 					seedPrompt: text,
 					...(opts?.quantity && quantity != null && { generationCount: quantity }),
-					...(opts?.duration && duration != null && { duration })
+					...(opts?.duration && duration != null && { duration }),
+					...(seed != null && { seed })
 				}
 
 		try {
 			dispatch(clearVideoCollection())
+			dispatch(clearSeed())
 
 			const res = await generateT2VService.postExploreVideos(payload, telegramId, isImageMode)
 

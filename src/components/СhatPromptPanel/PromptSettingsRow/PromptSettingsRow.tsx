@@ -9,6 +9,7 @@ import type { RootState } from 'store/store'
 import { sanitizeOptionGroups } from 'utils/sanitizeOptionGroups'
 
 import { OptionSelect } from '@/ui/OptionSelect/OptionSelect'
+import { SeedInput } from '@/ui/Seed/SeedInput'
 
 interface PromptSettingsRowProps {
 	onFileSelect: (file: File) => void
@@ -77,8 +78,8 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 				<Image
 					src='/icons/attach.svg'
 					alt='Attach Icon'
-					width={20}
-					height={20}
+					width={16}
+					height={16}
 				/>
 			</button>
 
@@ -88,14 +89,7 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 					onChange={handleOptionChange}
 				/>
 
-				<button className='flex items-center justify-center w-[30px] h-[30px] rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4 hover:bg-dark-bg-transparency-8 transition-colors duration-200'>
-					<Image
-						src='/icons/grow.svg'
-						alt='Grow Icon'
-						width={20}
-						height={20}
-					/>
-				</button>
+				<SeedInput />
 			</div>
 		</div>
 	)

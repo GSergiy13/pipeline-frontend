@@ -14,11 +14,15 @@ export default {
 				'dark-bg-transparency-4': 'rgba(255, 255, 255, 0.04)',
 				'dark-bg-transparency-8': 'rgba(255, 255, 255, 0.08)',
 				'dark-bg-transparency-12': 'rgba(255, 255, 255, 0.12)',
+				'dark-bg-transparency-16': 'rgba(255, 255, 255, 0.16)',
 				'blue-bg-transparency-12': 'rgba(0, 144, 233, 0.12)',
 				'blue-bg-transparency-40': 'rgba(0, 144, 233, 0.40)',
 				'blue-bg-transparency-60': 'rgba(0, 144, 233, 0.60)',
 				'wight-bg-transparency-04': 'rgba(0, 0, 0, 0.04)',
 				'wight-bg-transparency-60': 'rgba(255, 255, 255, 0.60)'
+			},
+			boxShadow: {
+				'seed-shadow': '0px 8px 16.6px 0px rgba(0, 0, 0, 0.25)'
 			},
 			backgroundImage: {
 				'chat-gradient':

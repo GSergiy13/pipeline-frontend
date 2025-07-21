@@ -60,7 +60,7 @@ export const OptionSelect = ({ data, onChange }: OptionSelectProps) => {
 	return (
 		<div
 			ref={wrapperRef}
-			className='flex gap-2'
+			className='flex gap-1'
 		>
 			{Object.values(data).map(group => {
 				if (!group || !group.options?.length) return null
@@ -80,13 +80,13 @@ export const OptionSelect = ({ data, onChange }: OptionSelectProps) => {
 					>
 						<div
 							onClick={() => handleClick(groupId)}
-							className='flex gap-2 items-center justify-center p-2 h-[30px] w-auto rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4 cursor-pointer hover:bg-dark-bg-transparency-8 transition-colors duration-200'
+							className='flex gap-1 items-center justify-center p-2 h-[30px] w-auto rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4 cursor-pointer hover:bg-dark-bg-transparency-8 transition-colors duration-200'
 						>
 							<Image
 								src={iconSrc}
 								alt='Option Icon'
-								width={20}
-								height={20}
+								width={16}
+								height={16}
 							/>
 							<span
 								className='text-xs'
