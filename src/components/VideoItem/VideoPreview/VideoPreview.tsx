@@ -1,19 +1,37 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Spinner } from '@/ui/Spinner/Spinner'
 
 interface VideoPreviewProps {
 	videoUrl: string
+	durationLimit?: number
 }
 
-export const VideoPreview = ({ videoUrl }: VideoPreviewProps) => {
+export const VideoPreview = ({ videoUrl, durationLimit = 3 }: VideoPreviewProps) => {
 	const [isLoaded, setIsLoaded] = useState(false)
 	const [hasError, setHasError] = useState(false)
+	const videoRef = useRef<HTMLVideoElement>(null)
 
 	useEffect(() => {
 		setIsLoaded(false)
 		setHasError(false)
 	}, [videoUrl])
+
+	useEffect(() => {
+		const video = videoRef.current
+		if (!video) return
+
+		const handleTimeUpdate = () => {
+			if (video.currentTime >= durationLimit) {
+				video.pause()
+			}
+		}
+
+		video.addEventListener('timeupdate', handleTimeUpdate)
+		return () => {
+			video.removeEventListener('timeupdate', handleTimeUpdate)
+		}
+	}, [durationLimit])
 
 	return (
 		<>
@@ -22,19 +40,17 @@ export const VideoPreview = ({ videoUrl }: VideoPreviewProps) => {
 					<Spinner />
 				</div>
 			)}
+
 			{!hasError ? (
 				<video
+					ref={videoRef}
 					src={videoUrl}
 					muted
 					playsInline
 					autoPlay
 					preload='auto'
-					controls={false}
 					onLoadedData={() => setIsLoaded(true)}
-					onError={e => {
-						console.error('❌ Video load error', e)
-						setHasError(true)
-					}}
+					onError={() => setHasError(true)}
 					className='object-cover w-full h-full rounded-[32px] will-change-transform'
 				/>
 			) : (
