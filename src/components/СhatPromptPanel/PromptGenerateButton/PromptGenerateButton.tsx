@@ -5,9 +5,14 @@ import { handleVibrate } from 'utils/handleVibrate'
 interface PromptGenerateButtonProps {
 	handleGenerate: () => void
 	disabled?: boolean
+	price?: number
 }
 
-export const PromptGenerateButton = ({ handleGenerate, disabled }: PromptGenerateButtonProps) => {
+export const PromptGenerateButton = ({
+	handleGenerate,
+	disabled,
+	price
+}: PromptGenerateButtonProps) => {
 	const [isLoading, setIsLoading] = useState(false)
 
 	const handleClick = () => {
@@ -37,15 +42,13 @@ export const PromptGenerateButton = ({ handleGenerate, disabled }: PromptGenerat
 							width={24}
 							height={24}
 						/>
-						<span className='text-sm text-primary-blue font-medium'>40</span>
+						<span className='text-sm text-primary-blue font-medium'>{price}</span>
 					</div>
 
 					<i className='w-[1px] h-[18px] bg-primary-blue/40'></i>
 
 					<div className='flex items-center gap-1'>
 						<span className='text-sm text-primary-blue font-medium'>Generated</span>
-
-						{/* Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iste reprehenderit ut itaque enim doloribus mollitia! Culpa fugit, vel quis placeat repudiandae provident est nam magni suscipit, modi voluptates tenetur quisquam. */}
 
 						<Image
 							src='/icons/magic-stick.svg'

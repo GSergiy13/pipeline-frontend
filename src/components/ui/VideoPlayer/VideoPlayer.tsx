@@ -71,7 +71,7 @@ const VideoPlayer = ({ src }: VideoPlayerProps) => {
 
 			<video
 				ref={videoRef}
-				src={src}
+				src={`${process.env.NEXT_PUBLIC_API_URL}/${src}`}
 				playsInline
 				className='w-full h-full rounded-2xl object-contain'
 				onCanPlay={() => setIsLoading(false)}

@@ -1,60 +1,59 @@
-import { forwardRef, useState } from 'react'
-import { useSelector } from 'react-redux'
-import { generateT2VService } from 'services/gnerate-t2v.service'
+'use client'
+
+import { useGenerateVideo } from 'hooks/useGenerateVideo'
+import { type Ref, forwardRef, memo, useEffect } from 'react'
+import { shallowEqual, useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
 
 import { PromptGenerateButton } from './PromptGenerateButton/PromptGenerateButton'
 import { PromptWrapper } from './PromptWrapper/PromptWrapper'
 
-export const ChatPromptPanel = forwardRef<HTMLDivElement>((props, ref) => {
-	const [prompt, setPrompt] = useState('')
-	const generation = useSelector((state: RootState) => state.generation)
-	const { selectedModel, selectedParams } = generation
+const useGenerationContext = () =>
+	useSelector(
+		(s: RootState) => ({
+			telegramId: String(s.user.user?.tg_data?.id ?? '5621694270'),
+			selectedModel: s.generation.selectedModel,
+			selectedParams: s.generation.selectedParams
+		}),
+		shallowEqual
+	)
 
-	const telegramId = useSelector((state: RootState) => state.user.user?.tg_data?.id)
+const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
+	const { telegramId, selectedModel, selectedParams } = useGenerationContext()
 
-	const handleGenerate = async () => {
-		// if (!selectedModel || !prompt.trim()) {
-		// 	console.warn('Missing data to generate')
-		// 	return
-		// }
-		// const payload = {
-		// 	model: selectedModel.type,
-		// 	quantity: selectedParams.quantity,
-		// 	duration: selectedParams.duration,
-		// 	quality: selectedParams.quality,
-		// 	prompt: prompt.trim(),
-		// 	image: selectedParams.image || null,
-		// 	telegramId: telegramId || 'user_id'
-		// }
-		// console.log('Send to backend:', payload)
+	const {
+		prompt,
+		setPrompt,
+		attachmentFilename,
+		setAttachmentFilename,
+		handleGenerate,
+		price,
+		disabled
+	} = useGenerateVideo({ telegramId, selectedModel, selectedParams })
 
-		try {
-			const response = await generateT2VService.postExploreVideos()
-			console.log('Генерація надіслана:', response)
-
-			const generationId = response.generations[0]?.generationId
-			console.log('ID генерації:', generationId)
-
-			// Можна тут зберегти ID в Redux або почати polling
-		} catch (error) {
-			console.error('Помилка при генерації:', error)
-		}
-	}
+	useEffect(() => {
+		console.log('ChatPromptPanelInner mounted')
+	}, [])
 
 	return (
 		<div
 			ref={ref}
-			className=' absolute bottom-0 left-0 flex flex-col mt-auto w-full z-40 transition-all duration-150 max-w-[640px] mx-auto px-3'
+			className='absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col mt-auto w-full z-40 transition-all duration-150 max-w-[640px] mx-auto px-3'
 		>
 			<PromptWrapper
 				prompt={prompt}
+				telegramId={telegramId}
 				setPrompt={setPrompt}
+				attachmentFilename={attachmentFilename}
+				setAttachmentFilename={setAttachmentFilename}
 			/>
 			<PromptGenerateButton
 				handleGenerate={handleGenerate}
-				disabled={!prompt.trim()}
+				disabled={disabled}
+				price={price}
 			/>
 		</div>
 	)
-})
+}
+
+export const ChatPromptPanel = memo(forwardRef(ChatPromptPanelInner))

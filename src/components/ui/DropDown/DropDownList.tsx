@@ -33,7 +33,7 @@ export const DropDownList = ({ data, show, active, handleSelect }: DropDownListP
 					aria-selected={active.id === item.id}
 				>
 					<Image
-						src={`/models/${item.type}.svg`}
+						src={`/models/${item.type_icon}.svg`}
 						width={16}
 						height={16}
 						className='mt-0.5'

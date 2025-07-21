@@ -1,55 +1,68 @@
 'use client'
 
 import cn from 'clsx'
-import { VideoItem } from 'components/VideoItem/VideoItem'
+import { StatusPanel } from 'components/StatusPanel/StatusPanel'
 import { ChatPromptPanel } from 'components/СhatPromptPanel/СhatPromptPanel'
-import { useEffect, useRef, useState } from 'react'
+import { useInitialHeight } from 'hooks/useInitialHeight'
+import { memo, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
 
-export const HomePage = () => {
-	const ref = useRef<HTMLDivElement>(null)
-	const [height, setHeight] = useState(150)
-	const data = useSelector((state: RootState) => state.generation.selectedParams.quantity)
+import VideosGrid from './VideosGrid/VideosGrid'
 
-	useEffect(() => {
-		if (ref.current) {
-			setHeight(ref.current.offsetHeight)
-		}
-	}, [])
+const useBalance = () => useSelector((s: RootState) => s.user.user?.balance)
+const useTelegramId = () => useSelector((s: RootState) => s.user.user?.tg_data?.id ?? '5621694270')
 
-	const videoItems = Array.from(
-		{ length: typeof data === 'number' && data > 0 ? data : 0 },
-		(_, i) => i + 1
+const useVideoIds = () =>
+	useSelector(
+		(s: RootState) => s.generation.videoCollectionIds,
+		(a, b) => a.length === b.length && a.every((id, i) => id === b[i])
 	)
-	const videoCount = videoItems.length
-	const isCompactLayout = videoItems.length > 2
+
+const HomePage = memo(() => {
+	const promptRef = useRef<HTMLDivElement>(null)
+	const promptHeight = useInitialHeight(promptRef, 150)
+
+	const balance = useBalance()
+	const tgId = useTelegramId()
+	const videoIds = useVideoIds()
+
+	const balanceEmpty = balance === 0
+	const videoCount = videoIds.length
+	const isCompactLayout = videoCount > 2
+
+	// useEffect(() => {
+	// 	console.log('HomePage rendered', {
+	// 		videoCount,
+	// 		balanceEmpty
+	// 	})
+	// })
 
 	return (
 		<div
-			className='relative px-1 pt-1 w-full bg-chat-gradient rounded-t-[32px]'
-			style={{ paddingBottom: `${height + 26}px` }}
+			className='relative px-1 pt-1 w-full bg-chat-gradient rounded-t-[32px] max-w-[640px] mx-auto'
+			style={{ paddingBottom: `${promptHeight + 26}px` }}
 		>
-			<div
-				className={cn(
-					' w-full overflow-y-auto min-h-[350px] max-h-full h-full',
-					videoCount > 2 ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col'
-				)}
-			>
-				{videoItems.map((item, index) => (
-					<VideoItem
-						key={index}
-						className={cn(
-							videoCount === 1 && 'w-full h-full',
-							videoCount === 2 && 'w-full h-1/2',
-							videoCount > 2 && 'w-full'
-						)}
-						isCompactLayout={isCompactLayout}
+			{balanceEmpty ? (
+				<StatusPanel state={{ type: 'insufficient_funds' }} />
+			) : (
+				<div
+					className={cn(
+						'w-full overflow-y-auto min-h-[350px] max-h-full h-full',
+						isCompactLayout ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col gap-1.5'
+					)}
+				>
+					<VideosGrid
+						ids={videoIds}
+						tgId={tgId}
+						isCompact={isCompactLayout}
 					/>
-				))}
-			</div>
+				</div>
+			)}
 
-			<ChatPromptPanel ref={ref} />
+			<ChatPromptPanel ref={promptRef} />
 		</div>
 	)
-}
+})
+
+export default HomePage

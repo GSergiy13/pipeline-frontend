@@ -6,7 +6,7 @@ import type { RootState } from 'store/store'
 
 import { ButtonBasic } from '@/ui/ButtonBasic/buttonBasic'
 
-export const Welcome = () => {
+const Welcome = () => {
 	const isMobileTelegram = useSelector((state: RootState) => state.user.isMobileTelegram)
 	const router = useRouter()
 
@@ -71,3 +71,5 @@ export const Welcome = () => {
 		</div>
 	)
 }
+
+export default Welcome

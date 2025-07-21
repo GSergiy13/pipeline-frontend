@@ -7,17 +7,18 @@ import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
+import type { GenerationDetails } from 'types/IVideo.type'
 
 import { DownloadButton } from '@/ui/DownloadButton/DownloadButton'
 import VideoPlayer from '@/ui/VideoPlayer/VideoPlayer'
 
 interface MediaModalProps {
-	src: string
 	isOpen: boolean
 	onClose: () => void
+	data: GenerationDetails
 }
 
-export const MediaModal = ({ src, isOpen, onClose }: MediaModalProps) => {
+export const MediaModal = ({ isOpen, onClose, data }: MediaModalProps) => {
 	const isMobileTelegram = useSelector((state: RootState) => state.user.isMobileTelegram)
 	const [mounted, setMounted] = useState(false)
 
@@ -28,6 +29,8 @@ export const MediaModal = ({ src, isOpen, onClose }: MediaModalProps) => {
 			document.body.style.overflow = ''
 		}
 	}, [isOpen])
+
+	console.log('data:', data)
 
 	if (!mounted || !isOpen) return null
 
@@ -52,7 +55,7 @@ export const MediaModal = ({ src, isOpen, onClose }: MediaModalProps) => {
 				<div className='absolute gap-2 top-5 w-full px-4 flex items-center z-40'>
 					<DownloadButton
 						className='relative'
-						href='/video/scen_1.mp4'
+						href={data.downloadUrl}
 						fileName='Hailuo02.mp4'
 					/>
 
@@ -67,8 +70,10 @@ export const MediaModal = ({ src, isOpen, onClose }: MediaModalProps) => {
 					</div>
 
 					<div>
-						<h2 className='text-xs text-white/80 mb-1'>Video Title</h2>
-						<p className='text-xs text-white/80'>Hailuo 02 (1080p/10s)</p>
+						<h2 className='text-xs text-white/80 mb-1 max-w-[150px] truncate'>
+							{data.prompt.slice(0, 30)}
+						</h2>
+						<p className='text-xs text-white/80'>{data.model}</p>
 					</div>
 
 					<button
@@ -84,7 +89,7 @@ export const MediaModal = ({ src, isOpen, onClose }: MediaModalProps) => {
 					</button>
 				</div>
 
-				<VideoPlayer src={src} />
+				<VideoPlayer src={data.downloadUrl} />
 			</motion.div>
 		</div>,
 		document.body

@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setGenerationParams } from 'store/slices/generationSlice'
 import type { RootState } from 'store/store'
+import { sanitizeOptionGroups } from 'utils/sanitizeOptionGroups'
 
 import { OptionSelect } from '@/ui/OptionSelect/OptionSelect'
 
@@ -21,17 +22,27 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 	useEffect(() => {
 		if (!selectedModel) return
 
-		const defaultQuantity = selectedModel.options.quantity.options[0]?.value
-		const defaultDuration = selectedModel.options.duration.options[0]?.value
-		const defaultQuality = selectedModel.options.quality.options[0]?.value
+		const payload: {
+			quantity?: number
+			duration?: number | 'auto'
+			quality?: string
+		} = {}
 
-		dispatch(
-			setGenerationParams({
-				quantity: defaultQuantity,
-				duration: defaultDuration,
-				quality: defaultQuality
-			})
-		)
+		const quantityOption = selectedModel.options.quantity?.options?.[0]
+		if (quantityOption) payload.quantity = quantityOption.value
+
+		const durationOption = selectedModel.options.duration?.options?.[0]
+		if (durationOption) {
+			if (typeof durationOption.value === 'number' || durationOption.value === 'auto') {
+				payload.duration = durationOption.value
+			} else {
+				payload.duration = 'auto'
+			}
+		}
+		const qualityOption = selectedModel.options.quality?.options?.[0]
+		if (qualityOption) payload.quality = qualityOption.name
+
+		dispatch(setGenerationParams(payload))
 	}, [selectedModel, dispatch])
 
 	const handleFileUploadClick = () => {
@@ -73,7 +84,7 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 
 			<div className='flex items-center gap-1'>
 				<OptionSelect
-					data={selectedModel?.options || {}}
+					data={sanitizeOptionGroups(selectedModel?.options || {})}
 					onChange={handleOptionChange}
 				/>
 

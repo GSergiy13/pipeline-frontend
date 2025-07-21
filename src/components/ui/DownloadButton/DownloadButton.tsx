@@ -13,7 +13,7 @@ export const DownloadButton = ({
 }: DownloadButtonProps) => {
 	return (
 		<a
-			href={href}
+			href={`${process.env.NEXT_PUBLIC_API_URL}/${href}`}
 			download={fileName}
 			className={`${className} py-2 px-3 flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-md border border-white/5 pointer-events-auto`}
 			onClick={e => e.stopPropagation()}

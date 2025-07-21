@@ -1,5 +1,10 @@
+export type DurationType = number | 'auto'
+export type QuantityType = number
+export type QualityType = string
+
 export interface T2VGeneration {
 	generationId: string
+	id: string
 	status: 'pending' | 'completed' | 'failed'
 	index: number
 }
@@ -55,5 +60,37 @@ export interface GetGenerationError {
 
 export interface ErrorResponse {
 	error: string
+	message: string
+}
+
+export type T2VRequest =
+	| {
+			seedPrompt: string
+			model?: string
+			duration?: DurationType
+			seed?: number
+			generationCount?: QuantityType
+			quality?: QualityType
+	  }
+	| {
+			pairs: Array<{
+				seedPrompt: string
+				imageUrl: string
+			}>
+			model?: string
+			duration?: DurationType
+			seed?: number
+			quality?: QualityType
+	  }
+
+export interface ImageUploadResponse {
+	success: true
+	message: string
+	url: string
+	filename: string
+}
+
+export interface ImageUploadError {
+	success: false
 	message: string
 }

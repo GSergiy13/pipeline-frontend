@@ -3,6 +3,7 @@
 import { FixTelegramViewport } from 'components/FixTelegramViewport'
 import { TelegramInitializer } from 'components/TelegramInitializer'
 import { usePathname } from 'next/navigation'
+import { Toaster } from 'react-hot-toast'
 
 import { Footer } from './Footer/Footer'
 import { Header } from './Header/Header'
@@ -19,6 +20,10 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 				{!isWelcome && <Footer />}
 			</div>
 
+			<Toaster
+				position='top-center'
+				reverseOrder={false}
+			/>
 			<FixTelegramViewport />
 			<TelegramInitializer />
 		</>

@@ -32,6 +32,7 @@ export const OptionSelect = ({ data, onChange }: OptionSelectProps) => {
 
 	const handleOptionSelect = (groupId: string, optionId: string) => {
 		const group = data[groupId]
+
 		const selected = group.options.find(opt => opt.id === optionId)
 		if (!selected) return
 
@@ -44,7 +45,6 @@ export const OptionSelect = ({ data, onChange }: OptionSelectProps) => {
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-				// Delay to let onClick inside portal fire first
 				setTimeout(() => {
 					setActiveGroupName(null)
 				}, 0)
@@ -63,6 +63,8 @@ export const OptionSelect = ({ data, onChange }: OptionSelectProps) => {
 			className='flex gap-2'
 		>
 			{Object.values(data).map(group => {
+				if (!group || !group.options?.length) return null
+
 				const groupId = group.id
 
 				const selectedOption =
@@ -87,6 +89,7 @@ export const OptionSelect = ({ data, onChange }: OptionSelectProps) => {
 								height={20}
 							/>
 							<span
+								className='text-xs'
 								ref={el => {
 									spanRefs.current[groupId] = el
 								}}
