@@ -21,7 +21,7 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 	const [isPlaying, setIsPlaying] = useState(false)
 
 	const actualVideoUrl = `${process.env.NEXT_PUBLIC_API_URL}/${data.downloadUrl}`
-	const proxyUrl = `/api/video-proxy?url=${encodeURIComponent(actualVideoUrl)}`
+	const proxyUrl = `https://pipeline-frontend-steel.vercel.app/api/video-proxy?url=${encodeURIComponent(actualVideoUrl)}`
 	const { thumbnail } = useVideoThumbnail(proxyUrl)
 
 	const handleOpen = useCallback(() => {
