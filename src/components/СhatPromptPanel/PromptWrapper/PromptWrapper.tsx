@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import { generateT2VService } from 'services/gnerate-t2v.service'
 import { handleVibrate } from 'utils/handleVibrate'
 
 import { PromptAttachmentPreview } from '../PromptAttachmentPreview/PromptAttachmentPreview'
@@ -11,13 +12,20 @@ import { PromptInputField } from './PromptInputField/PromptInputField'
 
 interface PromptWrapperProps {
 	prompt: string
+	telegramId: string
 	setPrompt: (value: string) => void
+	setAttachmentFilename: (filename: string | null) => void
 }
 
-export const PromptWrapper = ({ prompt, setPrompt }: PromptWrapperProps) => {
+export const PromptWrapper = ({
+	prompt,
+	setPrompt,
+	telegramId,
+	setAttachmentFilename
+}: PromptWrapperProps) => {
 	const inputRef = useRef<{ toggleExpand: () => void }>(null)
 	const [isExpanded, setIsExpanded] = useState(false)
-	const [attachment, setAttachment] = useState<File | null>(null)
+	const [attachmentUrl, setAttachmentUrl] = useState<string | null>(null)
 
 	const handleExpand = () => {
 		inputRef.current?.toggleExpand()
@@ -25,21 +33,30 @@ export const PromptWrapper = ({ prompt, setPrompt }: PromptWrapperProps) => {
 		handleVibrate('light', 100)
 	}
 
-	const handleFileSelect = (file: File) => {
-		setAttachment(file)
+	const handleFileSelect = async (file: File) => {
 		handleVibrate('light', 100)
+		if (!telegramId) return console.warn('Missing telegramId')
+
+		try {
+			const { url, filename } = await generateT2VService.uploadImage(file, telegramId)
+			setAttachmentUrl(url)
+			setAttachmentFilename(url)
+		} catch (err) {
+			console.error('Upload failed:', err)
+		}
 	}
 
 	const handleRemoveAttachment = () => {
-		setAttachment(null)
+		setAttachmentUrl(null)
+		setAttachmentFilename(null)
 		handleVibrate('light', 100)
 	}
 
 	return (
 		<div className='relative flex flex-col gap-2 mt-auto w-full min-h-20 backdrop-blur-[30px] bg-dark-bg-transparency-8 rounded-[24px] p-2'>
-			{attachment && (
+			{attachmentUrl && (
 				<PromptAttachmentPreview
-					file={attachment}
+					url={attachmentUrl}
 					onRemove={handleRemoveAttachment}
 				/>
 			)}

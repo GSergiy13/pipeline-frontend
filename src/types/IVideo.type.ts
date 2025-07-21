@@ -4,6 +4,7 @@ export type QualityType = string
 
 export interface T2VGeneration {
 	generationId: string
+	id: string
 	status: 'pending' | 'completed' | 'failed'
 	index: number
 }
@@ -81,3 +82,15 @@ export type T2VRequest =
 			seed?: number
 			quality?: QualityType
 	  }
+
+export interface ImageUploadResponse {
+	success: true
+	message: string
+	url: string
+	filename: string
+}
+
+export interface ImageUploadError {
+	success: false
+	message: string
+}

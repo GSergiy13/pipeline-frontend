@@ -2,7 +2,6 @@ import { generateT2VService } from 'services/gnerate-t2v.service'
 import type { GenerationDetails } from 'types/IVideo.type'
 
 const POLL_INTERVAL = 30000
-
 export function waitUntilAnyVideoReady(
 	ids: string[],
 	tg_id: number | string,
@@ -32,9 +31,13 @@ export function waitUntilAnyVideoReady(
 		for (const result of results) {
 			if (!result) continue
 			const { id, generation } = result
+
 			if (generation.status === 'completed') {
 				checkedSet.add(id)
 				onReady(id, generation)
+			} else if (generation.status === 'failed') {
+				checkedSet.add(id)
+				console.warn(`⚠️ Генерація з ID ${id} завершилась з помилкою.`)
 			}
 		}
 

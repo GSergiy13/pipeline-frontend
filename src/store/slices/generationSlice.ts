@@ -23,6 +23,7 @@ interface GenerationState {
 	}
 	videoCollectionIds: string[]
 }
+export type SelectedParams = GenerationState['selectedParams']
 
 const initialState: GenerationState = {
 	selectedModel: null,

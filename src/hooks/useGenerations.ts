@@ -2,20 +2,20 @@ import { useEffect, useRef, useState } from 'react'
 import type { GenerationDetails } from 'types/IVideo.type'
 import { waitUntilAnyVideoReady } from 'utils/waitUntilAnyVideoReady'
 
-export function useGenerations(videoIds: string[], telegramId: string | number | undefined) {
+export function useGenerations(ids: string[], tgId?: string | number) {
 	const [map, setMap] = useState<Record<string, GenerationDetails>>({})
 	const stopsRef = useRef<(() => void)[]>([])
 
 	useEffect(() => {
-		if (!videoIds.length || !telegramId) return
+		if (!ids.length || !tgId) return
 
 		stopsRef.current.forEach(stop => stop())
 		stopsRef.current = []
 		setMap({})
 
-		videoIds.forEach(id => {
-			const stop = waitUntilAnyVideoReady([id], telegramId, (readyId, generation) => {
-				setMap(prev => ({ ...prev, [readyId]: generation }))
+		ids.forEach(id => {
+			const stop = waitUntilAnyVideoReady([id], tgId, (readyId, generation) => {
+				setMap(prev => (prev[readyId] ? prev : { ...prev, [readyId]: generation }))
 			})
 			stopsRef.current.push(stop)
 		})
@@ -24,7 +24,7 @@ export function useGenerations(videoIds: string[], telegramId: string | number |
 			stopsRef.current.forEach(stop => stop())
 			stopsRef.current = []
 		}
-	}, [videoIds, telegramId])
+	}, [ids.join(','), tgId])
 
 	return map
 }

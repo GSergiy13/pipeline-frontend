@@ -2,9 +2,9 @@ import type { ModelConfigurationsItem } from 'types/ModelConfigurations.type'
 
 const quantityOptions = [
 	{ id: 'q1', name: '1', value: 1 },
-	{ id: 'q2', name: '2', value: 2 },
-	{ id: 'q4', name: '4', value: 4 },
-	{ id: 'q6', name: '6', value: 6 }
+	{ id: 'q2', name: '2', value: 2 }
+	// { id: 'q4', name: '4', value: 4 },
+	// { id: 'q6', name: '6', value: 6 }
 ]
 
 export const ModelConfigurations: ModelConfigurationsItem[] = [
@@ -13,7 +13,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		type: 'hailuo02-standard',
 		type_icon: 'Hailuo02',
 		name: 'Hailuo02 Standard',
-		price: 0,
+		price: 20,
 		options: {
 			quantity: {
 				id: 'quantity',

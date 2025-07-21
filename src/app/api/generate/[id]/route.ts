@@ -4,8 +4,8 @@ import type { GetGenerationError, GetGenerationResponse } from 'types/IVideo.typ
 
 export const dynamic = 'force-dynamic'
 
-export async function GET(req: NextRequest, context: { params: { id: string } }) {
-	const generationId = context.params.id
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+	const { id: generationId } = await params
 	const telegramId = req.headers.get('x-telegram-id') ?? ''
 
 	if (!generationId) {
@@ -29,10 +29,11 @@ export async function GET(req: NextRequest, context: { params: { id: string } })
 
 		return NextResponse.json(data, { status: 200 })
 	} catch (err: any) {
-		console.error('Помилка при отриманні генерації:', err.message)
+		console.error('❌ Помилка при отриманні генерації:', err?.response?.data || err.message)
+
 		const error: GetGenerationError = {
 			success: false,
-			message: 'Failed to fetch generation'
+			message: err?.response?.data?.message || err?.message || 'Failed to fetch generation'
 		}
 		return NextResponse.json(error, { status: 500 })
 	}
