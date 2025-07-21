@@ -32,7 +32,7 @@ export const HomePage = () => {
 		>
 			<div
 				className={cn(
-					' w-full overflow-y-auto min-h-[350px] max-h-full h-full',
+					' w-full overflow-y-auto min-h-[350px] mx-auto max-w-[640px] h-full',
 					videoCount > 2 ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col'
 				)}
 			>
