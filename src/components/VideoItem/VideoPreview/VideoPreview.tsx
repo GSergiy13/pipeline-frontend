@@ -4,24 +4,24 @@ import { Spinner } from '@/ui/Spinner/Spinner'
 
 interface VideoPreviewProps {
 	videoUrl: string
-	className?: string
-	alt?: string
 }
 
-export const VideoPreview = ({ videoUrl, className, alt = 'Preview' }: VideoPreviewProps) => {
+export const VideoPreview = ({ videoUrl }: VideoPreviewProps) => {
 	const [isLoaded, setIsLoaded] = useState(false)
 	const [hasError, setHasError] = useState(false)
 
 	useEffect(() => {
-		// Reset state on URL change
 		setIsLoaded(false)
 		setHasError(false)
 	}, [videoUrl])
 
 	return (
 		<>
-			{' '}
-			{!isLoaded && !hasError && <Spinner />}
+			{!isLoaded && !hasError && (
+				<div className='absolute inset-0 flex items-center justify-center z-10 bg-black/10'>
+					<Spinner />
+				</div>
+			)}
 			{!hasError ? (
 				<video
 					src={videoUrl}
@@ -33,7 +33,7 @@ export const VideoPreview = ({ videoUrl, className, alt = 'Preview' }: VideoPrev
 				/>
 			) : (
 				<div className='w-full h-full bg-gray-800 flex items-center justify-center text-white text-xs'>
-					⚠️ Не вдалося завантажити прев’ю
+					⚠️ Не удалось загрузить превью
 				</div>
 			)}
 		</>
