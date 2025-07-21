@@ -27,8 +27,14 @@ export const VideoPreview = ({ videoUrl }: VideoPreviewProps) => {
 					src={videoUrl}
 					muted
 					playsInline
-					onCanPlay={() => setIsLoaded(true)}
-					onError={() => setHasError(true)}
+					autoPlay
+					preload='auto'
+					controls={false}
+					onLoadedData={() => setIsLoaded(true)}
+					onError={e => {
+						console.error('❌ Video load error', e)
+						setHasError(true)
+					}}
 					className='object-cover w-full h-full rounded-[32px] will-change-transform'
 				/>
 			) : (

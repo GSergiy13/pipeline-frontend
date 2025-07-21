@@ -44,7 +44,7 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 
 					<div
 						className={cn(
-							'absolute left-1/2 top-1/2 flex items-center gap-2 rounded-full bg-white/5 backdrop-blur-md border border-white/5 hover:bg-white/10 transition-all duration-300 ease-in-out pointer-events-auto',
+							'absolute left-1/2 top-1/2 flex items-center gap-2 rounded-full bg-white/5 backdrop-blur-md border border-white/5 hover:bg-white/10 transition-all duration-300 ease-in-out pointer-events-auto z-20',
 							{
 								'py-4 px-4 -translate-x-1/2 -translate-y-[60%]': isCompactLayout,
 								'py-5 px-5 -translate-x-1/2 -translate-y-1/2': !isCompactLayout
