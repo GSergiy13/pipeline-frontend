@@ -5,6 +5,7 @@ import { MediaModal } from 'components/MediaModal/MediaModal'
 import { useVideoThumbnail } from 'hooks/useVideoThumbnail'
 import Image from 'next/image'
 import { useCallback, useState } from 'react'
+import { videoService } from 'services/video.service'
 import type { GenerationDetails } from 'types/IVideo.type'
 import { handleVibrate } from 'utils/handleVibrate'
 
@@ -20,8 +21,7 @@ interface VideoItemProps {
 export const VideoItem = ({ className, isCompactLayout = false, data }: VideoItemProps) => {
 	const [isPlaying, setIsPlaying] = useState(false)
 
-	const actualVideoUrl = `${process.env.NEXT_PUBLIC_API_URL}/${data.downloadUrl}`
-	const proxyUrl = `https://pipeline-frontend-steel.vercel.app/api/video-proxy?url=${encodeURIComponent(actualVideoUrl)}`
+	const proxyUrl = videoService.getProxyVideoUrl(data.downloadUrl)
 	const { thumbnail } = useVideoThumbnail(proxyUrl)
 
 	const handleOpen = useCallback(() => {
@@ -60,7 +60,7 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 					{thumbnail && (
 						<div
 							className={cn(
-								'absolute left-1/2 top-1/2  flex items-center gap-2 rounded-full  bg-white/5 backdrop-blur-md border border-white/5 hover:bg-white/10 transition-all duration-300 ease-in-out pointer-events-auto',
+								'absolute left-1/2 top-1/2 flex items-center gap-2 rounded-full bg-white/5 backdrop-blur-md border border-white/5 hover:bg-white/10 transition-all duration-300 ease-in-out pointer-events-auto',
 								{
 									'py-4 px-4 -translate-x-1/2 -translate-y-[60%]': isCompactLayout,
 									'py-5 px-5 -translate-x-1/2 -translate-y-1/2': !isCompactLayout
@@ -69,7 +69,7 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 							onClick={handleOpen}
 						>
 							<Image
-								src={'/icons/play.svg'}
+								src='/icons/play.svg'
 								alt='Play Icon'
 								width={24}
 								height={24}
