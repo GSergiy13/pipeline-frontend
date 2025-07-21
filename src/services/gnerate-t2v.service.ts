@@ -20,7 +20,9 @@ class GenerateT2VService {
 			telegramId
 		)
 
-		const endpoint = isImageMode ? '/api/generate/i2v' : '/api/generate/t2v'
+		const endpoint = isImageMode
+			? 'https://pipeline-frontend-steel.vercel.app/api/generate/i2v'
+			: '/api/generate/t2v'
 
 		const res = await fetch(endpoint, {
 			method: 'POST',
@@ -39,10 +41,13 @@ class GenerateT2VService {
 		generationId: string,
 		telegramId: string
 	): Promise<GetGenerationResponse> {
-		const res = await fetch(`/api/generate/${generationId}`, {
-			method: 'GET',
-			headers: { 'X-Telegram-ID': telegramId }
-		})
+		const res = await fetch(
+			`https://pipeline-frontend-steel.vercel.app/api/generate/${generationId}`,
+			{
+				method: 'GET',
+				headers: { 'X-Telegram-ID': telegramId }
+			}
+		)
 
 		const data = (await res.json()) as GetGenerationResponse | GetGenerationError
 		if (!res.ok || !data.success) {
