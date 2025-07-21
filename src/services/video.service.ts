@@ -9,6 +9,17 @@ class VideoService {
 
 	async getVideoThumbnail(videoUrl: string, captureTimeSec = 1): Promise<string | null> {
 		return new Promise(resolve => {
+			const isTelegramWebView = (): boolean => {
+				const ua = navigator.userAgent.toLowerCase()
+				return ua.includes('telegram') || (window as any).TelegramWebviewProxy != null
+			}
+
+			// 🛡 Блокуємо генерацію в Telegram WebView
+			if (isTelegramWebView()) {
+				console.warn('📵 Thumbnail disabled in Telegram WebView')
+				return resolve(null)
+			}
+
 			const video = document.createElement('video')
 			video.src = videoUrl
 			video.crossOrigin = 'anonymous'
@@ -25,12 +36,26 @@ class VideoService {
 			video.addEventListener('seeked', () => {
 				canvas.width = video.videoWidth
 				canvas.height = video.videoHeight
-				const ctx = canvas.getContext('2d')
-				if (!ctx) return resolve(null)
 
-				ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
-				const imageUrl = canvas.toDataURL('image/png')
-				resolve(imageUrl)
+				const ctx = canvas.getContext('2d')
+				if (!ctx) {
+					console.warn('🖼 No canvas context')
+					return resolve(null)
+				}
+
+				try {
+					ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+					const imageUrl = canvas.toDataURL('image/png')
+					resolve(imageUrl)
+				} catch (error) {
+					console.error('❌ Canvas toDataURL failed:', error)
+					resolve(null)
+				}
+			})
+
+			video.addEventListener('error', e => {
+				console.error('🎥 Video failed to load:', e, video.src)
+				resolve(null)
 			})
 
 			video.load()
