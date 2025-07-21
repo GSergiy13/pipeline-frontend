@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { generateT2VService } from 'services/gnerate-t2v.service'
+import { generateT2VService } from 'services/gnerate.service'
 import { handleVibrate } from 'utils/handleVibrate'
 
 import { PromptAttachmentPreview } from '../PromptAttachmentPreview/PromptAttachmentPreview'

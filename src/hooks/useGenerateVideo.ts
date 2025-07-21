@@ -2,7 +2,7 @@ import { usePrice } from 'hooks/usePrice'
 import { useCallback, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
-import { generateT2VService } from 'services/gnerate-t2v.service'
+import { generateT2VService } from 'services/gnerate.service'
 import {
 	type SelectedParams,
 	addVideosToCollection,

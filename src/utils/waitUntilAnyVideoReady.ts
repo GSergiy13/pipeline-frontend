@@ -1,4 +1,4 @@
-import { generateT2VService } from 'services/gnerate-t2v.service'
+import { generateT2VService } from 'services/gnerate.service'
 import type { GenerationDetails } from 'types/IVideo.type'
 
 const POLL_INTERVAL = 30000
