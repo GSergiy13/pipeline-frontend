@@ -12,7 +12,7 @@ export type OptionGroup<T = string | number> = {
 }
 
 export type ModelConfigurationsItem = {
-	id: number
+	id: string
 	type: string
 	type_generation?: string
 	type_icon?: string

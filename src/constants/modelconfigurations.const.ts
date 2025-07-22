@@ -1,4 +1,5 @@
 import type { ModelConfigurationsItem } from 'types/ModelConfigurations.type'
+import { v4 as uuidv4 } from 'uuid'
 
 const quantityOptions = [
 	{ id: 'q1', name: '1', value: 1 },
@@ -9,7 +10,7 @@ const quantityOptions = [
 
 export const ModelConfigurations: ModelConfigurationsItem[] = [
 	{
-		id: 1,
+		id: uuidv4(),
 		type: 'hailuo02-standard',
 		type_generation: 'text-video',
 		type_icon: 'Hailuo02',
@@ -36,7 +37,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 	},
 
 	{
-		id: 2,
+		id: uuidv4(),
 		type: 'hailuo02-pro',
 		type_generation: 'text-video',
 		type_icon: 'Hailuo02',
@@ -55,7 +56,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 	},
 
 	{
-		id: 3,
+		id: uuidv4(),
 		type: 'seedance-lite',
 		type_generation: 'text-video',
 		type_icon: 'Seedance',
@@ -82,7 +83,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 	},
 
 	{
-		id: 4,
+		id: uuidv4(),
 		type: 'seedance-v1-pro',
 		type_generation: 'text-video',
 		type_icon: 'Seedance',
@@ -118,7 +119,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 	},
 
 	{
-		id: 7,
+		id: uuidv4(),
 		type: 'veo3',
 		type_generation: 'text-video',
 		type_icon: 'Veo',
@@ -144,7 +145,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		}
 	},
 	{
-		id: 8,
+		id: uuidv4(),
 		type: 'veo3_fast',
 		type_generation: 'text-video',
 		type_icon: 'Veo',
@@ -169,8 +170,35 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 			quality: null
 		}
 	},
+
 	{
-		id: 9,
+		id: uuidv4(),
+		type: 'kling-v2.1-t2v-master',
+		type_generation: 'text-video',
+		type_icon: 'flux',
+		name: 'Kling v2.1 T2V Master',
+		price: 60,
+		options: {
+			quantity: {
+				id: 'quantity',
+				name: 'Quantity',
+				icon: '/icons/quantity/1.svg',
+				options: quantityOptions
+			},
+			duration: {
+				id: 'duration',
+				name: 'Duration',
+				icon: '/icons/clock.svg',
+				options: [
+					{ id: 'd1', name: '5 sec', value: 5 },
+					{ id: 'd4', name: '10 sec', value: 10 }
+				]
+			},
+			quality: null
+		}
+	},
+	{
+		id: uuidv4(),
 		type: 'audio_v3',
 		type_generation: 'text-audio',
 		name: 'V3',

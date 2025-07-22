@@ -30,7 +30,6 @@ interface SingleAudioCardProps {
 	audioUrl: string
 	createdAt: string
 }
-
 const SingleAudioCard = ({ audioUrl, createdAt }: SingleAudioCardProps) => {
 	const audioRef = useRef<HTMLAudioElement>(null)
 	const [isPlaying, setIsPlaying] = useState(false)
@@ -48,12 +47,17 @@ const SingleAudioCard = ({ audioUrl, createdAt }: SingleAudioCardProps) => {
 		}
 	}
 
+	const handleEnded = () => {
+		setIsPlaying(false)
+	}
+
 	return (
 		<div className='relative flex items-center justify-center w-full h-full rounded-[30px] overflow-hidden bg-black'>
 			<audio
 				ref={audioRef}
 				src={`${NEXT_PUBLIC_API_URL}${audioUrl}`}
 				preload='auto'
+				onEnded={handleEnded}
 			/>
 
 			<DownloadButton
