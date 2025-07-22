@@ -2,6 +2,7 @@
 
 import cn from 'clsx'
 import { MediaModal } from 'components/MediaModal/MediaModal'
+import { NEXT_PUBLIC_API_URL } from 'constants/CONST_API'
 import Image from 'next/image'
 import { useCallback, useState } from 'react'
 import type { GenerationDetails } from 'types/IVideo.type'
@@ -30,6 +31,8 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 		handleVibrate('light', 100)
 	}, [])
 
+	console.log('VideoItem data:', data)
+
 	return (
 		<>
 			<div className={cn('relative flex items-center justify-center cursor-pointer', className)}>
@@ -38,7 +41,7 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 				<div className='absolute inset-0 bg-video-gradient flex items-center justify-center will-change-transform rounded-[30px] pointer-events-none'>
 					<DownloadButton
 						className='absolute left-3 top-3'
-						href={data.downloadUrl}
+						href={`${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`}
 						fileName='Hailuo02.mp4'
 					/>
 

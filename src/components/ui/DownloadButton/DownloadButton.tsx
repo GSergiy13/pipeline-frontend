@@ -20,14 +20,13 @@ export const DownloadButton = ({
 	useEffect(() => {
 		if (typeof window !== 'undefined') {
 			setIsTelegramWebApp(
-				// Basic detection
 				typeof window.Telegram !== 'undefined' && !!window.Telegram.WebApp?.initData
 			)
 		}
 	}, [])
 
 	const downloadProxyUrl = `${NEXT_PUBLIC_BASE_URL}/api/download?url=${encodeURIComponent(
-		`${NEXT_PUBLIC_API_URL}${href}`
+		`${href}`
 	)}&filename=${encodeURIComponent(fileName)}`
 
 	const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {

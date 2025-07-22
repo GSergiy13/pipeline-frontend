@@ -62,7 +62,7 @@ const SingleAudioCard = ({ audioUrl, createdAt }: SingleAudioCardProps) => {
 
 			<DownloadButton
 				className='absolute left-3 top-3 z-20'
-				href={audioUrl}
+				href={`${NEXT_PUBLIC_API_URL}${audioUrl}`}
 				fileName='audio.mp3'
 			/>
 

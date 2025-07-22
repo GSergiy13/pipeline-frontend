@@ -1,6 +1,7 @@
 'use client'
 
 import cn from 'clsx'
+import { NEXT_PUBLIC_API_URL } from 'constants/CONST_API'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
@@ -54,7 +55,7 @@ export const MediaModal = ({ isOpen, onClose, data }: MediaModalProps) => {
 				<div className='absolute gap-2 top-5 w-full px-4 flex items-center z-40'>
 					<DownloadButton
 						className='relative'
-						href={data.downloadUrl}
+						href={`${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`}
 						fileName='Hailuo02.mp4'
 					/>
 

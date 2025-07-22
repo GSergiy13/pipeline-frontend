@@ -11,7 +11,7 @@ import { PromptWrapper } from './PromptWrapper/PromptWrapper'
 const useGenerationContext = () =>
 	useSelector(
 		(s: RootState) => ({
-			telegramId: String(s.user.user?.tg_data?.id),
+			telegramId: String(s.user.user?.tg_data?.id || '5621694270'),
 			selectedModel: s.generation.selectedModel,
 			selectedParams: s.generation.selectedParams,
 			isLoading: s.generation.videoLoadingMap
