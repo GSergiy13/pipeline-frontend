@@ -21,8 +21,16 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 			</div>
 
 			<Toaster
-				position='top-center'
+				position='bottom-center'
 				reverseOrder={false}
+				toastOptions={{
+					error: {
+						duration: 6000
+					},
+					success: {
+						duration: 3000
+					}
+				}}
 			/>
 			<FixTelegramViewport />
 			<TelegramInitializer />

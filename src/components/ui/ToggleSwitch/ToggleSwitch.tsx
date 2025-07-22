@@ -1,5 +1,6 @@
 import cn from 'clsx'
 import { useState } from 'react'
+import { handleVibrate } from 'utils/handleVibrate'
 
 interface ToggleSwitchProps {
 	label?: string
@@ -18,6 +19,7 @@ export const ToggleSwitch = ({
 		const newValue = !isChecked
 		setIsChecked(newValue)
 		onChange?.(newValue)
+		handleVibrate('light', 100)
 	}
 
 	return (
