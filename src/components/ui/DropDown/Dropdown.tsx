@@ -54,12 +54,15 @@ export const DropDown = ({ data, onSelect }: DropDownProps) => {
 				className='flex items-center gap-1 py-1.5 px-2 border border-dark-bg-transparency-12 rounded-3xl transition-all duration-300'
 				aria-expanded={show}
 			>
-				<Image
-					src={`/models/${active.type_icon}.svg`}
-					width={16}
-					height={16}
-					alt='Model logo'
-				/>
+				{active.type_icon && (
+					<Image
+						src={`/models/${active.type_icon}.svg`}
+						width={16}
+						height={16}
+						alt='Model icon'
+					/>
+				)}
+
 				<span className='text-sm'>{active.name}</span>
 				<Image
 					className={cn('ml-auto transition-all duration-300', {

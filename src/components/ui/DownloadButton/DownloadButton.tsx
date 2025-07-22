@@ -1,6 +1,6 @@
 'use client'
 
-import { NEXT_PUBLIC_BASE_URL } from 'constants/CONST_API'
+import { NEXT_PUBLIC_API_URL, NEXT_PUBLIC_BASE_URL } from 'constants/CONST_API'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
@@ -27,7 +27,7 @@ export const DownloadButton = ({
 	}, [])
 
 	const downloadProxyUrl = `${NEXT_PUBLIC_BASE_URL}/api/download?url=${encodeURIComponent(
-		`${process.env.NEXT_PUBLIC_API_URL}/${href}`
+		`${NEXT_PUBLIC_API_URL}${href}`
 	)}&filename=${encodeURIComponent(fileName)}`
 
 	const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -37,7 +37,7 @@ export const DownloadButton = ({
 			e.preventDefault()
 			window.Telegram.WebApp.downloadFile(
 				{
-					url: `${process.env.NEXT_PUBLIC_API_URL}/${href}`,
+					url: `${NEXT_PUBLIC_API_URL}${href}`,
 					file_name: fileName
 				},
 				(accepted: boolean) => {

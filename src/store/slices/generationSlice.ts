@@ -4,11 +4,13 @@ import type { ModelConfigurationsItem } from 'types/ModelConfigurations.type'
 type QuantityType = number
 type DurationType = number | 'auto'
 type QualityType = string
+type ModelType = string
 
 interface ModelOptions {
 	quantities: QuantityType[]
 	durations: DurationType[]
 	qualities: QualityType[]
+	models?: ModelType[]
 }
 
 interface GenerationState {
@@ -20,6 +22,9 @@ interface GenerationState {
 		quality: QualityType | null
 		seed: number | null
 		prompt: string
+		model?: ModelType | null
+		instrumental?: boolean
+		custom_model?: boolean
 	}
 	videoCollectionIds: string[]
 	videoLoadingMap: Record<string, boolean>
@@ -31,14 +36,18 @@ const initialState: GenerationState = {
 	availableOptions: {
 		quantities: [],
 		durations: [],
-		qualities: []
+		qualities: [],
+		models: []
 	},
 	selectedParams: {
 		quantity: null,
 		duration: null,
 		quality: null,
 		seed: null,
-		prompt: ''
+		prompt: '',
+		model: null,
+		instrumental: false,
+		custom_model: false
 	},
 	videoCollectionIds: [],
 	videoLoadingMap: {}
@@ -112,6 +121,15 @@ const generationSlice = createSlice({
 		},
 		clearAllVideoLoading(state) {
 			state.videoLoadingMap = {}
+		},
+		setModel(state, action: PayloadAction<ModelType | null>) {
+			state.selectedParams.model = action.payload
+		},
+		setInstrumental(state, action: PayloadAction<boolean>) {
+			state.selectedParams.instrumental = action.payload
+		},
+		setCustomModel(state, action: PayloadAction<boolean>) {
+			state.selectedParams.custom_model = action.payload
 		}
 	}
 })
@@ -130,7 +148,10 @@ export const {
 	addVideosToCollection,
 	clearVideoCollection,
 	setVideoLoading,
-	clearAllVideoLoading
+	clearAllVideoLoading,
+	setModel,
+	setInstrumental,
+	setCustomModel
 } = generationSlice.actions
 
 export default generationSlice.reducer

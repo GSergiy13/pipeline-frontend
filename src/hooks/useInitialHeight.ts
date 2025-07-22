@@ -8,7 +8,6 @@ export function useInitialHeight<T extends HTMLElement = HTMLElement>(
 
 	useLayoutEffect(() => {
 		const el = ref.current
-		console.log('useInitialHeight', el, el?.offsetHeight)
 		if (el) setHeight(el.offsetHeight)
 	}, [])
 

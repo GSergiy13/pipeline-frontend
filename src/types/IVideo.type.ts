@@ -33,7 +33,7 @@ export interface GenerationDetails {
 	userId: string
 	telegramId: string
 	status: 'pending' | 'completed' | 'failed'
-	type: 't2v' | 'i2v'
+	type: 't2v' | 'i2v' | 't2a'
 	prompt: string
 	model: string
 	service: string
@@ -51,6 +51,33 @@ export interface GenerationDetails {
 export interface GetGenerationResponse {
 	success: true
 	generation: GenerationDetails
+}
+
+export interface GenerationAudioResponse {
+	success: boolean
+	generation: AudioGenerationDetails
+}
+
+export interface AudioGenerationDetails {
+	userId: string
+	telegramId: string
+	flowId: string
+	generationIndex: number
+	status: 'completed' | 'pending' | 'failed' | string
+	type: 't2v' | 'i2v' | 't2a'
+	prompt: string
+	model: string
+	service: string
+	audioDownloadUrls: string[]
+	audioResultUrls: string[]
+	startTime: string // ISO 8601 date
+	createdAt: string
+	updatedAt: string
+	jobId: string
+	downloadUrl: string
+	endTime: string
+	resultUrl: string
+	id: string
 }
 
 export interface GetGenerationError {
@@ -93,4 +120,21 @@ export interface ImageUploadResponse {
 export interface ImageUploadError {
 	success: false
 	message: string
+}
+export interface T2ARequest {
+	seedPrompt: string
+	model?: string
+	customMode?: boolean
+	style?: string
+	title?: string
+	instrumental?: boolean
+	negativeTags?: string[]
+}
+
+export interface T2AResponse {
+	generations: {
+		generationId: string
+		audioUrl: string
+		duration: number
+	}[]
 }

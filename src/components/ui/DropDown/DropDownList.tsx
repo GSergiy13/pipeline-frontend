@@ -12,7 +12,7 @@ export const DropDownList = ({ data, show, active, handleSelect }: DropDownListP
 	return (
 		<ul
 			className={cn(
-				`absolute flex flex-col top-11 w-full rounded-xl bg-dark-bg-transparency-8 backdrop-blur-[30px] will-change-transform transform-gpu z-50 transition-all duration-400 overflow-hidden max-h-[60vh] overflow-y-auto`,
+				`absolute flex flex-col top-11 w-full rounded-xl bg-dark-bg-transparency-8 backdrop-blur-[30px] will-change-transform transform-gpu z-50 transition-all duration-400 overflow-hidden max-h-[60vh] overflow-y-auto min-w-[180px]`,
 				{
 					'pointer-events-auto opacity-100 translate-y-0': show == true,
 					'pointer-events-none opacity-0 -translate-y-3': show == false
@@ -32,13 +32,17 @@ export const DropDownList = ({ data, show, active, handleSelect }: DropDownListP
 					role='option'
 					aria-selected={active.id === item.id}
 				>
-					<Image
-						src={`/models/${item.type_icon}.svg`}
-						width={16}
-						height={16}
-						className='mt-0.5'
-						alt='Model logo'
-					/>
+					{item.type_icon ? (
+						<Image
+							src={`/models/${item.type_icon}.svg`}
+							width={16}
+							height={16}
+							className='mt-0.5'
+							alt='Model icon'
+						/>
+					) : (
+						<div className='h-4 w-4'></div>
+					)}
 
 					<div className='flex flex-col gap-1'>
 						<span className='text-sm'>{item.name}</span>

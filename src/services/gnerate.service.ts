@@ -4,6 +4,8 @@ import type {
 	GetGenerationResponse,
 	ImageUploadError,
 	ImageUploadResponse,
+	T2ARequest,
+	T2AResponse,
 	T2VRequest,
 	T2VResponse
 } from 'types/IVideo.type'
@@ -34,6 +36,24 @@ class GenerateT2VService {
 
 		if (!res.ok) throw new Error(`Failed to generate video from ${endpoint}`)
 		return (await res.json()) as T2VResponse
+	}
+
+	async postAudioGeneration(payload: T2ARequest, telegramId: string): Promise<T2AResponse> {
+		console.log('Sending request to generate T2A with payload:', payload)
+
+		const endpoint = '/api/generate/t2a'
+
+		const res = await fetch(endpoint, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'X-Telegram-ID': telegramId
+			},
+			body: JSON.stringify(payload)
+		})
+
+		if (!res.ok) throw new Error(`Failed to generate audio from ${endpoint}`)
+		return (await res.json()) as T2AResponse
 	}
 
 	async getGenerationInfo(

@@ -69,6 +69,7 @@ export const PromptWrapper = ({
 				onExpand={handleExpand}
 				isExpanded={isExpanded}
 			/>
+
 			<PromptSettingsRow onFileSelect={handleFileSelect} />
 		</div>
 	)

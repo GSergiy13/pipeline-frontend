@@ -14,12 +14,16 @@ export type OptionGroup<T = string | number> = {
 export type ModelConfigurationsItem = {
 	id: number
 	type: string
+	type_generation?: string
 	type_icon?: string
 	name: string
 	price: number
-	options: {
+	instrumental?: boolean
+	custom_model?: boolean
+	options?: {
 		quantity: OptionGroup<number> | null
 		duration: OptionGroup<number | string> | null
 		quality: OptionGroup<string> | null
+		model?: OptionGroup<string> | null
 	}
 }

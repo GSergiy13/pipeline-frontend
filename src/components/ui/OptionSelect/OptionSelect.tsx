@@ -82,12 +82,16 @@ export const OptionSelect = ({ data, onChange }: OptionSelectProps) => {
 							onClick={() => handleClick(groupId)}
 							className='flex gap-1 items-center justify-center p-2 h-[30px] w-auto rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4 cursor-pointer hover:bg-dark-bg-transparency-8 transition-colors duration-200'
 						>
-							<Image
-								src={iconSrc}
-								alt='Option Icon'
-								width={16}
-								height={16}
-							/>
+							{iconSrc && (
+								<Image
+									src={iconSrc}
+									alt='Option Icon'
+									width={16}
+									height={16}
+									className='shrink-0'
+								/>
+							)}
+
 							<span
 								className='text-xs'
 								ref={el => {

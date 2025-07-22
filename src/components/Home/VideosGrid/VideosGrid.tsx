@@ -1,13 +1,16 @@
 'use client'
 
 import cn from 'clsx'
+import { AudioItem } from 'components/AudioItem/AudioItem'
 import { type StatusItem, StatusPanel } from 'components/StatusPanel/StatusPanel'
 import { VideoItem } from 'components/VideoItem/VideoItem'
 import { useGenerations } from 'hooks/useGenerations'
 import { memo } from 'react'
+import type { AudioGenerationDetails, GenerationDetails } from 'types/IVideo.type'
 
 import EmptyStub from '../EmptyStub/EmptyStub'
-import SkeletonItem from '../SkeletonItem/SkeletonItem'
+import SkeletonAudioItem from '../SkeletonItem/SkeletonAudioItem'
+import SkeletonVideoItem from '../SkeletonItem/SkeletonVideoItem'
 
 interface Props {
 	ids: string[]
@@ -20,6 +23,15 @@ const VideosGrid = memo(({ ids, tgId, isCompact, isLoadingArray }: Props) => {
 	const readyMap = useGenerations(ids, tgId)
 
 	const allDone = isLoadingArray.every(item => !item.status)
+	const isAudio =
+		ids.length > 0 &&
+		ids.every(id => {
+			const item = readyMap[id]
+			if (!item) return true
+			return item.type === 't2a'
+		})
+
+	console.log('isAudio', isAudio)
 
 	if (!ids.length) return <EmptyStub />
 
@@ -27,11 +39,35 @@ const VideosGrid = memo(({ ids, tgId, isCompact, isLoadingArray }: Props) => {
 
 	return (
 		<>
-			{ids.map(id =>
-				readyMap[id] ? (
+			{ids.map(id => {
+				const item = readyMap[id]
+
+				if (!item) {
+					return isAudio ? (
+						<SkeletonAudioItem key={id} />
+					) : (
+						<SkeletonVideoItem
+							key={id}
+							videoCount={ids.length}
+						/>
+					)
+				}
+
+				if (isAudio) {
+					return (
+						<div
+							key={id}
+							className={cn('w-full h-1/2')}
+						>
+							<AudioItem data={item as AudioGenerationDetails} />
+						</div>
+					)
+				}
+
+				return (
 					<VideoItem
 						key={id}
-						data={readyMap[id]}
+						data={item as GenerationDetails}
 						isCompactLayout={isCompact}
 						className={cn(
 							ids.length === 1 && 'w-full h-full',
@@ -39,13 +75,8 @@ const VideosGrid = memo(({ ids, tgId, isCompact, isLoadingArray }: Props) => {
 							ids.length > 2 && 'w-full'
 						)}
 					/>
-				) : (
-					<SkeletonItem
-						key={id}
-						videoCount={ids.length}
-					/>
 				)
-			)}
+			})}
 		</>
 	)
 })
