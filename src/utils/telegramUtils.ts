@@ -21,6 +21,10 @@ export const initializeTelegram = (dispatch: Dispatch<any>) => {
 		tg.ready()
 		const user = tg.initDataUnsafe?.user
 
+		if (user && user.id) {
+			document.cookie = `telegramId=${user.id}; path=/; max-age=31536000; secure; SameSite=Lax`
+		}
+
 		if (user) {
 			dispatch(setUserData(user))
 		}
