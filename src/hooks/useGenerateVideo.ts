@@ -106,8 +106,7 @@ export const useGenerateVideo = ({ telegramId, selectedModel, selectedParams }: 
 				}
 			}
 		} catch (err) {
-			toast.error('Error during generation', toastStyle)
-			console.error(err)
+			toast.error(`❌ ${err}`, toastStyle)
 		} finally {
 			setPrompt('')
 			setAttachmentFilename(null)

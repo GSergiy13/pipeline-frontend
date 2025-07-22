@@ -31,8 +31,6 @@ const VideosGrid = memo(({ ids, tgId, isCompact, isLoadingArray }: Props) => {
 			return item.type === 't2a'
 		})
 
-	console.log('isAudio', isAudio)
-
 	if (!ids.length) return <EmptyStub />
 
 	if (!allDone) return <StatusPanel state={{ type: 'loading', isLoadingState: isLoadingArray }} />

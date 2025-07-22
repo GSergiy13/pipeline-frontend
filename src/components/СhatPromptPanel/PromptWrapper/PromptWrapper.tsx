@@ -1,6 +1,7 @@
 'use client'
 
 import { useRef, useState } from 'react'
+import toast from 'react-hot-toast'
 import { generateT2VService } from 'services/gnerate.service'
 import { handleVibrate } from 'utils/handleVibrate'
 
@@ -17,6 +18,8 @@ interface PromptWrapperProps {
 	attachmentFilename: string | null
 	setAttachmentFilename: (filename: string | null) => void
 }
+
+const toastStyle = { style: { borderRadius: '10px', background: '#333', color: '#fff' } }
 
 export const PromptWrapper = ({
 	prompt,
@@ -43,7 +46,7 @@ export const PromptWrapper = ({
 
 			setAttachmentFilename(url)
 		} catch (err) {
-			console.error('Upload failed:', err)
+			toast.error(`❌ ${err}`, toastStyle)
 		}
 	}
 
