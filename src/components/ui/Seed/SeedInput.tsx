@@ -35,7 +35,7 @@ export const SeedInput = () => {
 	useEffect(() => {
 		if (!isOpen || !buttonRef.current) return
 		const rect = buttonRef.current.getBoundingClientRect()
-		const overlayH = 230 // орієнтовно
+		const overlayH = 230
 		const preferTop = rect.bottom + 8
 		const safeTop =
 			preferTop + overlayH > window.innerHeight ? Math.max(rect.top - overlayH - 8, 16) : preferTop

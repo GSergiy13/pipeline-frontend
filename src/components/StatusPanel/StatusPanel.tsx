@@ -20,11 +20,11 @@ export const StatusPanel = ({ state }: { state?: StatusState }) => {
 	const total = loadingState.length
 
 	if (total === 1) {
-		loadingTime = '1 мин.'
-	} else if (total === 2) {
 		loadingTime = '2 мин.'
-	} else {
+	} else if (total === 2) {
 		loadingTime = '4 мин.'
+	} else {
+		loadingTime = '5 мин.'
 	}
 
 	const completed = loadingState.filter(item => !item.status).length

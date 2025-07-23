@@ -33,6 +33,9 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 			{ids.map(id => {
 				const item = readyMap[id]
 
+				// console.log('GenerationsGrid item', item)
+
+				console.log('skeleton')
 				if (!item) {
 					return typeGeneration === 'text-audio' ? (
 						<SkeletonAudioItem key={id} />
@@ -44,7 +47,8 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 					)
 				}
 
-				if (typeGeneration === 'text-audio') {
+				console.log('text-autdo')
+				if (typeGeneration === 'text-audio' && item.type === 't2a') {
 					return (
 						<div
 							key={id}
@@ -55,7 +59,8 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 					)
 				}
 
-				if (typeGeneration === 'image') {
+				console.log('text-img')
+				if (typeGeneration === 'text-image' && item.type === 't2i') {
 					return (
 						<div
 							key={id}

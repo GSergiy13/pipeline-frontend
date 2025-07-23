@@ -21,6 +21,8 @@ interface VideoItemProps {
 export const VideoItem = ({ className, isCompactLayout = false, data }: VideoItemProps) => {
 	const [isPlaying, setIsPlaying] = useState(false)
 
+	console.log('VideoItem data', data)
+
 	const handleOpen = useCallback(() => {
 		setIsPlaying(true)
 		handleVibrate('light', 100)

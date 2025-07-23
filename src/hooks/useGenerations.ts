@@ -12,6 +12,8 @@ export function useGenerations(ids: string[]) {
 	useEffect(() => {
 		if (!ids.length) return
 
+		// console.log('useGenerations effect', ids)
+
 		stopsRef.current.forEach(stop => stop())
 		stopsRef.current = []
 		setMap({})

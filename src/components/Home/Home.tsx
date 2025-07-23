@@ -39,6 +39,9 @@ const HomePage = memo(() => {
 				}))
 			: []
 
+	// console.log('isLoadingArray', isLoadingArray)
+	// console.log('videoIds', videoIds)
+
 	return (
 		<div
 			className='relative px-1 pt-1 w-full bg-chat-gradient rounded-t-[32px] max-w-[640px] mx-auto'
