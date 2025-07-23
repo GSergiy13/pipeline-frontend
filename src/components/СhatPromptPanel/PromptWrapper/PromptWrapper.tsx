@@ -8,12 +8,12 @@ import { handleVibrate } from 'utils/handleVibrate'
 import { PromptAttachmentPreview } from '../PromptAttachmentPreview/PromptAttachmentPreview'
 import { PromptSettingsRow } from '../PromptSettingsRow/PromptSettingsRow'
 
+import { AddRowsCustom } from './AddRowsCustom/AddRowsCustom'
 import { ExpandButton } from './ExpandInputButton/ExpandInputButton'
 import { PromptInputField } from './PromptInputField/PromptInputField'
 
 interface PromptWrapperProps {
 	prompt: string
-
 	setPrompt: (value: string) => void
 	attachmentFilename: string | null
 	setAttachmentFilename: (filename: string | null) => void
@@ -54,22 +54,8 @@ export const PromptWrapper = ({
 	}
 
 	return (
-		<div className='relative flex flex-col gap-3 mt-auto w-full min-h-20 backdrop-blur-[30px] bg-dark-bg-transparency-8 rounded-[24px] p-2 '>
-			{/* <div className='absolute top-0 left-0 right-0 flex flex-col gap-1 -translate-y-[160px]'>
-				<div className='p-1  backdrop-blur-[30px] bg-dark-bg-transparency-8 rounded-[24px] '>
-					<input
-						type='text'
-						placeholder='Введите заголовок'
-						className='w-full p-2 bg-transparent text-white placeholder:text-gray-400 rounded focus:outline-none'
-					/>
-				</div>
-				<div className='p-1 backdrop-blur-[30px] min-h-[90px] bg-dark-bg-transparency-8 rounded-[24px] '>
-					<textarea
-						placeholder='Введите заголовок'
-						className='w-full h-full p-2 bg-transparent text-white placeholder:text-gray-400 rounded focus:outline-none'
-					></textarea>
-				</div>
-			</div> */}
+		<div className='relative flex flex-col gap-3 mt-auto w-full min-h-20 backdrop-blur-[30px] bg-dark-bg-transparency-8 rounded-[24px] p-2'>
+			<AddRowsCustom />
 
 			{attachmentFilename && (
 				<PromptAttachmentPreview

@@ -33,7 +33,7 @@ export interface GenerationDetails {
 	userId: string
 	telegramId: string
 	status: 'pending' | 'completed' | 'failed'
-	type: 't2v' | 'i2v' | 't2a' | 't2i'
+	type: 't2v' | 'i2v' | 't2a' | 't2i' | 'i2i'
 	prompt: string
 	model: string
 	service: string
@@ -46,6 +46,42 @@ export interface GenerationDetails {
 	updatedAt: string
 	startTime: string
 	endTime: string
+}
+
+export interface GenerationDetailsImgToImg {
+	id: string
+	userId: string
+	telegramId: string
+	flowId: string
+	generationIndex: number
+	status: 'completed' | 'pending' | 'failed' | string
+	type: 'i2i'
+	prompt: string
+	model: string
+	service: string
+	numImages: number
+
+	imageUrl: string
+	imageResultUrls: string[]
+	imageDownloadUrls: string[]
+
+	audioResultUrls: string[]
+	audioDownloadUrls: string[]
+
+	resultUrl: string
+	downloadUrl: string
+
+	jobId: string
+
+	startTime: string
+	endTime: string
+	createdAt: string
+	updatedAt: string
+}
+
+export interface DetailsImgToImgResponse {
+	success: true
+	generation: GenerationDetailsImgToImg
 }
 
 export interface GetGenerationResponse {
@@ -134,6 +170,19 @@ export interface T2ARequest {
 	title?: string
 	instrumental?: boolean
 	negativeTags?: string[]
+}
+
+export interface I2IRequest {
+	seedPrompt: string
+	imageUrl: string
+	model: string
+
+	guidanceScale?: number
+	numImages?: number
+	outputFormat?: 'jpeg' | 'png'
+	safetyTolerance?: string
+	aspectRatio?: string
+	seed?: number
 }
 
 export interface T2AResponse {

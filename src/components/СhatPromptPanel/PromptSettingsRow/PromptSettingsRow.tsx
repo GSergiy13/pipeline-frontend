@@ -35,9 +35,10 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 			quantity?: number
 			duration?: number | 'auto'
 			quality?: string
+			aspectRatio?: string | null
 		} = {}
 
-		const { quantity, duration, quality } = selectedModel.options
+		const { quantity, duration, quality, aspectRatio } = selectedModel.options
 
 		if (quantity?.options?.[0]) {
 			payload.quantity = quantity.options[0].value
@@ -50,6 +51,9 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 
 		if (quality?.options?.[0]) {
 			payload.quality = quality.options[0].name
+		}
+		if (aspectRatio?.options?.[0]) {
+			payload.aspectRatio = aspectRatio.options[0].value
 		}
 
 		dispatch(setGenerationParams(payload))
@@ -83,6 +87,7 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 		if (optionType === 'duration') payload.duration = value === 'auto' ? 'auto' : Number(value)
 		if (optionType === 'quality') payload.quality = String(value)
 		if (optionType === 'model') payload.model = String(value)
+		if (optionType === 'aspectRatio') payload.aspectRatio = String(value)
 
 		dispatch(setGenerationParams(payload))
 	}
@@ -115,13 +120,13 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 						onChange={handleInstrumentalChange}
 					/>
 				)}
-				{/* {selectedModel?.type_generation === 'text-audio' && (
+				{selectedModel?.type_generation === 'text-audio' && (
 					<ToggleSwitch
 						label='Custom Mode'
 						checked={customModel}
 						onChange={handleCustomModelChange}
 					/>
-				)} */}
+				)}
 				{selectedModel?.options && (
 					<OptionSelect
 						data={sanitizeOptionGroups(selectedModel.options)}

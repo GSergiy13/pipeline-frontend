@@ -26,5 +26,6 @@ export type ModelConfigurationsItem = {
 		duration: OptionGroup<number | string> | null
 		quality: OptionGroup<string> | null
 		model?: OptionGroup<string> | null
+		aspectRatio?: OptionGroup<string> | null
 	}
 }

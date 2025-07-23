@@ -17,6 +17,8 @@ export const DownloadButton = ({
 }: DownloadButtonProps) => {
 	const [isTelegramWebApp, setIsTelegramWebApp] = useState(false)
 
+	// console.log('DownloadButton rendered', href, fileName)
+
 	useEffect(() => {
 		if (typeof window !== 'undefined') {
 			setIsTelegramWebApp(
@@ -31,6 +33,8 @@ export const DownloadButton = ({
 
 	const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
 		e.stopPropagation()
+
+		console.log(href)
 
 		if (isTelegramWebApp && typeof window.Telegram?.WebApp?.downloadFile === 'function') {
 			e.preventDefault()

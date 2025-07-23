@@ -1,11 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setVideoLoading } from 'store/slices/generationSlice'
-import type { AudioGenerationDetails, GenerationDetails } from 'types/IVideo.type'
+import type {
+	AudioGenerationDetails,
+	GenerationDetails,
+	GenerationDetailsImgToImg
+} from 'types/IVideo.type'
 import { waitUntilAnyVideoReady } from 'utils/waitUntilAnyVideoReady'
 
+type BaseGenerationItem = GenerationDetails | AudioGenerationDetails | GenerationDetailsImgToImg
+
 export function useGenerations(ids: string[]) {
-	const [map, setMap] = useState<Record<string, GenerationDetails | AudioGenerationDetails>>({})
+	const [map, setMap] = useState<Record<string, BaseGenerationItem>>({})
 	const stopsRef = useRef<(() => void)[]>([])
 	const dispatch = useDispatch()
 

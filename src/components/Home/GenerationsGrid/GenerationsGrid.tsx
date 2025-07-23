@@ -2,11 +2,16 @@
 
 import cn from 'clsx'
 import { AudioItem } from 'components/AudioItem/AudioItem'
+import { ImageItem } from 'components/ImageItem/ImageItem'
 import { type StatusItem, StatusPanel } from 'components/StatusPanel/StatusPanel'
 import { VideoItem } from 'components/VideoItem/VideoItem'
 import { useGenerations } from 'hooks/useGenerations'
 import { memo } from 'react'
-import type { AudioGenerationDetails, GenerationDetails } from 'types/IVideo.type'
+import type {
+	AudioGenerationDetails,
+	GenerationDetails,
+	GenerationDetailsImgToImg
+} from 'types/IVideo.type'
 
 import EmptyStub from '../EmptyStub/EmptyStub'
 import SkeletonAudioItem from '../SkeletonLoading/SkeletonAudioItem'
@@ -69,15 +74,13 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 					)
 				}
 
-				if (item.type === 't2i') {
+				if (item.type === 'i2i') {
 					return (
-						<div
-							key={id}
-							className='w-full h-auto bg-dark-bg-transparency-4 flex items-center justify-center rounded-[24px] aspect-[16/9]'
-						>
-							{/* <ImageItem data={item} /> */}
-							<p className='text-sm text-white/60'>[Image Placeholder]</p>
-						</div>
+						<ImageItem
+							key={item.id}
+							className={cn(sizeClass)}
+							data={item as GenerationDetailsImgToImg}
+						/>
 					)
 				}
 

@@ -12,7 +12,7 @@ import {
 	setVideoLoading
 } from 'store/slices/generationSlice'
 import { decreaseBalance } from 'store/slices/userSlice'
-import type { T2ARequest, T2VRequest } from 'types/IVideo.type'
+import type { I2IRequest, T2ARequest, T2VRequest } from 'types/IVideo.type'
 import type { ModelConfigurationsItem, OptionGroup } from 'types/ModelConfigurations.type'
 
 interface Params {
@@ -30,11 +30,11 @@ export const useGenerateVideo = ({ selectedModel, selectedParams }: Params) => {
 		const text = prompt.trim()
 		if (!selectedModel || !text) return
 
-		const { quantity, duration, quality, seed, model, instrumental, custom_model } = selectedParams
+		const { quantity, duration, quality, seed, aspectRatio, model, instrumental, custom_model } =
+			selectedParams
 
 		const opts = selectedModel.options
 		const isImageMode = Boolean(attachmentFilename)
-		const isAudioMode = selectedModel.type_generation === 'text-audio'
 
 		let modelType = selectedModel.type
 		if (opts?.quality && quality) modelType += `-${quality}`
@@ -45,7 +45,7 @@ export const useGenerateVideo = ({ selectedModel, selectedParams }: Params) => {
 		dispatch(clearAllVideoLoading())
 
 		try {
-			if (isAudioMode) {
+			if (selectedModel.type_generation === 'text-audio') {
 				const resolvedAudioModel =
 					(model as OptionGroup<string> | null | undefined)?.options?.[0]?.value ?? undefined
 
@@ -57,14 +57,36 @@ export const useGenerateVideo = ({ selectedModel, selectedParams }: Params) => {
 					...(custom_model && {
 						style: quality || 'Default',
 						title: text.slice(0, 40),
-
 						negativeTags: ['rock', 'heavy metal']
 					})
 				}
 
 				const res = await generateT2VService.postAudioGeneration(audioPayload)
-
 				const ids = res.generations?.map(g => g.generationId)?.filter(Boolean)
+
+				if (ids?.length) {
+					ids.forEach(id => dispatch(setVideoLoading({ videoId: id, isLoading: true })))
+					dispatch(addVideosToCollection(ids))
+				} else {
+					toast.error('ID not found in audio response', toastStyle)
+				}
+			} else if (selectedModel.type_generation === 'img-to-img') {
+				if (!attachmentFilename) {
+					toast.error('Attachment filename is required for ImgToImg generation', toastStyle)
+					return
+				}
+
+				const payload: I2IRequest = {
+					model: modelType,
+					seedPrompt: text,
+					imageUrl: attachmentFilename!,
+					numImages: quantity || 1,
+					aspectRatio: aspectRatio || '1:1',
+					seed: seed || undefined
+				}
+
+				const res = await generateT2VService.postImageToImage(payload)
+				const ids = res.generations?.map(g => g.id)?.filter(Boolean)
 
 				if (ids?.length) {
 					ids.forEach(id => dispatch(setVideoLoading({ videoId: id, isLoading: true })))
@@ -79,9 +101,8 @@ export const useGenerateVideo = ({ selectedModel, selectedParams }: Params) => {
 					? {
 							...base,
 							pairs: [{ seedPrompt: text, imageUrl: attachmentFilename! }],
-							...(opts?.duration && duration != null && { duration }),
-							...(opts?.quality && quality != null && { quality }),
-							...(seed != null && { seed })
+							seed: seed || undefined,
+							duration: duration || undefined
 						}
 					: {
 							...base,

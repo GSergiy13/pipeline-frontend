@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
-import type { GenerationDetails } from 'types/IVideo.type'
 
 import { DownloadButton } from '@/ui/DownloadButton/DownloadButton'
 import { ButtonBox } from '@/ui/Seed/SeedBox'
@@ -17,10 +16,17 @@ import VideoPlayer from '@/ui/VideoPlayer/VideoPlayer'
 interface MediaModalProps {
 	isOpen: boolean
 	onClose: () => void
-	data: GenerationDetails
+	data: {
+		downloadUrl: string
+		prompt?: string
+		model?: string
+		href?: string
+		seed?: number | null
+	}
+	type?: 'video' | 'image' | 'audio'
 }
 
-export const MediaModal = ({ isOpen, onClose, data }: MediaModalProps) => {
+export const MediaModal = ({ isOpen, onClose, data, type }: MediaModalProps) => {
 	const isMobileTelegram = useSelector((state: RootState) => state.user.isMobileTelegram)
 	const [mounted, setMounted] = useState(false)
 
@@ -56,7 +62,7 @@ export const MediaModal = ({ isOpen, onClose, data }: MediaModalProps) => {
 					<DownloadButton
 						className='relative'
 						href={`${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`}
-						fileName='Hailuo02.mp4'
+						fileName={data.prompt ? data.prompt.slice(0, 30) : 'filename'}
 					/>
 
 					{data.seed !== null && data.seed !== undefined && data.seed !== 0 && (
@@ -65,7 +71,7 @@ export const MediaModal = ({ isOpen, onClose, data }: MediaModalProps) => {
 
 					<div>
 						<h2 className='text-xs text-white/80 mb-1 max-w-[150px] truncate'>
-							{data.prompt.slice(0, 30)}
+							{data.prompt ? data.prompt.slice(0, 30) : ''}
 						</h2>
 						<p className='text-xs text-white/80'>{data.model}</p>
 					</div>
@@ -82,8 +88,18 @@ export const MediaModal = ({ isOpen, onClose, data }: MediaModalProps) => {
 						/>
 					</button>
 				</div>
+				{/* <div className='fixed inset-0  bg-black'> */}
+				{type === 'image' && (
+					<Image
+						src={`${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`}
+						alt='Generated Image'
+						fill
+						className='absolute top-1/2 left-1/2 w-[90%] h-auto object-contain '
+					/>
+				)}
+				{/* </div> */}
 
-				<VideoPlayer src={data.downloadUrl} />
+				{type !== 'image' && <VideoPlayer src={data.downloadUrl} />}
 			</motion.div>
 		</div>,
 		document.body

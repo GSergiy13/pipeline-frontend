@@ -2,6 +2,7 @@ import { NEXT_PUBLIC_BASE_URL } from 'constants/CONST_API'
 import type {
 	GetGenerationError,
 	GetGenerationResponse,
+	I2IRequest,
 	ImageUploadError,
 	ImageUploadResponse,
 	T2ARequest,
@@ -12,9 +13,22 @@ import type {
 
 class GenerateT2VService {
 	async postExploreVideos(payload: T2VRequest, isImageMode = false): Promise<T2VResponse> {
-		// console.log(`Sending request to generate ${isImageMode ? 'I2V' : 'T2V'} with payload:`, payload)
-
 		const endpoint = isImageMode ? `${NEXT_PUBLIC_BASE_URL}/api/generate/i2v` : '/api/generate/t2v'
+
+		const res = await fetch(endpoint, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(payload)
+		})
+
+		if (!res.ok) throw new Error(`Failed to generate video from ${endpoint}`)
+		return (await res.json()) as T2VResponse
+	}
+
+	async postImageToImage(payload: I2IRequest): Promise<T2VResponse> {
+		const endpoint = `${NEXT_PUBLIC_BASE_URL}/api/generate/i2i`
 
 		const res = await fetch(endpoint, {
 			method: 'POST',

@@ -25,6 +25,7 @@ interface GenerationState {
 		model?: ModelType | null
 		instrumental?: boolean
 		custom_model?: boolean
+		aspectRatio?: string | null
 	}
 	videoCollectionIds: string[]
 	videoLoadingMap: Record<string, boolean>
@@ -47,7 +48,8 @@ const initialState: GenerationState = {
 		prompt: '',
 		model: null,
 		instrumental: false,
-		custom_model: false
+		custom_model: false,
+		aspectRatio: null
 	},
 	videoCollectionIds: [],
 	videoLoadingMap: {}
@@ -67,13 +69,15 @@ const generationSlice = createSlice({
 				duration?: DurationType
 				quality?: QualityType
 				seed?: number
+				aspectRatio?: string | null
 			}>
 		) {
-			const { quantity, duration, quality, seed } = action.payload
+			const { quantity, duration, quality, seed, aspectRatio } = action.payload
 			if (quantity !== undefined) state.selectedParams.quantity = quantity
 			if (duration !== undefined) state.selectedParams.duration = duration
 			if (quality !== undefined) state.selectedParams.quality = quality
 			if (seed !== undefined) state.selectedParams.seed = seed
+			if (aspectRatio !== undefined) state.selectedParams.aspectRatio = aspectRatio
 		},
 		setQuantity(state, action: PayloadAction<QuantityType>) {
 			state.selectedParams.quantity = action.payload
