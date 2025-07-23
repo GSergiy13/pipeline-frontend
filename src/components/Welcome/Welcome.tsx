@@ -8,6 +8,7 @@ import { ButtonBasic } from '@/ui/ButtonBasic/buttonBasic'
 
 const Welcome = () => {
 	const isMobileTelegram = useSelector((state: RootState) => state.user.isMobileTelegram)
+	const tgId = useSelector((state: RootState) => state.user.user?.tg_data?.id)
 	const router = useRouter()
 
 	const handleClick = () => {
@@ -50,6 +51,12 @@ const Welcome = () => {
 						Для того чтобы восопользоваться AI генератором видео, вам необходимо связаться с нашим
 						менеджером
 					</p>
+
+					{tgId && (
+						<p className='font-bold text-white/60'>
+							Ваш ID в Telegram: <span className='text-primary-blue'>{tgId}</span>
+						</p>
+					)}
 
 					<ButtonBasic
 						className='max-w-[170px]'

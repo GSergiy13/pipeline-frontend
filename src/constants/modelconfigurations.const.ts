@@ -11,8 +11,34 @@ const quantityOptions = [
 export const ModelConfigurations: ModelConfigurationsItem[] = [
 	{
 		id: uuidv4(),
+		type: 'audio_v3',
+		type_generation: 'text-audio',
+		title: 'Text To Audio',
+		name: 'Suno',
+		price: 60,
+		type_icon: 'suno',
+		instrumental: false,
+		custom_model: false,
+		options: {
+			quantity: null,
+			duration: null,
+			quality: null,
+			model: {
+				id: 'model',
+				name: 'Model',
+				options: [
+					{ id: uuidv4(), name: 'v3_5', value: 'v3_5' },
+					{ id: uuidv4(), name: 'v4', value: 'v4' },
+					{ id: uuidv4(), name: 'v4_5', value: 'v4_5' }
+				]
+			}
+		}
+	},
+	{
+		id: uuidv4(),
 		type: 'hailuo02-standard',
 		type_generation: 'text-video',
+		title: 'Video Generation',
 		type_icon: 'Hailuo02',
 		name: 'Hailuo02 Standard',
 		price: 20,
@@ -39,6 +65,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 	{
 		id: uuidv4(),
 		type: 'hailuo02-pro',
+		title: 'Video Generation',
 		type_generation: 'text-video',
 		type_icon: 'Hailuo02',
 		name: 'Hailuo02 Pro',
@@ -59,6 +86,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		id: uuidv4(),
 		type: 'seedance-lite',
 		type_generation: 'text-video',
+		title: 'Video Generation',
 		type_icon: 'Seedance',
 		name: 'Seedance Lite',
 		price: 20,
@@ -86,6 +114,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		id: uuidv4(),
 		type: 'seedance-v1-pro',
 		type_generation: 'text-video',
+		title: 'Video Generation',
 		type_icon: 'Seedance',
 		name: 'Seedance V1 Pro',
 		price: 40,
@@ -122,6 +151,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		id: uuidv4(),
 		type: 'veo3',
 		type_generation: 'text-video',
+		title: 'Video Generation',
 		type_icon: 'Veo',
 		name: 'Veo 2',
 		price: 40,
@@ -148,6 +178,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		id: uuidv4(),
 		type: 'veo3_fast',
 		type_generation: 'text-video',
+		title: 'Video Generation',
 		type_icon: 'Veo',
 		name: 'Veo 3',
 		price: 40,
@@ -175,8 +206,9 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		id: uuidv4(),
 		type: 'kling-v2.1-t2v-master',
 		type_generation: 'text-video',
-		type_icon: 'flux',
-		name: 'Kling v2.1 T2V Master',
+		title: 'Video Generation',
+		type_icon: 'kling',
+		name: 'Kling v2.1 Master',
 		price: 60,
 		options: {
 			quantity: {
@@ -195,29 +227,6 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 				]
 			},
 			quality: null
-		}
-	},
-	{
-		id: uuidv4(),
-		type: 'audio_v3',
-		type_generation: 'text-audio',
-		name: 'V3',
-		price: 60,
-		instrumental: false,
-		custom_model: false,
-		options: {
-			quantity: null,
-			duration: null,
-			quality: null,
-			model: {
-				id: 'model',
-				name: 'Model',
-				options: [
-					{ id: uuidv4(), name: 'V3_5', value: 'v3_5' },
-					{ id: uuidv4(), name: 'V4', value: 'v4' },
-					{ id: uuidv4(), name: 'v4_5', value: 'v4_5' }
-				]
-			}
 		}
 	}
 ]
