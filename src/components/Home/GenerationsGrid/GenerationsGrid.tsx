@@ -28,6 +28,9 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 	if (ids.length === 0) return <EmptyStub typeGeneration={typeGeneration} />
 	if (!allDone) return <StatusPanel state={{ type: 'loading', isLoadingState: isLoadingArray }} />
 
+	const sizeClass =
+		ids.length === 1 ? 'w-full h-full' : ids.length === 2 ? 'w-full h-1/2' : 'w-full'
+
 	return (
 		<>
 			{ids.map(id => {
@@ -50,7 +53,7 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 					}
 				}
 
-				if (typeGeneration === 'text-audio' && item.type === 't2a') {
+				if (item.type === 't2a') {
 					return (
 						<div
 							key={id}
@@ -61,7 +64,7 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 					)
 				}
 
-				if (typeGeneration === 'text-image' && item.type === 't2i') {
+				if (item.type === 't2i') {
 					return (
 						<div
 							key={id}
@@ -72,20 +75,6 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 						</div>
 					)
 				}
-
-				if (typeGeneration === 'text-video' && (item.type === 't2v' || item.type === 'i2v')) {
-					return (
-						<VideoItem
-							key={id}
-							data={item as GenerationDetails}
-							isCompactLayout={isCompact}
-							className='w-full h-1/3'
-						/>
-					)
-				}
-
-				const sizeClass =
-					ids.length === 1 ? 'w-full h-full' : ids.length === 2 ? 'w-full h-1/2' : 'w-full'
 
 				return (
 					<VideoItem
