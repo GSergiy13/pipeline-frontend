@@ -36,7 +36,7 @@ export const DropDownList = ({ data, show, active, handleSelect }: DropDownListP
 						key={groupKey}
 						className='w-full'
 					>
-						<div className='flex items-center gap-1 px-2 py-2 text-xs text-dark-text-opacity-50 uppercase tracking-wider'>
+						<div className='flex items-center gap-2 px-2 py-2 text-xs text-dark-text-opacity-50 uppercase tracking-wider'>
 							<span className='min-w-fit'>{title}</span>
 							<div className='w-full h-[1px] bg-dark-bg-transparency-12'></div>
 						</div>
