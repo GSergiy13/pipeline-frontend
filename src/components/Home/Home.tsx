@@ -8,14 +8,11 @@ import { memo, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
 
-import VideosGrid from './VideosGrid/VideosGrid'
+import GenerationsGrid from './GenerationsGrid/GenerationsGrid'
 
 const useBalance = () => useSelector((s: RootState) => s.user.user?.balance)
 
-const isLoading = () => useSelector((s: RootState) => s.generation.videoLoadingMap)
-
-const useTelegramId = () =>
-	useSelector((s: RootState) => String(s.user.user?.tg_data?.id || '5621694270'))
+const getGeneration = () => useSelector((s: RootState) => s.generation)
 
 const useVideoIds = () =>
 	useSelector(
@@ -28,16 +25,15 @@ const HomePage = memo(() => {
 	const promptHeight = useInitialHeight(promptRef, 150)
 
 	const balance = useBalance()
-	const tgId = useTelegramId()
 	const videoIds = useVideoIds()
-	const isLoadingState = isLoading()
+	const generationOptions = getGeneration()
 
 	const balanceEmpty = balance === 0
 	const videoCount = videoIds.length
 	const isCompactLayout = videoCount > 2
 	const isLoadingArray =
-		isLoadingState && typeof isLoadingState === 'object'
-			? Object.entries(isLoadingState).map(([id, status]) => ({
+		generationOptions.videoLoadingMap && typeof generationOptions.videoLoadingMap === 'object'
+			? Object.entries(generationOptions.videoLoadingMap).map(([id, status]) => ({
 					id,
 					status
 				}))
@@ -57,9 +53,9 @@ const HomePage = memo(() => {
 						isCompactLayout ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col gap-1.5'
 					)}
 				>
-					<VideosGrid
+					<GenerationsGrid
 						ids={videoIds}
-						tgId={tgId}
+						typeGeneration={generationOptions.selectedModel?.type_generation || 'text-video'}
 						isCompact={isCompactLayout}
 						isLoadingArray={isLoadingArray}
 					/>

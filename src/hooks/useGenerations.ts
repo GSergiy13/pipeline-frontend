@@ -4,13 +4,13 @@ import { setVideoLoading } from 'store/slices/generationSlice'
 import type { AudioGenerationDetails, GenerationDetails } from 'types/IVideo.type'
 import { waitUntilAnyVideoReady } from 'utils/waitUntilAnyVideoReady'
 
-export function useGenerations(ids: string[], tgId?: string | number) {
+export function useGenerations(ids: string[]) {
 	const [map, setMap] = useState<Record<string, GenerationDetails | AudioGenerationDetails>>({})
 	const stopsRef = useRef<(() => void)[]>([])
 	const dispatch = useDispatch()
 
 	useEffect(() => {
-		if (!ids.length || !tgId) return
+		if (!ids.length) return
 
 		stopsRef.current.forEach(stop => stop())
 		stopsRef.current = []
@@ -28,7 +28,7 @@ export function useGenerations(ids: string[], tgId?: string | number) {
 			stopsRef.current.forEach(stop => stop())
 			stopsRef.current = []
 		}
-	}, [ids.join(','), tgId])
+	}, [ids.join(',')])
 
 	return map
 }

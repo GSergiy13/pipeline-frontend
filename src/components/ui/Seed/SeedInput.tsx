@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSeed } from 'store/slices/generationSlice'
@@ -9,32 +9,73 @@ import type { RootState } from 'store/store'
 import { debounce } from 'utils/debounce'
 
 export const SeedInput = () => {
+	/* ---------------- state / refs ---------------- */
 	const [isOpen, setIsOpen] = useState(false)
 	const [mounted, setMounted] = useState(false)
-	const [position, setPosition] = useState({ top: 0, left: 0 })
+	const [position, setPosition] = useState<{ top: number; left: number } | null>(null)
+
 	const buttonRef = useRef<HTMLButtonElement>(null)
+	const portalRef = useRef<HTMLDivElement>(null)
 
 	const dispatch = useDispatch()
 	const currentSeed = useSelector((s: RootState) => s.generation.selectedParams.seed)
 	const [seedInput, setSeedInput] = useState<number | ''>(currentSeed ?? '')
 
-	useEffect(() => {
-		setMounted(true)
-	}, [])
+	useEffect(() => setMounted(true), [])
 
 	useEffect(() => {
-		if (isOpen && buttonRef.current) {
-			const rect = buttonRef.current.getBoundingClientRect()
-			setPosition({
-				top: rect.bottom + 8,
-				left: rect.left + rect.width / 2
-			})
+		if (!isOpen) return
+		const prev = document.body.style.overflow
+		document.body.style.overflow = 'hidden'
+		return () => {
+			document.body.style.overflow = prev
 		}
+	}, [isOpen])
+
+	useEffect(() => {
+		if (!isOpen || !buttonRef.current) return
+		const rect = buttonRef.current.getBoundingClientRect()
+		const overlayH = 230 // орієнтовно
+		const preferTop = rect.bottom + 8
+		const safeTop =
+			preferTop + overlayH > window.innerHeight ? Math.max(rect.top - overlayH - 8, 16) : preferTop
+
+		setPosition({
+			top: safeTop,
+			left: rect.left + rect.width / 2
+		})
 	}, [isOpen])
 
 	useEffect(() => {
 		if (isOpen) setSeedInput(currentSeed ?? '')
 	}, [isOpen, currentSeed])
+
+	const handleOutside = useCallback(
+		(e: MouseEvent | TouchEvent) => {
+			if (
+				isOpen &&
+				portalRef.current &&
+				!portalRef.current.contains(e.target as Node) &&
+				!buttonRef.current?.contains(e.target as Node)
+			) {
+				setIsOpen(false)
+			}
+		},
+		[isOpen]
+	)
+
+	useEffect(() => {
+		if (!isOpen) return
+		document.addEventListener('mousedown', handleOutside)
+		document.addEventListener('touchstart', handleOutside)
+		const esc = (e: KeyboardEvent) => e.key === 'Escape' && setIsOpen(false)
+		document.addEventListener('keydown', esc)
+		return () => {
+			document.removeEventListener('mousedown', handleOutside)
+			document.removeEventListener('touchstart', handleOutside)
+			document.removeEventListener('keydown', esc)
+		}
+	}, [isOpen, handleOutside])
 
 	const debouncedSetSeed = useMemo(
 		() =>
@@ -45,34 +86,47 @@ export const SeedInput = () => {
 	)
 
 	const handleSeedChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const value = e.target.value
-		if (value === '') {
+		const val = e.target.value
+		if (val === '') {
 			setSeedInput('')
 			debouncedSetSeed(null)
 		} else {
-			const num = parseInt(value)
-			if (!isNaN(num)) {
+			const num = parseInt(val)
+			if (!Number.isNaN(num)) {
 				setSeedInput(num)
 				debouncedSetSeed(num)
 			}
 		}
 	}
 
+	const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
 	const portalContent = (
 		<div
-			className='fixed z-[9999] pointer-events-none w-[90%]'
-			style={{
-				top: `${position.top}px`,
-				left: `50%`,
-				transform: 'translateX(-50%) translateY(-150%)'
-			}}
+			ref={portalRef}
+			className='fixed z-[9999] pointer-events-none w-[90%] md:w-auto'
+			style={
+				isMobile
+					? {
+							bottom: '15%',
+							left: '50%',
+							transform: 'translateX(-50%)'
+						}
+					: position
+						? {
+								top: position.top,
+								left: position.left,
+								transform: 'translateX(-50%)'
+							}
+						: {}
+			}
 		>
-			<div className='relative w-full bg-black/5 backdrop-blur-2xl p-3 rounded-xl shadow-seed-shadow pointer-events-auto'>
+			<div className='relative w-full bg-black/60 backdrop-blur-2xl p-3 rounded-xl shadow-seed-shadow pointer-events-auto'>
 				<div className='flex items-center justify-between mb-5'>
 					<span className='text-xs text-dark-text-transparency-12'>Seed</span>
 					<Image
 						src='/icons/close.svg'
-						alt='Close Icon'
+						alt='Close'
 						width={16}
 						height={16}
 						className='cursor-pointer'
@@ -82,8 +136,9 @@ export const SeedInput = () => {
 
 				<div className='w-full rounded-2xl bg-black/20 p-2 border border-black/15'>
 					<input
-						className='bg-transparent outline-none text-base w-full'
+						className='bg-transparent outline-none text-base w-full appearance-none'
 						type='number'
+						inputMode='numeric'
 						value={seedInput}
 						onChange={handleSeedChange}
 						placeholder='Enter seed (optional)'
@@ -102,7 +157,7 @@ export const SeedInput = () => {
 			>
 				<Image
 					src='/icons/grow.svg'
-					alt='Grow Icon'
+					alt='Grow'
 					width={16}
 					height={16}
 				/>

@@ -9,30 +9,23 @@ import { memo } from 'react'
 import type { AudioGenerationDetails, GenerationDetails } from 'types/IVideo.type'
 
 import EmptyStub from '../EmptyStub/EmptyStub'
-import SkeletonAudioItem from '../SkeletonItem/SkeletonAudioItem'
-import SkeletonVideoItem from '../SkeletonItem/SkeletonVideoItem'
+import SkeletonAudioItem from '../SkeletonLoading/SkeletonAudioItem'
+import SkeletonVideoItem from '../SkeletonLoading/SkeletonVideoItem'
+
+// import ImageItem from 'components/ImageItem/ImageItem'
 
 interface Props {
 	ids: string[]
-	tgId: string | number
 	isCompact: boolean
 	isLoadingArray: StatusItem[]
+	typeGeneration: string
 }
 
-const VideosGrid = memo(({ ids, tgId, isCompact, isLoadingArray }: Props) => {
-	const readyMap = useGenerations(ids, tgId)
-
+const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }: Props) => {
+	const readyMap = useGenerations(ids)
 	const allDone = isLoadingArray.every(item => !item.status)
-	const isAudio =
-		ids.length > 0 &&
-		ids.every(id => {
-			const item = readyMap[id]
-			if (!item) return true
-			return item.type === 't2a'
-		})
 
-	if (!ids.length) return <EmptyStub />
-
+	if (ids.length === 0) return <EmptyStub typeGeneration={typeGeneration} />
 	if (!allDone) return <StatusPanel state={{ type: 'loading', isLoadingState: isLoadingArray }} />
 
 	return (
@@ -41,7 +34,7 @@ const VideosGrid = memo(({ ids, tgId, isCompact, isLoadingArray }: Props) => {
 				const item = readyMap[id]
 
 				if (!item) {
-					return isAudio ? (
+					return typeGeneration === 'text-audio' ? (
 						<SkeletonAudioItem key={id} />
 					) : (
 						<SkeletonVideoItem
@@ -51,27 +44,38 @@ const VideosGrid = memo(({ ids, tgId, isCompact, isLoadingArray }: Props) => {
 					)
 				}
 
-				if (isAudio) {
+				if (typeGeneration === 'text-audio') {
 					return (
 						<div
 							key={id}
-							className={cn('w-full h-1/3 flex items-center gap-1')}
+							className='w-full h-1/3 flex items-center gap-1'
 						>
 							<AudioItem data={item as AudioGenerationDetails} />
 						</div>
 					)
 				}
 
+				if (typeGeneration === 'image') {
+					return (
+						<div
+							key={id}
+							className='w-full h-auto bg-dark-bg-transparency-4 flex items-center justify-center rounded-[24px] aspect-[16/9]'
+						>
+							{/* <ImageItem data={item} /> */}
+							<p className='text-sm text-white/60'>[Image Placeholder]</p>
+						</div>
+					)
+				}
+
+				const sizeClass =
+					ids.length === 1 ? 'w-full h-full' : ids.length === 2 ? 'w-full h-1/2' : 'w-full'
+
 				return (
 					<VideoItem
 						key={id}
 						data={item as GenerationDetails}
 						isCompactLayout={isCompact}
-						className={cn(
-							ids.length === 1 && 'w-full h-full',
-							ids.length === 2 && 'w-full h-1/2',
-							ids.length > 2 && 'w-full'
-						)}
+						className={cn(sizeClass)}
 					/>
 				)
 			})}
@@ -79,4 +83,4 @@ const VideosGrid = memo(({ ids, tgId, isCompact, isLoadingArray }: Props) => {
 	)
 })
 
-export default VideosGrid
+export default GenerationsGrid

@@ -108,7 +108,7 @@ export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptI
 				onInput={updateHeight}
 				onFocus={handleFocus}
 				onBlur={handleBlur}
-				className='w-full resize-none pl-2 pr-2 py-1 text-base text-white placeholder:text-white/40 bg-transparent focus:outline-none focus:ring-0'
+				className='w-[90%] resize-none pl-2 pr-2 py-1 text-base text-white placeholder:text-white/40 bg-transparent focus:outline-none focus:ring-0'
 				placeholder='Составьте промпт запрос'
 				rows={1}
 				animate={{ height }}

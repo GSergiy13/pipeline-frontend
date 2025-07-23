@@ -33,7 +33,7 @@ export interface GenerationDetails {
 	userId: string
 	telegramId: string
 	status: 'pending' | 'completed' | 'failed'
-	type: 't2v' | 'i2v' | 't2a'
+	type: 't2v' | 'i2v' | 't2a' | 't2i'
 	prompt: string
 	model: string
 	service: string
@@ -69,7 +69,7 @@ export interface AudioGenerationDetails {
 	flowId: string
 	generationIndex: number
 	status: 'completed' | 'pending' | 'failed' | string
-	type: 't2v' | 'i2v' | 't2a'
+	type: 't2v' | 'i2v' | 't2a' | 't2i'
 	prompt: string
 	model: string
 	service: string

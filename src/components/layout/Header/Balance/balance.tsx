@@ -72,7 +72,7 @@ export const Balance = ({ balance }: BalanceProps) => {
 
 			<div
 				className={cn(
-					'absolute top-12 right-0 min-w-[215px] flex flex-col gap-3 p-3 rounded-3xl bg-wight-bg-transparency-04 backdrop-blur-[90px] transition-all duration-300 ease-in-out z-20',
+					'absolute top-12 right-0 min-w-[215px] flex flex-col gap-3 p-3 rounded-3xl bg-wight-bg-transparency-04 backdrop-blur-[90px] transition-all duration-300 ease-in-out z-40',
 					{
 						'opacity-0 pointer-events-none -translate-y-2': !show,
 						'opacity-100 pointer-events-auto translate-y-0': show
@@ -81,11 +81,10 @@ export const Balance = ({ balance }: BalanceProps) => {
 			>
 				<p className='text-sm text-center'>Для пополнения баланса свяжитесь с менеджером</p>
 
-				{/* <ButtonBasic onClick={() => dispatch(increaseBalance(12364))}> */}
 				<ButtonBasic
 					onClick={async () => {
-						await persistor.purge() // очищає localStorage
-						window.location.reload() // перезавантажує сторінку
+						await persistor.purge()
+						window.location.reload()
 					}}
 				>
 					<span className='text-xs font-medium text-primary-blue'>Перейти</span>

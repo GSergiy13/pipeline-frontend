@@ -35,7 +35,7 @@ export const OptionSelectList = ({
 
 	if (!mounted || !anchorRect) return null
 
-	const dropdownWidth = 180
+	const dropdownWidth = 160
 	const minSpacing = 16
 	const additionalSpacing = 10
 
@@ -76,7 +76,7 @@ export const OptionSelectList = ({
 		>
 			<h3 className='text-xs opacity-60 mb-2'>{group.name}</h3>
 
-			<ul className='flex flex-col gap-6'>
+			<ul className='flex flex-col gap-4'>
 				{group.options.map(option => (
 					<li
 						key={option.id}
@@ -98,7 +98,7 @@ export const OptionSelectList = ({
 								height={24}
 							/>
 
-							<span>{option.name}</span>
+							<span className='text-sm'>{option.name}</span>
 						</div>
 						<div
 							className={cn('w-6 h-6 flex items-center justify-center border rounded-full', {

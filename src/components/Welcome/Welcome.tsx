@@ -1,6 +1,5 @@
 import cn from 'clsx'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
 
@@ -9,13 +8,6 @@ import { ButtonBasic } from '@/ui/ButtonBasic/buttonBasic'
 const Welcome = () => {
 	const isMobileTelegram = useSelector((state: RootState) => state.user.isMobileTelegram)
 	const tgId = useSelector((state: RootState) => state.user.user?.tg_data?.id)
-	const router = useRouter()
-
-	const handleClick = () => {
-		localStorage.setItem('onboarded', '1')
-		document.cookie = 'onboarded=1; path=/'
-		router.push('/')
-	}
 
 	return (
 		<div
@@ -58,10 +50,7 @@ const Welcome = () => {
 						</p>
 					)}
 
-					<ButtonBasic
-						className='max-w-[170px]'
-						onClick={handleClick}
-					>
+					<ButtonBasic className='max-w-[170px]'>
 						<span className=' text-xs font-medium text-primary-blue'>Менеджер</span>
 
 						<Image

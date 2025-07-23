@@ -2,10 +2,18 @@
 
 import Image from 'next/image'
 
-const EmptyStub = () => (
+interface EmptyStubProps {
+	typeGeneration?: string
+}
+
+const EmptyStub = ({ typeGeneration }: EmptyStubProps) => (
 	<div className='flex flex-col gap-10 items-center justify-center w-full h-full text-gray-500 text-lg'>
 		<Image
-			src={'/icons/play-picture.svg'}
+			src={
+				typeGeneration === 'text-audio'
+					? '/icons/music-placeholder.svg'
+					: '/icons/video-placeholder.svg'
+			}
 			width={80}
 			height={80}
 			alt='Play Icon'
@@ -15,3 +23,5 @@ const EmptyStub = () => (
 )
 
 export default EmptyStub
+
+// 5621694270
