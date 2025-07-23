@@ -58,7 +58,7 @@ const HomePage = memo(() => {
 			) : (
 				<div
 					className={cn(
-						`w-full overflow-y-auto h-full aspect-[4/5]`,
+						`w-full overflow-y-auto h-full`,
 						isCompactLayout ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col gap-1.5'
 					)}
 				>
