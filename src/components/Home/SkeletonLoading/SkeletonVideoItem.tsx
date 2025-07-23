@@ -8,8 +8,6 @@ interface Props {
 }
 
 const SkeletonVideoItem = memo(({ videoCount }: Props) => {
-	console.log('SkeletonVideoItem rendered')
-
 	return (
 		<div
 			className={cn(

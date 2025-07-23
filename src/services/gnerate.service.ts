@@ -12,7 +12,7 @@ import type {
 
 class GenerateT2VService {
 	async postExploreVideos(payload: T2VRequest, isImageMode = false): Promise<T2VResponse> {
-		console.log(`Sending request to generate ${isImageMode ? 'I2V' : 'T2V'} with payload:`, payload)
+		// console.log(`Sending request to generate ${isImageMode ? 'I2V' : 'T2V'} with payload:`, payload)
 
 		const endpoint = isImageMode ? `${NEXT_PUBLIC_BASE_URL}/api/generate/i2v` : '/api/generate/t2v'
 

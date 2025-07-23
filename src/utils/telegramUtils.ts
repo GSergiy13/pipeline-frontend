@@ -33,7 +33,7 @@ export const initializeTelegram = (dispatch: Dispatch<any>) => {
 
 		try {
 			const version = tg.version || '0.0'
-			console.log(`Telegram WebApp version: ${version}`)
+			// console.log(`Telegram WebApp version: ${version}`)
 			const [major, minor] = version.split('.').map(Number)
 
 			const disableSwipesSupported = major > 6 || (major === 6 && minor >= 1)
