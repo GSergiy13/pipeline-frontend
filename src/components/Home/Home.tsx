@@ -39,9 +39,6 @@ const HomePage = memo(() => {
 				}))
 			: []
 
-	// console.log('isLoadingArray', isLoadingArray)
-	// console.log('videoIds', videoIds)
-
 	return (
 		<div
 			className='relative px-1 pt-1 w-full bg-chat-gradient rounded-t-[32px] max-w-[640px] mx-auto'
@@ -52,7 +49,7 @@ const HomePage = memo(() => {
 			) : (
 				<div
 					className={cn(
-						`w-full overflow-y-auto min-h-[350px] h-full aspect-[4/5] max-h-[calc(100dvh-190px)]`,
+						`w-full overflow-y-auto h-full aspect-[4/5]]`,
 						isCompactLayout ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col gap-1.5'
 					)}
 				>
@@ -71,3 +68,5 @@ const HomePage = memo(() => {
 })
 
 export default HomePage
+
+// min-h-[350px] max-h-[calc(100dvh-190px)
