@@ -28,7 +28,7 @@ export const DropDown = ({ data, onSelect }: DropDownProps) => {
 		setActive(item)
 		setShow(false)
 		onSelect(item)
-		handleVibrate('light', 100)
+		handleVibrate('light', 200)
 	}
 
 	useEffect(() => {

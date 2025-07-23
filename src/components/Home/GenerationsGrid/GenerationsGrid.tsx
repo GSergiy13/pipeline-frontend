@@ -35,7 +35,7 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 		<>
 			{ids.map(id => {
 				const item = readyMap[id]
-				const typeHint = item?.type || 't2v'
+				const typeHint = item?.type
 
 				if (!item) {
 					switch (typeHint) {

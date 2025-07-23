@@ -7,9 +7,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setSeed } from 'store/slices/generationSlice'
 import type { RootState } from 'store/store'
 import { debounce } from 'utils/debounce'
+import { handleVibrate } from 'utils/handleVibrate'
 
 export const SeedInput = () => {
-	/* ---------------- state / refs ---------------- */
 	const [isOpen, setIsOpen] = useState(false)
 	const [mounted, setMounted] = useState(false)
 	const [position, setPosition] = useState<{ top: number; left: number } | null>(null)
@@ -99,6 +99,11 @@ export const SeedInput = () => {
 		}
 	}
 
+	const handlerOpen = () => {
+		setIsOpen(prev => !prev)
+		handleVibrate('light', 100)
+	}
+
 	const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
 	const portalContent = (
@@ -121,9 +126,9 @@ export const SeedInput = () => {
 						: {}
 			}
 		>
-			<div className='relative w-full bg-black/60 backdrop-blur-2xl p-3 rounded-xl shadow-seed-shadow pointer-events-auto'>
+			<div className='relative w-full bg-white/20 backdrop-blur-2xl p-3 rounded-xl shadow-seed-shadow pointer-events-auto'>
 				<div className='flex items-center justify-between mb-5'>
-					<span className='text-xs text-dark-text-transparency-12'>Seed</span>
+					<span className='text-xs text-dark-text-transparency-12 text-center'>Seed</span>
 					<Image
 						src='/icons/close.svg'
 						alt='Close'
@@ -141,7 +146,7 @@ export const SeedInput = () => {
 						inputMode='numeric'
 						value={seedInput}
 						onChange={handleSeedChange}
-						placeholder='Enter seed (optional)'
+						placeholder='Enter seed'
 					/>
 				</div>
 			</div>
@@ -152,7 +157,7 @@ export const SeedInput = () => {
 		<>
 			<button
 				ref={buttonRef}
-				onClick={() => setIsOpen(prev => !prev)}
+				onClick={handlerOpen}
 				className='relative flex items-center justify-center w-[30px] h-[30px] rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4 hover:bg-dark-bg-transparency-8 transition-colors duration-200'
 			>
 				<Image

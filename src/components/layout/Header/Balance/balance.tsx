@@ -3,7 +3,6 @@
 import cn from 'clsx'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
-import { useDispatch } from 'react-redux'
 import { persistor } from 'store/store'
 import { handleVibrate } from 'utils/handleVibrate'
 import { transformBalance } from 'utils/transform-balance'
@@ -15,7 +14,6 @@ interface BalanceProps {
 }
 
 export const Balance = ({ balance }: BalanceProps) => {
-	const dispatch = useDispatch()
 	const [show, setShow] = useState(false)
 	const formattedBalance = transformBalance(balance)
 

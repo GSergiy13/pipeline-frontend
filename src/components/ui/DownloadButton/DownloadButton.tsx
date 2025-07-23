@@ -29,6 +29,8 @@ export const DownloadButton = ({
 		`${href}`
 	)}&filename=${encodeURIComponent(fileName)}`
 
+	console.log(`${NEXT_PUBLIC_API_URL}${href}`)
+
 	const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
 		e.stopPropagation()
 

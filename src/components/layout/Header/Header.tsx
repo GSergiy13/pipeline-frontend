@@ -24,6 +24,9 @@ export const Header = () => {
 		dispatch(setSelectedModel(model))
 	}
 
+	// console.log('select:', selectedModel)
+	// console.log('defult:', ModelConfigurations[0])
+
 	return (
 		<header
 			className={cn(`w-full pb-3`, {

@@ -20,6 +20,27 @@
 		--foreground: #fff;
 	}
 }
+
+@layer components {
+	.speedo-digits {
+		@apply transition-transform duration-1000;
+		transition-timing-function: ease-in-out;
+	}
+
+	.speedo-digit {
+		color: #fff;
+		font-variant-numeric: tabular-nums;
+		font-feature-settings: 'tnum';
+	}
+
+	.speedo-digit-down {
+		background: linear-gradient(to right, #f87171, #ef4444);
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		color: transparent;
+	}
+}
+
 html {
 	overscroll-behavior: none;
 }

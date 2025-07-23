@@ -1,5 +1,6 @@
 'use client'
 
+import { useAnimatedProgress } from 'hooks/useAnimatedProgress'
 import Image from 'next/image'
 import { memo, useCallback, useEffect, useRef, useState } from 'react'
 
@@ -19,22 +20,8 @@ const ControlPanel = ({
 	onDragStateChange
 }: ControlPanelProps) => {
 	const barRef = useRef<HTMLDivElement | null>(null)
-	const [animated, setAnimated] = useState(progress)
 	const [dragging, setDragging] = useState(false)
-
-	useEffect(() => {
-		let frame = 0
-		const tick = () => {
-			setAnimated(prev => {
-				const delta = progress - prev
-				if (Math.abs(delta) < 0.1) return progress
-				return prev + delta * 0.1
-			})
-			frame = requestAnimationFrame(tick)
-		}
-		tick()
-		return () => cancelAnimationFrame(frame)
-	}, [progress])
+	const animated = useAnimatedProgress(progress, dragging)
 
 	const seekFromClientX = useCallback(
 		(clientX: number) => {
@@ -53,48 +40,47 @@ const ControlPanel = ({
 		seekFromClientX(clientX)
 	}
 
+	const stopDrag = () => {
+		setDragging(false)
+		onDragStateChange(false)
+	}
+
 	useEffect(() => {
 		const move = (e: MouseEvent) => dragging && seekFromClientX(e.clientX)
-		const up = () => {
-			if (dragging) {
-				setDragging(false)
-				onDragStateChange(false)
-			}
-		}
+		const up = () => dragging && stopDrag()
+
 		window.addEventListener('mousemove', move)
 		window.addEventListener('mouseup', up)
 		return () => {
 			window.removeEventListener('mousemove', move)
 			window.removeEventListener('mouseup', up)
 		}
-	}, [dragging, seekFromClientX, onDragStateChange])
+	}, [dragging, seekFromClientX])
 
 	useEffect(() => {
 		const move = (e: TouchEvent) => dragging && seekFromClientX(e.touches[0].clientX)
-		const end = () => {
-			if (dragging) {
-				setDragging(false)
-				onDragStateChange(false)
-			}
-		}
+		const end = () => dragging && stopDrag()
+
 		window.addEventListener('touchmove', move)
 		window.addEventListener('touchend', end)
 		return () => {
 			window.removeEventListener('touchmove', move)
 			window.removeEventListener('touchend', end)
 		}
-	}, [dragging, seekFromClientX, onDragStateChange])
+	}, [dragging, seekFromClientX])
 
 	return (
 		<div className='absolute inset-x-0 z-10 bottom-4 px-4 flex flex-col items-center'>
 			<div
 				ref={barRef}
-				className='w-full h-0.5 bg-white/10 mb-4 rounded-lg cursor-pointer touch-none'
+				className='relative w-full h-6 mb-4 cursor-pointer touch-none'
 				onMouseDown={e => startDrag(e.clientX)}
 				onTouchStart={e => startDrag(e.touches[0].clientX)}
 			>
+				<div className='absolute top-1/2 left-0 right-0 h-0.5 bg-white/10 rounded-lg -translate-y-1/2 pointer-events-none' />
+
 				<div
-					className='h-full bg-progress-bar-gradient transition-all duration-75 ease-linear relative'
+					className='absolute top-1/2 left-0 h-0.5 bg-progress-bar-gradient rounded-lg -translate-y-1/2 transition-all duration-75 ease-linear pointer-events-none'
 					style={{ width: `${animated}%` }}
 				>
 					<div className='absolute -right-[6px] top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white shadow-md' />
