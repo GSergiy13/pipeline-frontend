@@ -22,7 +22,7 @@ const Welcome = () => {
 				<Image
 					fill
 					quality={100}
-					src='/wellcome.svg'
+					src='/wellcome.png'
 					alt='Welcome Background'
 					className='absolute inset-0 w-full h-full object-cover opacity-20 z-0 rounded-[32px]'
 					priority={true}
