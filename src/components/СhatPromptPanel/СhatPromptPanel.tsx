@@ -11,7 +11,6 @@ import { PromptWrapper } from './PromptWrapper/PromptWrapper'
 const useGenerationContext = () =>
 	useSelector(
 		(s: RootState) => ({
-			telegramId: String(s.user.user?.tg_data?.id || '5621694270'),
 			selectedModel: s.generation.selectedModel,
 			selectedParams: s.generation.selectedParams,
 			isLoading: s.generation.videoLoadingMap
@@ -20,7 +19,7 @@ const useGenerationContext = () =>
 	)
 
 const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
-	const { telegramId, selectedModel, selectedParams, isLoading } = useGenerationContext()
+	const { selectedModel, selectedParams, isLoading } = useGenerationContext()
 
 	const {
 		prompt,
@@ -30,7 +29,7 @@ const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
 		handleGenerate,
 		price,
 		disabled
-	} = useGenerateVideo({ telegramId, selectedModel, selectedParams })
+	} = useGenerateVideo({ selectedModel, selectedParams })
 
 	const allDone =
 		isLoading && typeof isLoading === 'object'
@@ -44,7 +43,6 @@ const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
 		>
 			<PromptWrapper
 				prompt={prompt}
-				telegramId={telegramId}
 				setPrompt={setPrompt}
 				attachmentFilename={attachmentFilename}
 				setAttachmentFilename={setAttachmentFilename}

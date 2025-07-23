@@ -13,7 +13,7 @@ import { PromptInputField } from './PromptInputField/PromptInputField'
 
 interface PromptWrapperProps {
 	prompt: string
-	telegramId: string
+
 	setPrompt: (value: string) => void
 	attachmentFilename: string | null
 	setAttachmentFilename: (filename: string | null) => void
@@ -24,7 +24,7 @@ const toastStyle = { style: { borderRadius: '10px', background: '#333', color: '
 export const PromptWrapper = ({
 	prompt,
 	setPrompt,
-	telegramId,
+
 	attachmentFilename,
 	setAttachmentFilename
 }: PromptWrapperProps) => {
@@ -39,10 +39,9 @@ export const PromptWrapper = ({
 
 	const handleFileSelect = async (file: File) => {
 		handleVibrate('light', 100)
-		if (!telegramId) return console.warn('Missing telegramId')
 
 		try {
-			const { url } = await generateT2VService.uploadImage(file, telegramId)
+			const { url } = await generateT2VService.uploadImage(file)
 
 			setAttachmentFilename(url)
 		} catch (err) {

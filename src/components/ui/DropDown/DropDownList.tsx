@@ -22,7 +22,7 @@ export const DropDownList = ({ data, show, active, handleSelect }: DropDownListP
 	return (
 		<ul
 			className={cn(
-				`absolute flex flex-col top-11 w-full rounded-xl bg-dark-bg-transparency-8 backdrop-blur-[30px] will-change-transform transform-gpu z-50 transition-all duration-400 overflow-hidden max-h-[70vh] overflow-y-auto min-w-[180px] py-2`,
+				`absolute flex flex-col top-11 w-full rounded-xl bg-dark-bg-transparency-8 backdrop-blur-[30px] will-change-transform transform-gpu z-50 transition-all duration-400 overflow-hidden max-h-[70vh] overflow-y-auto min-w-[180px]`,
 				{
 					'pointer-events-auto opacity-100 translate-y-0': show,
 					'pointer-events-none opacity-0 -translate-y-3': !show
@@ -36,7 +36,7 @@ export const DropDownList = ({ data, show, active, handleSelect }: DropDownListP
 						key={groupKey}
 						className='w-full'
 					>
-						<div className='flex items-center gap-1 px-2 py-1 text-xs text-dark-text-opacity-50 uppercase tracking-wider'>
+						<div className='flex items-center gap-1 px-2 py-2 text-xs text-dark-text-opacity-50 uppercase tracking-wider'>
 							<span className='min-w-fit'>{title}</span>
 							<div className='w-full h-[1px] bg-dark-bg-transparency-12'></div>
 						</div>

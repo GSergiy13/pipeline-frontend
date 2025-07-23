@@ -7,7 +7,6 @@ const toastStyle = { style: { borderRadius: '10px', background: '#333', color: '
 
 export function waitUntilAnyVideoReady(
 	ids: string[],
-	tg_id: number | string,
 	onReady: (id: string, generation: GenerationDetails) => void
 ) {
 	let cancelled = false
@@ -22,7 +21,7 @@ export function waitUntilAnyVideoReady(
 		const results = await Promise.all(
 			pendingIds.map(async id => {
 				try {
-					const res = await generateT2VService.getGenerationInfo(id, tg_id.toString())
+					const res = await generateT2VService.getGenerationInfo(id)
 					return { id, generation: res.generation }
 				} catch (err) {
 					console.error(`❌ Помилка перевірки статусу ${id}`, err)

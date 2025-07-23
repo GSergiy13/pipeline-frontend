@@ -11,25 +11,15 @@ import type {
 } from 'types/IVideo.type'
 
 class GenerateT2VService {
-	async postExploreVideos(
-		payload: T2VRequest,
-		telegramId: string,
-		isImageMode = false
-	): Promise<T2VResponse> {
-		console.log(
-			`Sending request to generate ${isImageMode ? 'I2V' : 'T2V'} with payload:`,
-			payload,
-			'and Telegram ID:',
-			telegramId
-		)
+	async postExploreVideos(payload: T2VRequest, isImageMode = false): Promise<T2VResponse> {
+		console.log(`Sending request to generate ${isImageMode ? 'I2V' : 'T2V'} with payload:`, payload)
 
 		const endpoint = isImageMode ? `${NEXT_PUBLIC_BASE_URL}/api/generate/i2v` : '/api/generate/t2v'
 
 		const res = await fetch(endpoint, {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json',
-				'X-Telegram-ID': telegramId
+				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(payload)
 		})
@@ -38,7 +28,7 @@ class GenerateT2VService {
 		return (await res.json()) as T2VResponse
 	}
 
-	async postAudioGeneration(payload: T2ARequest, telegramId: string): Promise<T2AResponse> {
+	async postAudioGeneration(payload: T2ARequest): Promise<T2AResponse> {
 		console.log('Sending request to generate T2A with payload:', payload)
 
 		const endpoint = '/api/generate/t2a'
@@ -46,8 +36,7 @@ class GenerateT2VService {
 		const res = await fetch(endpoint, {
 			method: 'POST',
 			headers: {
-				'Content-Type': 'application/json',
-				'X-Telegram-ID': telegramId
+				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify(payload)
 		})
@@ -56,13 +45,9 @@ class GenerateT2VService {
 		return (await res.json()) as T2AResponse
 	}
 
-	async getGenerationInfo(
-		generationId: string,
-		telegramId: string
-	): Promise<GetGenerationResponse> {
+	async getGenerationInfo(generationId: string): Promise<GetGenerationResponse> {
 		const res = await fetch(`${NEXT_PUBLIC_BASE_URL}/api/generate/${generationId}`, {
-			method: 'GET',
-			headers: { 'X-Telegram-ID': telegramId }
+			method: 'GET'
 		})
 
 		const data = (await res.json()) as GetGenerationResponse | GetGenerationError
@@ -72,15 +57,12 @@ class GenerateT2VService {
 		return data as GetGenerationResponse
 	}
 
-	async uploadImage(file: File, telegramId: string): Promise<{ url: string; filename: string }> {
+	async uploadImage(file: File): Promise<{ url: string; filename: string }> {
 		const formData = new FormData()
 		formData.append('image', file)
 
 		const res = await fetch(`${NEXT_PUBLIC_BASE_URL}/api/images/upload`, {
 			method: 'POST',
-			headers: {
-				'X-Telegram-ID': telegramId
-			},
 			body: formData
 		})
 

@@ -17,7 +17,7 @@ export function useGenerations(ids: string[], tgId?: string | number) {
 		setMap({})
 
 		ids.forEach(id => {
-			const stop = waitUntilAnyVideoReady([id], tgId, (readyId, generation) => {
+			const stop = waitUntilAnyVideoReady([id], (readyId, generation) => {
 				dispatch(setVideoLoading({ videoId: readyId, isLoading: false }))
 				setMap(prev => (prev[readyId] ? prev : { ...prev, [readyId]: generation }))
 			})

@@ -5,8 +5,7 @@ import { ModelConfigurations } from 'constants/modelconfigurations.const'
 import Image from 'next/image'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setGenerationParams } from 'store/slices/generationSlice'
-import { setCustomModel, setInstrumental } from 'store/slices/generationSlice'
+import { setCustomModel, setGenerationParams, setInstrumental } from 'store/slices/generationSlice'
 import type { RootState } from 'store/store'
 import { sanitizeOptionGroups } from 'utils/sanitizeOptionGroups'
 
@@ -116,13 +115,13 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 						onChange={handleInstrumentalChange}
 					/>
 				)}
-				{selectedModel?.type_generation === 'text-audio' && (
+				{/* {selectedModel?.type_generation === 'text-audio' && (
 					<ToggleSwitch
 						label='Custom Mode'
 						checked={customModel}
 						onChange={handleCustomModelChange}
 					/>
-				)}
+				)} */}
 				{selectedModel?.options && (
 					<OptionSelect
 						data={sanitizeOptionGroups(selectedModel.options)}

@@ -1,15 +1,22 @@
 import axios from 'axios'
+import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
+	const cookieStore = await cookies()
+
+	const tgId = cookieStore.get('telegramId')?.value
+	if (!tgId) {
+		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+	}
+
 	try {
 		const payload = await req.json()
-		const telegramId = req.headers.get('X-Telegram-ID') || 'default-id'
 
 		const { data } = await axios.post(`${process.env.API_URL}/generate/t2v`, payload, {
 			headers: {
 				'Content-Type': 'application/json',
-				'X-Telegram-ID': telegramId
+				'X-Telegram-ID': tgId
 			}
 		})
 

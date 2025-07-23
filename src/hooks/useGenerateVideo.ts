@@ -16,11 +16,10 @@ import type { T2ARequest, T2VRequest } from 'types/IVideo.type'
 import type { ModelConfigurationsItem, OptionGroup } from 'types/ModelConfigurations.type'
 
 interface Params {
-	telegramId: string
 	selectedModel: ModelConfigurationsItem | null
 	selectedParams: SelectedParams
 }
-export const useGenerateVideo = ({ telegramId, selectedModel, selectedParams }: Params) => {
+export const useGenerateVideo = ({ selectedModel, selectedParams }: Params) => {
 	const [prompt, setPrompt] = useState('')
 	const [attachmentFilename, setAttachmentFilename] = useState<string | null>(null)
 
@@ -63,7 +62,7 @@ export const useGenerateVideo = ({ telegramId, selectedModel, selectedParams }: 
 					})
 				}
 
-				const res = await generateT2VService.postAudioGeneration(audioPayload, telegramId)
+				const res = await generateT2VService.postAudioGeneration(audioPayload)
 
 				const ids = res.generations?.map(g => g.generationId)?.filter(Boolean)
 
@@ -92,7 +91,7 @@ export const useGenerateVideo = ({ telegramId, selectedModel, selectedParams }: 
 							...(seed != null && { seed })
 						}
 
-				const res = await generateT2VService.postExploreVideos(payload, telegramId, isImageMode)
+				const res = await generateT2VService.postExploreVideos(payload, isImageMode)
 
 				const ids = (
 					isImageMode ? res.generations.map(g => g.id) : res.generations.map(g => g.generationId)
@@ -107,11 +106,12 @@ export const useGenerateVideo = ({ telegramId, selectedModel, selectedParams }: 
 			}
 		} catch (err) {
 			toast.error(`❌ ${err}`, toastStyle)
+			dispatch(clearVideoCollection())
 		} finally {
 			setPrompt('')
 			setAttachmentFilename(null)
 		}
-	}, [prompt, attachmentFilename, selectedModel, selectedParams, telegramId, price, dispatch])
+	}, [prompt, attachmentFilename, selectedModel, selectedParams, price, dispatch])
 
 	return {
 		prompt,

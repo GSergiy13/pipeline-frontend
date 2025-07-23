@@ -1,14 +1,18 @@
 import axios from 'axios'
 import FormData from 'form-data'
+import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
-	try {
-		const telegramId = req.headers.get('X-Telegram-ID')
-		if (!telegramId) {
-			return NextResponse.json({ success: false, message: 'Missing telegramId' }, { status: 400 })
-		}
+	const cookieStore = await cookies()
 
+	const tgId = cookieStore.get('telegramId')?.value
+
+	if (!tgId) {
+		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+	}
+
+	try {
 		const formData = await req.formData()
 		const file = formData.get('image') as File | null
 
@@ -16,7 +20,6 @@ export async function POST(req: NextRequest) {
 			return NextResponse.json({ success: false, message: 'Image not provided' }, { status: 400 })
 		}
 
-		// Читання файла в buffer
 		const arrayBuffer = await file.arrayBuffer()
 		const buffer = Buffer.from(arrayBuffer)
 
@@ -26,7 +29,7 @@ export async function POST(req: NextRequest) {
 		const { data } = await axios.post(`${process.env.API_URL}/api/images/upload`, forwardForm, {
 			headers: {
 				...forwardForm.getHeaders(),
-				'X-Telegram-ID': telegramId
+				'X-Telegram-ID': tgId
 			}
 		})
 

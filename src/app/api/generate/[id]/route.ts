@@ -1,12 +1,15 @@
 import axios from 'axios'
+import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 import type { GetGenerationError, GetGenerationResponse } from 'types/IVideo.type'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+	const cookieStore = await cookies()
 	const { id: generationId } = await params
-	const telegramId = req.headers.get('x-telegram-id') ?? ''
+
+	const tgId = cookieStore.get('telegramId')?.value
 
 	if (!generationId) {
 		const error: GetGenerationError = {
@@ -16,13 +19,17 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 		return NextResponse.json(error, { status: 400 })
 	}
 
+	if (!tgId) {
+		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+	}
+
 	try {
 		const { data } = await axios.get<GetGenerationResponse>(
 			`${process.env.API_URL}/generate/${generationId}`,
 			{
 				headers: {
 					'Content-Type': 'application/json',
-					'X-Telegram-ID': telegramId
+					'X-Telegram-ID': tgId
 				}
 			}
 		)
