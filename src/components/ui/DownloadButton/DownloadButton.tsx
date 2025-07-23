@@ -38,7 +38,7 @@ export const DownloadButton = ({
 			e.preventDefault()
 			window.Telegram.WebApp.downloadFile(
 				{
-					url: `${NEXT_PUBLIC_API_URL}${href}`,
+					url: `${href}`,
 					file_name: fileName
 				},
 				(accepted: boolean) => {
