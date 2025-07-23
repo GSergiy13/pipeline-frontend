@@ -45,7 +45,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		id: uuidv4(),
 		type: 'flux-pro-kontext-max',
 		type_generation: 'img-to-img',
-		title: 'ImgToImg',
+		title: 'Img To Img',
 		name: 'Flux Pro',
 		price: 40,
 		type_icon: 'flux',

@@ -52,8 +52,8 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 		if (quality?.options?.[0]) {
 			payload.quality = quality.options[0].name
 		}
-		if (aspectRatio?.options?.[0]) {
-			payload.aspectRatio = aspectRatio.options[0].value
+		if (aspectRatio?.name?.[0]) {
+			payload.aspectRatio = aspectRatio.options[0].name
 		}
 
 		dispatch(setGenerationParams(payload))

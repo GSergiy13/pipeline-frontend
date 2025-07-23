@@ -39,7 +39,7 @@ export const OptionSelect = ({ data, onChange }: OptionSelectProps) => {
 		setSelectedOptions(prev => ({ ...prev, [groupId]: optionId }))
 		setActiveGroupName(null)
 		handleVibrate('light', 200)
-		onChange?.(groupId, selected.value)
+		onChange?.(groupId, groupId === 'aspectRatio' ? selected.name : selected.value)
 	}
 
 	useEffect(() => {

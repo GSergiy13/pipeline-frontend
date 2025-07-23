@@ -34,12 +34,14 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 	return (
 		<>
 			<div className={cn('relative flex items-center justify-center cursor-pointer', className)}>
-				<div className='absolute inset-0 bg-video-gradient flex items-center justify-center will-change-transform rounded-[30px] pointer-events-none'>
+				<div className='absolute inset-0 bg-video-gradient flex items-center justify-center will-change-transform rounded-[30px] pointer-events-none overflow-hidden'>
 					<DownloadButton
 						className='absolute left-3 top-3'
 						href={`${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`}
 						fileName='Hailuo02.mp4'
 					/>
+
+					<div className='relative w-full h-full bg-video-gradient z-10' />
 
 					<VideoPreview videoUrl={`${process.env.NEXT_PUBLIC_API_URL}/${data.downloadUrl}`} />
 
@@ -61,7 +63,7 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 						/>
 					</div>
 
-					<div className='absolute bottom-3 left-3 text-white'>
+					<div className='absolute bottom-3 left-3 text-white z-20'>
 						<h2 className='text-xs text-white/80 mb-1 max-w-[150px] truncate'>
 							{data.prompt.slice(0, 40)}
 						</h2>
