@@ -73,6 +73,17 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 					)
 				}
 
+				if (typeGeneration === 'text-video' && (item.type === 't2v' || item.type === 'i2v')) {
+					return (
+						<VideoItem
+							key={id}
+							data={item as GenerationDetails}
+							isCompactLayout={isCompact}
+							className='w-full h-1/3'
+						/>
+					)
+				}
+
 				const sizeClass =
 					ids.length === 1 ? 'w-full h-full' : ids.length === 2 ? 'w-full h-1/2' : 'w-full'
 
