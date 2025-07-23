@@ -1,6 +1,7 @@
 'use client'
 
 import { GuidesCarousel } from 'components/GuidesCarousel/GuidesCarousel'
+import { useProgress } from 'hooks/useProgress'
 import Image from 'next/image'
 
 import { ButtonBasic } from '@/ui/ButtonBasic/buttonBasic'
@@ -13,13 +14,22 @@ type StatusState =
 
 export const StatusPanel = ({ state }: { state?: StatusState }) => {
 	if (!state) return null
+	let loadingTime
 
 	const loadingState = state.isLoadingState ?? []
-
 	const total = loadingState.length
-	const remaining = loadingState.filter(item => item.status).length
-	const completed = total - remaining
-	const percent = total > 0 ? Math.round((completed / total) * 100) : 0
+
+	if (total === 1) {
+		loadingTime = '1 мин.'
+	} else if (total === 2) {
+		loadingTime = '2 мин.'
+	} else {
+		loadingTime = '4 мин.'
+	}
+
+	const completed = loadingState.filter(item => !item.status).length
+
+	const fakeProgress = useProgress(loadingState)
 
 	if (state.type === 'insufficient_funds') {
 		return (
@@ -53,11 +63,11 @@ export const StatusPanel = ({ state }: { state?: StatusState }) => {
 					<div className='relative w-full bg-dark-bg-transparency-12 rounded h-2 overflow-hidden mb-2'>
 						<div
 							className='h-full bg-primary-blue transition-all duration-500'
-							style={{ width: `${percent}%` }}
+							style={{ width: `${fakeProgress}%` }}
 						/>
 					</div>
 
-					<div className='text-white/60 font-bold'>Среднее время ожидания 4 мин.</div>
+					<div className='text-white/60 font-bold'>Среднее время ожидания {loadingTime}</div>
 				</div>
 			</div>
 		)
