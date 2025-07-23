@@ -7,7 +7,7 @@ interface VideoPreviewProps {
 	durationLimit?: number
 }
 
-export const VideoPreview = ({ videoUrl, durationLimit = 3 }: VideoPreviewProps) => {
+export const VideoPreview = ({ videoUrl, durationLimit = 2 }: VideoPreviewProps) => {
 	const [isLoaded, setIsLoaded] = useState(false)
 	const [hasError, setHasError] = useState(false)
 	const videoRef = useRef<HTMLVideoElement>(null)
@@ -51,7 +51,7 @@ export const VideoPreview = ({ videoUrl, durationLimit = 3 }: VideoPreviewProps)
 					preload='auto'
 					onLoadedData={() => setIsLoaded(true)}
 					onError={() => setHasError(true)}
-					className='object-cover w-full h-full rounded-[32px] will-change-transform'
+					className='absolute inset-0 object-cover w-full h-full rounded-[32px] will-change-transform'
 				/>
 			) : (
 				<div className='w-full h-full bg-gray-800 flex items-center justify-center text-white text-xs'>

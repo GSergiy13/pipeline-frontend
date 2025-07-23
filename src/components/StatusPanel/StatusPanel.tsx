@@ -9,8 +9,8 @@ import { ButtonBasic } from '@/ui/ButtonBasic/buttonBasic'
 export type StatusItem = { id: string; status: boolean }
 
 type StatusState =
-	| { type: 'insufficient_funds'; isLoadingState?: StatusItem[] }
-	| { type: 'loading'; isLoadingState?: StatusItem[] }
+	| { type: 'insufficient_funds'; isLoadingState?: StatusItem[]; typeGeneration?: string }
+	| { type: 'loading'; isLoadingState?: StatusItem[]; typeGeneration?: string }
 
 export const StatusPanel = ({ state }: { state?: StatusState }) => {
 	if (!state) return null
@@ -20,7 +20,7 @@ export const StatusPanel = ({ state }: { state?: StatusState }) => {
 	const total = loadingState.length
 
 	if (total === 1) {
-		loadingTime = '2 мин.'
+		loadingTime = state.typeGeneration === 'text-audio' ? '5 мин.' : '2 мин.'
 	} else if (total === 2) {
 		loadingTime = '4 мин.'
 	} else {

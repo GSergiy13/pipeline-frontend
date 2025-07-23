@@ -34,14 +34,14 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 	return (
 		<>
 			<div className={cn('relative flex items-center justify-center cursor-pointer', className)}>
-				<VideoPreview videoUrl={`${process.env.NEXT_PUBLIC_API_URL}/${data.downloadUrl}`} />
-
 				<div className='absolute inset-0 bg-video-gradient flex items-center justify-center will-change-transform rounded-[30px] pointer-events-none'>
 					<DownloadButton
 						className='absolute left-3 top-3'
 						href={`${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`}
 						fileName='Hailuo02.mp4'
 					/>
+
+					<VideoPreview videoUrl={`${process.env.NEXT_PUBLIC_API_URL}/${data.downloadUrl}`} />
 
 					<div
 						className={cn(

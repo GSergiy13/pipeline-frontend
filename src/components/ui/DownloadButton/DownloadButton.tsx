@@ -1,6 +1,6 @@
 'use client'
 
-import { NEXT_PUBLIC_API_URL, NEXT_PUBLIC_BASE_URL } from 'constants/CONST_API'
+import { NEXT_PUBLIC_BASE_URL } from 'constants/CONST_API'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
@@ -28,8 +28,6 @@ export const DownloadButton = ({
 	const downloadProxyUrl = `${NEXT_PUBLIC_BASE_URL}/api/download?url=${encodeURIComponent(
 		`${href}`
 	)}&filename=${encodeURIComponent(fileName)}`
-
-	console.log(`${NEXT_PUBLIC_API_URL}${href}`)
 
 	const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
 		e.stopPropagation()

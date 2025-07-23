@@ -26,7 +26,12 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 	const allDone = isLoadingArray.every(item => !item.status)
 
 	if (ids.length === 0) return <EmptyStub typeGeneration={typeGeneration} />
-	if (!allDone) return <StatusPanel state={{ type: 'loading', isLoadingState: isLoadingArray }} />
+	if (!allDone)
+		return (
+			<StatusPanel
+				state={{ type: 'loading', isLoadingState: isLoadingArray, typeGeneration: typeGeneration }}
+			/>
+		)
 
 	const sizeClass =
 		ids.length === 1 ? 'w-full h-full' : ids.length === 2 ? 'w-full h-1/2' : 'w-full'

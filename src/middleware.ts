@@ -14,8 +14,8 @@ export async function middleware(req: NextRequest) {
 
 	const telegramId = req.cookies.get('telegramId')?.value || req.headers.get('x-telegram-id')
 
-	console.log('[middleware] pathname:', pathname)
-	console.log('[middleware] telegramId:', telegramId)
+	// console.log('[middleware] pathname:', pathname)
+	// console.log('[middleware] telegramId:', telegramId)
 
 	if (!telegramId) {
 		console.warn('[middleware] No telegramId — redirecting to /welcome')

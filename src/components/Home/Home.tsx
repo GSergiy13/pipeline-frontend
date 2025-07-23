@@ -4,15 +4,25 @@ import cn from 'clsx'
 import { StatusPanel } from 'components/StatusPanel/StatusPanel'
 import { ChatPromptPanel } from 'components/СhatPromptPanel/СhatPromptPanel'
 import { useInitialHeight } from 'hooks/useInitialHeight'
-import { memo, useRef } from 'react'
+import { memo, useMemo, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
 
 import GenerationsGrid from './GenerationsGrid/GenerationsGrid'
 
-const useBalance = () => useSelector((s: RootState) => s.user.user?.balance)
+const useBalance = () =>
+	useSelector(
+		(s: RootState) => s.user.user?.balance,
+		(a, b) => a === b
+	)
 
-const getGeneration = () => useSelector((s: RootState) => s.generation)
+const useSelectedModel = () =>
+	useSelector(
+		(s: RootState) => s.generation.selectedModel,
+		(a, b) => a?.id === b?.id
+	)
+
+const useVideoLoadingMap = () => useSelector((s: RootState) => s.generation.videoLoadingMap)
 
 const useVideoIds = () =>
 	useSelector(
@@ -26,18 +36,17 @@ const HomePage = memo(() => {
 
 	const balance = useBalance()
 	const videoIds = useVideoIds()
-	const generationOptions = getGeneration()
+	const selectedModel = useSelectedModel()
+	const videoLoadingMap = useVideoLoadingMap()
 
 	const balanceEmpty = balance === 0
 	const videoCount = videoIds.length
 	const isCompactLayout = videoCount > 2
-	const isLoadingArray =
-		generationOptions.videoLoadingMap && typeof generationOptions.videoLoadingMap === 'object'
-			? Object.entries(generationOptions.videoLoadingMap).map(([id, status]) => ({
-					id,
-					status
-				}))
-			: []
+
+	const isLoadingArray = useMemo(() => {
+		if (!videoLoadingMap || typeof videoLoadingMap !== 'object') return []
+		return Object.entries(videoLoadingMap).map(([id, status]) => ({ id, status }))
+	}, [videoLoadingMap])
 
 	return (
 		<div
@@ -49,13 +58,13 @@ const HomePage = memo(() => {
 			) : (
 				<div
 					className={cn(
-						`w-full overflow-y-auto h-full aspect-[4/5]]`,
+						`w-full overflow-y-auto h-full aspect-[4/5]`,
 						isCompactLayout ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col gap-1.5'
 					)}
 				>
 					<GenerationsGrid
 						ids={videoIds}
-						typeGeneration={generationOptions.selectedModel?.type_generation || 'text-video'}
+						typeGeneration={selectedModel?.type_generation || 'text-video'}
 						isCompact={isCompactLayout}
 						isLoadingArray={isLoadingArray}
 					/>
@@ -68,5 +77,3 @@ const HomePage = memo(() => {
 })
 
 export default HomePage
-
-// min-h-[350px] max-h-[calc(100dvh-190px)
