@@ -55,7 +55,7 @@ const VideosGrid = memo(({ ids, tgId, isCompact, isLoadingArray }: Props) => {
 					return (
 						<div
 							key={id}
-							className={cn('w-full h-1/2')}
+							className={cn('w-full h-1/3 flex items-center gap-1')}
 						>
 							<AudioItem data={item as AudioGenerationDetails} />
 						</div>
