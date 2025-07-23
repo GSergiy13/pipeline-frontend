@@ -15,10 +15,11 @@ interface AudioItemProps {
 export const AudioItem = ({ data }: AudioItemProps) => {
 	return (
 		<>
-			{data.audioDownloadUrls.map((url, index) => (
+			{data.audioDownloadUrls.map((item, index) => (
 				<SingleAudioCard
 					key={index}
-					audioUrl={`${url}`}
+					audioUrl={`${item.link}`}
+					posterUrl={`${NEXT_PUBLIC_API_URL}${item.image}`}
 					createdAt={data.createdAt}
 				/>
 			))}
@@ -28,9 +29,10 @@ export const AudioItem = ({ data }: AudioItemProps) => {
 
 interface SingleAudioCardProps {
 	audioUrl: string
+	posterUrl: string
 	createdAt: string
 }
-const SingleAudioCard = ({ audioUrl, createdAt }: SingleAudioCardProps) => {
+const SingleAudioCard = ({ audioUrl, createdAt, posterUrl }: SingleAudioCardProps) => {
 	const audioRef = useRef<HTMLAudioElement>(null)
 	const [isPlaying, setIsPlaying] = useState(false)
 
@@ -81,7 +83,7 @@ const SingleAudioCard = ({ audioUrl, createdAt }: SingleAudioCardProps) => {
 			</button>
 
 			<Image
-				src='/audio-preview.jpg'
+				src={posterUrl ? posterUrl : '/audio-preview.jpg'}
 				alt='Audio Preview'
 				width={300}
 				height={300}

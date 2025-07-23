@@ -57,6 +57,11 @@ export interface GenerationAudioResponse {
 	success: boolean
 	generation: AudioGenerationDetails
 }
+export interface AudioDownloadItem {
+	link: string
+	image: string
+	_id?: string
+}
 
 export interface AudioGenerationDetails {
 	userId: string
@@ -68,7 +73,7 @@ export interface AudioGenerationDetails {
 	prompt: string
 	model: string
 	service: string
-	audioDownloadUrls: string[]
+	audioDownloadUrls: AudioDownloadItem[]
 	audioResultUrls: string[]
 	startTime: string // ISO 8601 date
 	createdAt: string

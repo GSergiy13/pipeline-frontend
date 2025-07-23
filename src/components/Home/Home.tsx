@@ -14,7 +14,8 @@ const useBalance = () => useSelector((s: RootState) => s.user.user?.balance)
 
 const isLoading = () => useSelector((s: RootState) => s.generation.videoLoadingMap)
 
-const useTelegramId = () => useSelector((s: RootState) => String(s.user.user?.tg_data?.id))
+const useTelegramId = () =>
+	useSelector((s: RootState) => String(s.user.user?.tg_data?.id || '5621694270'))
 
 const useVideoIds = () =>
 	useSelector(

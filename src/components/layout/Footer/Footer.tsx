@@ -10,7 +10,7 @@ export const Footer = () => {
 		<footer
 			className={`text-[10px] text-white/40 text-center pt-1  ${userData.isMobileTelegram ? 'pb-5' : 'pb-2'}`}
 		>
-			Pipeline AI v. 0.1 beta{' '}
+			Sibrik AI v. 0.1.2 beta{' '}
 			{userData.user?.tg_data?.id ? `by user id ${userData.user.tg_data?.id}` : ''}
 		</footer>
 	)

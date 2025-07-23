@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import Marquee from 'react-fast-marquee'
 
 const MarqueeTextItem = ({ index }: { index: number }) => (
-	<span className='font-bold uppercase text-sm opacity-20 pl-1'>pipeline ai generated •</span>
+	<span className='font-bold uppercase text-sm opacity-20 pl-1'>sibrik ai generated •</span>
 )
 
 export const MarqueeText = () => {

@@ -66,7 +66,7 @@ const Welcome = () => {
 					</ButtonBasic>
 				</div>
 
-				<div className='text-white/40 text-[10px] text-center mb-6'>Name AI v. 0.1 beta</div>
+				<div className='text-white/40 text-[10px] text-center mb-6'>Sibrik AI v. 0.1.2 beta</div>
 			</div>
 		</div>
 	)
