@@ -9,8 +9,15 @@ import { handleVibrate } from 'utils/handleVibrate'
 import { DownloadButton } from '@/ui/DownloadButton/DownloadButton'
 
 export const ImageItem = memo(
-	({ data, className }: { data: GenerationDetailsImgToImg; className?: string }) => {
-		console.log('ImageItem rendered', data)
+	({
+		data,
+		className,
+		url
+	}: {
+		data: GenerationDetailsImgToImg
+		className?: string
+		url: string
+	}) => {
 		const [isPlaying, setIsPlaying] = useState(false)
 
 		const handleOpen = useCallback(() => {
@@ -29,8 +36,8 @@ export const ImageItem = memo(
 					<DownloadButton
 						className='absolute left-3 top-3
 			z-10'
-						href={`${data.imageUrl}`}
-						fileName='GeneratedImage.png'
+						href={`${NEXT_PUBLIC_API_URL}/${url}`}
+						fileName={`Generated-${Date.now()}.png`}
 					/>
 
 					<div
@@ -48,7 +55,7 @@ export const ImageItem = memo(
 					</div>
 
 					<Image
-						src={`${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`}
+						src={`${NEXT_PUBLIC_API_URL}/${url}`}
 						alt='Generated Image'
 						fill
 						className='object-cover '
@@ -58,6 +65,7 @@ export const ImageItem = memo(
 
 				<MediaModal
 					type='image'
+					herf={url}
 					data={data}
 					isOpen={isPlaying}
 					onClose={handleClose}

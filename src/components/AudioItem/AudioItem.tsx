@@ -65,7 +65,7 @@ const SingleAudioCard = ({ audioUrl, createdAt, posterUrl }: SingleAudioCardProp
 			<DownloadButton
 				className='absolute left-3 top-3 z-20'
 				href={`${NEXT_PUBLIC_API_URL}${audioUrl}`}
-				fileName='audio.mp3'
+				fileName={`Generated-${Date.now()}.mp3`}
 			/>
 
 			<button

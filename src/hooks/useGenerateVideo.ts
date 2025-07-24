@@ -81,7 +81,7 @@ export const useGenerateVideo = ({ selectedModel, selectedParams }: Params) => {
 				}
 			} else if (selectedModel.type_generation === 'img-to-img') {
 				if (!attachmentFilename) {
-					toast.error('Attachment filename is required for ImgToImg generation', toastStyle)
+					toast.error("Изображение обв'язкове для генерации", toastStyle)
 					return
 				}
 

@@ -32,9 +32,7 @@ const useVideoIds = () =>
 
 const HomePage = memo(() => {
 	const promptRef = useRef<HTMLDivElement>(null)
-	// const heightRef = useRef<HTMLDivElement>(null)
 	const promptHeight = useInitialHeight(promptRef, 150)
-	// const [minHeight, setMinHeight] = useState(0)
 
 	const balance = useBalance()
 	const videoIds = useVideoIds()
@@ -44,16 +42,6 @@ const HomePage = memo(() => {
 	const balanceEmpty = balance === 0
 	const videoCount = videoIds.length
 	const isCompactLayout = videoCount > 2
-
-	// useEffect(() => {
-	// 	if (heightRef.current) {
-	// 		const height = heightRef.current.clientHeight
-
-	// 		setMinHeight(height)
-	// 	}
-	// }, [])
-
-	// console.log(minHeight)
 
 	const isLoadingArray = useMemo(() => {
 		if (!videoLoadingMap || typeof videoLoadingMap !== 'object') return []
@@ -69,12 +57,10 @@ const HomePage = memo(() => {
 				<StatusPanel state={{ type: 'insufficient_funds' }} />
 			) : (
 				<div
-					// ref={heightRef}
 					className={cn(
 						`w-full overflow-y-auto h-full`,
 						isCompactLayout ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col gap-1.5'
 					)}
-					// style={{ minHeight: `${minHeight}px` }}
 				>
 					<GenerationsGrid
 						ids={videoIds}

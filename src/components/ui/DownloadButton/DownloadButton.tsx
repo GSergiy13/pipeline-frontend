@@ -17,8 +17,6 @@ export const DownloadButton = ({
 }: DownloadButtonProps) => {
 	const [isTelegramWebApp, setIsTelegramWebApp] = useState(false)
 
-	// console.log('DownloadButton rendered', href, fileName)
-
 	useEffect(() => {
 		if (typeof window !== 'undefined') {
 			setIsTelegramWebApp(

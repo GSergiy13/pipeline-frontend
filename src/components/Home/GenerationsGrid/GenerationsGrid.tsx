@@ -17,8 +17,6 @@ import EmptyStub from '../EmptyStub/EmptyStub'
 import SkeletonAudioItem from '../SkeletonLoading/SkeletonAudioItem'
 import SkeletonVideoItem from '../SkeletonLoading/SkeletonVideoItem'
 
-// import ImageItem from 'components/ImageItem/ImageItem'
-
 interface Props {
 	ids: string[]
 	isCompact: boolean
@@ -64,6 +62,7 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 				}
 
 				if (item.type === 't2a') {
+					console.log('AudioItem', item)
 					return (
 						<div
 							key={id}
@@ -73,15 +72,42 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 						</div>
 					)
 				}
-
 				if (item.type === 'i2i') {
-					return (
-						<ImageItem
-							key={item.id}
-							className={cn(sizeClass)}
-							data={item as GenerationDetailsImgToImg}
-						/>
-					)
+					const items = item as GenerationDetailsImgToImg
+
+					// Якщо <= 2 — просто повертаємо ImageItem як є
+					if (items.imageDownloadUrls.length <= 2) {
+						return items.imageDownloadUrls.map((url, index) => (
+							<ImageItem
+								key={index}
+								className={cn(sizeClass)}
+								data={items}
+								url={url}
+							/>
+						))
+					}
+
+					// Якщо > 2 — групуємо по 2 в один <div>
+					const grouped = []
+					for (let i = 0; i < items.imageDownloadUrls.length; i += 2) {
+						grouped.push(
+							<div
+								key={`group-${i}`}
+								className='flex h-full w-full gap-1'
+							>
+								{items.imageDownloadUrls.slice(i, i + 2).map((url, index) => (
+									<ImageItem
+										key={`${i}-${index}`}
+										className='w-1/2'
+										data={items}
+										url={url}
+									/>
+								))}
+							</div>
+						)
+					}
+
+					return grouped
 				}
 
 				return (

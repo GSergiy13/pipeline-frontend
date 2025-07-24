@@ -143,13 +143,13 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 						onChange={handleInstrumentalChange}
 					/>
 				)}
-				{selectedModel?.type_generation === 'text-audio' && (
+				{/* {selectedModel?.type_generation === 'text-audio' && (
 					<ToggleSwitch
 						label='Custom Mode'
 						checked={customModel}
 						onChange={handleCustomModelChange}
 					/>
-				)}
+				)} */}
 				{selectedModel?.options && (
 					<OptionSelect
 						data={sanitizeOptionGroups(selectedModel.options)}

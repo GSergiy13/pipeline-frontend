@@ -23,10 +23,11 @@ interface MediaModalProps {
 		href?: string
 		seed?: number | null
 	}
+	herf: string
 	type?: 'video' | 'image' | 'audio'
 }
 
-export const MediaModal = ({ isOpen, onClose, data, type }: MediaModalProps) => {
+export const MediaModal = ({ isOpen, onClose, data, type, herf }: MediaModalProps) => {
 	const isMobileTelegram = useSelector((state: RootState) => state.user.isMobileTelegram)
 	const [mounted, setMounted] = useState(false)
 
@@ -61,8 +62,12 @@ export const MediaModal = ({ isOpen, onClose, data, type }: MediaModalProps) => 
 				<div className='absolute gap-2 top-5 w-full px-4 flex items-center z-40'>
 					<DownloadButton
 						className='relative'
-						href={`${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`}
-						fileName={data.prompt ? data.prompt.slice(0, 30) : 'filename'}
+						href={
+							type !== 'image'
+								? `${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`
+								: `${NEXT_PUBLIC_API_URL}/${herf}`
+						}
+						fileName={`Generated-${Date.now()}.png`}
 					/>
 
 					{data.seed !== null && data.seed !== undefined && data.seed !== 0 && (
