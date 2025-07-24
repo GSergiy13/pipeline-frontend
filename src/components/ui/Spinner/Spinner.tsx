@@ -1,9 +1,11 @@
-export const Spinner = () => {
+export const Spinner = ({ size }: { size?: number }) => {
 	const bars = 8
 	const spinnerItems = Array.from({ length: bars })
 
 	return (
-		<div className='relative w-20 h-20 inline-block text-current'>
+		<div
+			className={`relative ${size ? `w-${size} h-${size}` : 'w-20 h-20'} inline-block text-current`}
+		>
 			{spinnerItems.map((_, i) => {
 				const angle = (i * 360) / bars
 				const delay = -(1.2 - i * 0.15)

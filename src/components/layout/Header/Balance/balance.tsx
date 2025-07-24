@@ -3,7 +3,6 @@
 import cn from 'clsx'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
-import { persistor } from 'store/store'
 import { handleVibrate } from 'utils/handleVibrate'
 import { transformBalance } from 'utils/transform-balance'
 
@@ -79,12 +78,7 @@ export const Balance = ({ balance }: BalanceProps) => {
 			>
 				<p className='text-sm text-center'>Для пополнения баланса свяжитесь с менеджером</p>
 
-				<ButtonBasic
-					onClick={async () => {
-						await persistor.purge()
-						window.location.reload()
-					}}
-				>
+				<ButtonBasic>
 					<span className='text-xs font-medium text-primary-blue'>Перейти</span>
 					<Image
 						src='/icons/telegram.svg'

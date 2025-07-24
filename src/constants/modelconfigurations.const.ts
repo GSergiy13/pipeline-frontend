@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 const quantityOptions = [
 	{ id: uuidv4(), name: '1', value: 1 },
 	{ id: uuidv4(), name: '2', value: 2 }
-	// { id: 'q4', name: '4', value: 4 },
+	// { id: uuidv4(), name: '4', value: 4 }
 	// { id: 'q6', name: '6', value: 6 }
 ]
 
@@ -12,7 +12,7 @@ const quantityOptionsImg = [
 	{ id: uuidv4(), name: '1', value: 1 },
 	{ id: uuidv4(), name: '2', value: 2 },
 	{ id: uuidv4(), name: '4', value: 4 }
-	// { id: uuidv4(), name: '6', value: 6 }
+	// { id: uuidv4(), name: '5', value: 5 }
 ]
 
 export const ModelConfigurations: ModelConfigurationsItem[] = [

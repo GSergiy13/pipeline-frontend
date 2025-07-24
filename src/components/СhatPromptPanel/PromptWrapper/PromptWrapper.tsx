@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { generateT2VService } from 'services/gnerate.service'
+import { persistor } from 'store/store'
 import { handleVibrate } from 'utils/handleVibrate'
 
 import { PromptAttachmentPreview } from '../PromptAttachmentPreview/PromptAttachmentPreview'
@@ -28,6 +29,7 @@ export const PromptWrapper = ({
 }: PromptWrapperProps) => {
 	const inputRef = useRef<{ toggleExpand: () => void }>(null)
 	const [isExpanded, setIsExpanded] = useState(false)
+	const [isFileUploaded, setIsFileUploaded] = useState(false)
 
 	const handleExpand = () => {
 		inputRef.current?.toggleExpand()
@@ -50,11 +52,22 @@ export const PromptWrapper = ({
 	const handleRemoveAttachment = () => {
 		setAttachmentFilename(null)
 		handleVibrate('light', 100)
+		setIsFileUploaded(false)
 	}
 
 	return (
 		<div className='relative flex flex-col gap-3 mt-auto w-full min-h-20 backdrop-blur-[30px] bg-dark-bg-transparency-8 rounded-[24px] p-2'>
 			{/* <AddRowsCustom /> */}
+
+			<div
+				className=' absolute right-0 top-0 -translate-y-[150%] p-1 px-2 rounded-lg bg-[#232327] text-xs'
+				onClick={async () => {
+					await persistor.purge()
+					window.location.reload()
+				}}
+			>
+				Clear State
+			</div>
 
 			{attachmentFilename && (
 				<PromptAttachmentPreview
@@ -72,7 +85,11 @@ export const PromptWrapper = ({
 				isExpanded={isExpanded}
 			/>
 
-			<PromptSettingsRow onFileSelect={handleFileSelect} />
+			<PromptSettingsRow
+				onFileSelect={handleFileSelect}
+				setIsFileUploaded={setIsFileUploaded}
+				isFileUploaded={isFileUploaded}
+			/>
 		</div>
 	)
 }

@@ -6,7 +6,7 @@ import Image from 'next/image'
 import { useEffect } from 'react'
 import toast from 'react-hot-toast'
 import { useDispatch, useSelector } from 'react-redux'
-import { setCustomModel, setGenerationParams, setInstrumental } from 'store/slices/generationSlice'
+import { setGenerationParams, setInstrumental } from 'store/slices/generationSlice'
 import type { RootState } from 'store/store'
 import { sanitizeOptionGroups } from 'utils/sanitizeOptionGroups'
 
@@ -16,11 +16,17 @@ import { ToggleSwitch } from '@/ui/ToggleSwitch/ToggleSwitch'
 
 interface PromptSettingsRowProps {
 	onFileSelect: (file: File) => void
+	isFileUploaded?: boolean
+	setIsFileUploaded: (value: boolean) => void
 }
 
 const toastStyle = { style: { borderRadius: '10px', background: '#333', color: '#fff' } }
 
-export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
+export const PromptSettingsRow = ({
+	onFileSelect,
+	isFileUploaded,
+	setIsFileUploaded
+}: PromptSettingsRowProps) => {
 	const dispatch = useDispatch()
 	const selectedModelId = useSelector((state: RootState) => state.generation.selectedModel?.id)
 	const selectedModel = ModelConfigurations.find(model => model.id === selectedModelId)
@@ -30,9 +36,9 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 
 	console.log('Selected Model:', selectedModelId)
 
-	const customModel = useSelector(
-		(state: RootState) => state.generation.selectedParams.custom_model
-	)
+	// const customModel = useSelector(
+	// 	(state: RootState) => state.generation.selectedParams.custom_model
+	// )
 
 	useEffect(() => {
 		if (!selectedModel || !selectedModel.options) return
@@ -75,9 +81,9 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 		dispatch(setInstrumental(value))
 	}
 
-	const handleCustomModelChange = (value: boolean) => {
-		dispatch(setCustomModel(value))
-	}
+	// const handleCustomModelChange = (value: boolean) => {
+	// 	dispatch(setCustomModel(value))
+	// }
 
 	const handleFileUploadClick = () => {
 		const input = document.createElement('input')
@@ -97,7 +103,7 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 				)
 				return
 			}
-
+			setIsFileUploaded(true)
 			onFileSelect(file)
 		}
 		input.click()
@@ -152,7 +158,14 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 				)} */}
 				{selectedModel?.options && (
 					<OptionSelect
-						data={sanitizeOptionGroups(selectedModel.options)}
+						data={sanitizeOptionGroups(
+							isFileUploaded
+								? {
+										...selectedModel.options,
+										quantity: undefined // <-- Прибираємо quantity, якщо файл вже є
+									}
+								: selectedModel.options
+						)}
 						onChange={handleOptionChange}
 					/>
 				)}
