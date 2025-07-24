@@ -58,10 +58,9 @@ const HomePage = memo(() => {
 			) : (
 				<div
 					className={cn(
-						'flex-1 overflow-y-auto',
+						`w-full overflow-y-auto h-full`,
 						isCompactLayout ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col gap-1.5'
 					)}
-					style={{ paddingBottom: `${promptHeight + 26}px` }}
 				>
 					<GenerationsGrid
 						ids={videoIds}
