@@ -11,8 +11,8 @@ const quantityOptions = [
 const quantityOptionsImg = [
 	{ id: uuidv4(), name: '1', value: 1 },
 	{ id: uuidv4(), name: '2', value: 2 },
-	{ id: uuidv4(), name: '4', value: 4 },
-	{ id: uuidv4(), name: '6', value: 6 }
+	{ id: uuidv4(), name: '4', value: 4 }
+	// { id: uuidv4(), name: '6', value: 6 }
 ]
 
 export const ModelConfigurations: ModelConfigurationsItem[] = [

@@ -13,7 +13,7 @@ import {
 } from 'store/slices/generationSlice'
 import { decreaseBalance } from 'store/slices/userSlice'
 import type { I2IRequest, T2ARequest, T2VRequest } from 'types/IVideo.type'
-import type { ModelConfigurationsItem, OptionGroup } from 'types/ModelConfigurations.type'
+import type { ModelConfigurationsItem } from 'types/ModelConfigurations.type'
 
 interface Params {
 	selectedModel: ModelConfigurationsItem | null
@@ -46,12 +46,9 @@ export const useGenerateVideo = ({ selectedModel, selectedParams }: Params) => {
 
 		try {
 			if (selectedModel.type_generation === 'text-audio') {
-				const resolvedAudioModel =
-					(model as OptionGroup<string> | null | undefined)?.options?.[0]?.value ?? undefined
-
 				const audioPayload: T2ARequest = {
 					seedPrompt: text,
-					model: resolvedAudioModel,
+					model: modelType,
 					customMode: custom_model,
 					instrumental,
 					...(custom_model && {
@@ -80,10 +77,12 @@ export const useGenerateVideo = ({ selectedModel, selectedParams }: Params) => {
 					model: modelType,
 					seedPrompt: text,
 					imageUrl: attachmentFilename!,
-					numImages: quantity || 1,
-					aspectRatio: aspectRatio || '1:1',
-					seed: seed || undefined
+					...(quantity && { numImages: quantity }),
+					...(aspectRatio && { aspectRatio }),
+					...(seed && { seed })
 				}
+
+				console.log('Payload for ImgToImg generation:', payload)
 
 				const res = await generateT2VService.postImageToImage(payload)
 				const ids = res.generations?.map(g => g.id)?.filter(Boolean)
@@ -101,8 +100,8 @@ export const useGenerateVideo = ({ selectedModel, selectedParams }: Params) => {
 					? {
 							...base,
 							pairs: [{ seedPrompt: text, imageUrl: attachmentFilename! }],
-							seed: seed || undefined,
-							duration: duration || undefined
+							...(seed && { seed }),
+							...(opts?.duration && duration != null && { duration })
 						}
 					: {
 							...base,

@@ -8,7 +8,6 @@ import { handleVibrate } from 'utils/handleVibrate'
 import { PromptAttachmentPreview } from '../PromptAttachmentPreview/PromptAttachmentPreview'
 import { PromptSettingsRow } from '../PromptSettingsRow/PromptSettingsRow'
 
-import { AddRowsCustom } from './AddRowsCustom/AddRowsCustom'
 import { ExpandButton } from './ExpandInputButton/ExpandInputButton'
 import { PromptInputField } from './PromptInputField/PromptInputField'
 
@@ -55,7 +54,7 @@ export const PromptWrapper = ({
 
 	return (
 		<div className='relative flex flex-col gap-3 mt-auto w-full min-h-20 backdrop-blur-[30px] bg-dark-bg-transparency-8 rounded-[24px] p-2'>
-			<AddRowsCustom />
+			{/* <AddRowsCustom /> */}
 
 			{attachmentFilename && (
 				<PromptAttachmentPreview

@@ -21,6 +21,10 @@ const useGenerationContext = () =>
 const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
 	const { selectedModel, selectedParams, isLoading } = useGenerationContext()
 
+	// console.log('Selected Model:', selectedModel)
+	// console.log('Selected Params:', selectedParams)
+	// console.log('Is Loading:', isLoading)
+
 	const {
 		prompt,
 		setPrompt,

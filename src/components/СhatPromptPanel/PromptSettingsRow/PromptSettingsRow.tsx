@@ -27,6 +27,9 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 	const instrumental = useSelector(
 		(state: RootState) => state.generation.selectedParams.instrumental
 	)
+
+	console.log('Selected Model:', selectedModelId)
+
 	const customModel = useSelector(
 		(state: RootState) => state.generation.selectedParams.custom_model
 	)
@@ -53,8 +56,9 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 		}
 
 		if (quality?.options?.[0]) {
-			payload.quality = quality.options[0].name
+			payload.quality = quality.options[0].value
 		}
+
 		if (aspectRatio?.name?.[0]) {
 			payload.aspectRatio = aspectRatio.options[0].name
 		}
