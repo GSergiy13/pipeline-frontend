@@ -14,12 +14,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
 	return (
 		<>
-			<div
-				className='flex flex-col w-full overflow-hidden'
-				style={{ height: 'var(--app-height)' }}
-			>
+			<div className='flex flex-col min-h-lvh max-h-lvh overflow-hidden'>
 				{!isWelcome && <Header />}
-				<main className='flex flex-1 w-full px-1 overflow-hidden'>{children}</main>
+				<main className='flex flex-grow w-full h-full px-1'>{children}</main>
 				{!isWelcome && <Footer />}
 			</div>
 
@@ -27,11 +24,14 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 				position='bottom-center'
 				reverseOrder={false}
 				toastOptions={{
-					error: { duration: 6000 },
-					success: { duration: 3000 }
+					error: {
+						duration: 6000
+					},
+					success: {
+						duration: 3000
+					}
 				}}
 			/>
-
 			<FixTelegramViewport />
 			<TelegramInitializer />
 		</>
