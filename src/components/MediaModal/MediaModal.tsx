@@ -23,7 +23,7 @@ interface MediaModalProps {
 		href?: string
 		seed?: number | null
 	}
-	herf: string
+	herf?: string
 	type?: 'video' | 'image' | 'audio'
 }
 
