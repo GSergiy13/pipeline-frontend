@@ -55,7 +55,7 @@ const HomePage = memo(() => {
 			) : (
 				<div
 					className={cn(
-						'w-full overflow-y-auto h-full transition-opacity duration-300',
+						'w-full overflow-y-auto h-full transition-opacity duration-300 min-h-[300px]',
 						isCompactLayout ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col gap-1.5'
 						// isFocused && 'opacity-20'
 					)}
