@@ -3,6 +3,7 @@
 import { NEXT_PUBLIC_BASE_URL } from 'constants/CONST_API'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import { handleVibrate } from 'utils/handleVibrate'
 
 interface DownloadButtonProps {
 	className?: string
@@ -31,7 +32,7 @@ export const DownloadButton = ({
 
 	const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
 		e.stopPropagation()
-
+		handleVibrate('light', 100)
 		console.log(href)
 
 		if (isTelegramWebApp && typeof window.Telegram?.WebApp?.downloadFile === 'function') {

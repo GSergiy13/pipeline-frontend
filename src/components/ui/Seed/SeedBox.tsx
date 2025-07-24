@@ -3,6 +3,7 @@
 import cn from 'clsx'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
+import { handleVibrate } from 'utils/handleVibrate'
 
 export const ButtonBox = ({ seed }: { seed: number }) => {
 	const [isVisible, setIsVisible] = useState(false)
@@ -12,6 +13,7 @@ export const ButtonBox = ({ seed }: { seed: number }) => {
 	const handleToggle = () => {
 		setIsVisible(v => !v)
 		setIsCopied(false)
+		handleVibrate('light', 100)
 	}
 
 	const handleCopy = async () => {
@@ -19,6 +21,7 @@ export const ButtonBox = ({ seed }: { seed: number }) => {
 			await navigator.clipboard.writeText(seed.toString())
 			setIsCopied(true)
 			setTimeout(() => setIsCopied(false), 2000)
+			handleVibrate('light', 100)
 		} catch (err) {
 			console.error('Failed to copy seed:', err)
 		}
