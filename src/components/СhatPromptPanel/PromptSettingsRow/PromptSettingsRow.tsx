@@ -35,7 +35,7 @@ export const PromptSettingsRow = ({
 	)
 
 	// console.log('Selected Model:', selectedModelId)
-
+	// console.log('Selected Model:', selectedModel)
 	// const customModel = useSelector(
 	// 	(state: RootState) => state.generation.selectedParams.custom_model
 	// )
