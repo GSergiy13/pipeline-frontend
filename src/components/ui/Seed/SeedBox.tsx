@@ -52,7 +52,7 @@ export const ButtonBox = ({ seed }: { seed: number }) => {
 		>
 			<button
 				onClick={handleToggle}
-				className='py-2 px-3 flex items-center gap-2 rounded-xl shadow-seed-shadow bg-[#232327] backdrop-blur-md border border-white/5'
+				className='py-2 px-3 flex items-center gap-2 rounded-xl bg-white/10 backdrop-blur-md  border border-white/5'
 			>
 				<Image
 					src='/icons/grow.svg'
@@ -65,7 +65,7 @@ export const ButtonBox = ({ seed }: { seed: number }) => {
 			<div
 				aria-hidden={!isVisible}
 				className={cn(
-					'absolute top-0 left-0 min-w-[200px] bg-black/20 p-3 rounded-xl shadow-seed-shadow translate-y-[50%] flex flex-col items-center',
+					'absolute top-0 left-0 min-w-[200px] bg-[#232327]/95 p-3 rounded-xl shadow-seed-shadow translate-y-[50%] flex flex-col items-center',
 					'transform-gpu transition-[opacity,transform] duration-200 ease-out',
 					isVisible
 						? 'opacity-100 scale-100 translate-y-[50%] pointer-events-auto'
