@@ -17,6 +17,7 @@ export type ModelConfigurationsItem = {
 	type_generation?: string
 	type_icon?: string
 	title: string
+	supportImage?: boolean
 	name: string
 	price: number
 	instrumental?: boolean

@@ -22,6 +22,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
 			<Toaster
 				position='bottom-center'
+				containerStyle={{
+					bottom: '13rem'
+				}}
 				reverseOrder={false}
 				toastOptions={{
 					error: {

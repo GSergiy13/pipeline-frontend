@@ -13,31 +13,22 @@ interface OptionSelectProps {
 }
 
 export const OptionSelect = ({ data, onChange }: OptionSelectProps) => {
-	const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null)
-	const [activeGroupName, setActiveGroupName] = useState<string | null>(null)
+	const [activeGroupId, setActiveGroupId] = useState<string | null>(null)
 	const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({})
-
-	const spanRefs = useRef<Record<string, HTMLSpanElement | null>>({})
 	const wrapperRef = useRef<HTMLDivElement>(null)
 
 	const handleClick = (groupId: string) => {
-		const span = spanRefs.current[groupId]
 		handleVibrate('light', 100)
-		if (span) {
-			const rect = span.getBoundingClientRect()
-			setAnchorRect(rect)
-			setActiveGroupName(prev => (prev === groupId ? null : groupId))
-		}
+		setActiveGroupId(prev => (prev === groupId ? null : groupId))
 	}
 
 	const handleOptionSelect = (groupId: string, optionId: string) => {
 		const group = data[groupId]
-
 		const selected = group.options.find(opt => opt.id === optionId)
 		if (!selected) return
 
 		setSelectedOptions(prev => ({ ...prev, [groupId]: optionId }))
-		setActiveGroupName(null)
+		setActiveGroupId(null)
 		handleVibrate('light', 200)
 		onChange?.(groupId, groupId === 'aspectRatio' ? selected.name : selected.value)
 	}
@@ -45,16 +36,12 @@ export const OptionSelect = ({ data, onChange }: OptionSelectProps) => {
 	useEffect(() => {
 		const handleClickOutside = (event: MouseEvent) => {
 			if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-				setTimeout(() => {
-					setActiveGroupName(null)
-				}, 0)
+				setActiveGroupId(null)
 			}
 		}
 
 		document.addEventListener('click', handleClickOutside)
-		return () => {
-			document.removeEventListener('click', handleClickOutside)
-		}
+		return () => document.removeEventListener('click', handleClickOutside)
 	}, [])
 
 	return (
@@ -66,7 +53,6 @@ export const OptionSelect = ({ data, onChange }: OptionSelectProps) => {
 				if (!group || !group.options?.length) return null
 
 				const groupId = group.id
-
 				const selectedOption =
 					group.options.find(opt => opt.id === selectedOptions[groupId]) || group.options[0]
 
@@ -92,22 +78,15 @@ export const OptionSelect = ({ data, onChange }: OptionSelectProps) => {
 								/>
 							)}
 
-							<span
-								className='text-xs'
-								ref={el => {
-									spanRefs.current[groupId] = el
-								}}
-							>
-								{selectedOption.name}
-							</span>
+							<span className='text-xs'>{selectedOption.name}</span>
 						</div>
 
-						{activeGroupName === groupId && (
+						{activeGroupId === groupId && (
 							<OptionSelectList
 								group={group}
-								anchorRect={anchorRect}
 								selectedId={selectedOption.id}
 								onSelect={optionId => handleOptionSelect(groupId, optionId)}
+								// className='absolute left-1/2 -translate-x-1/2 top-full mt-2 z-50'
 							/>
 						)}
 					</div>

@@ -1,177 +1,105 @@
 'use client'
 
+import { createSelector } from '@reduxjs/toolkit'
 import cn from 'clsx'
 import { ModelConfigurations } from 'constants/modelconfigurations.const'
-import Image from 'next/image'
-import { useEffect } from 'react'
-import toast from 'react-hot-toast'
+import { useInitDefaults } from 'hooks/useInitDefaults'
+import { memo, useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setGenerationParams, setInstrumental } from 'store/slices/generationSlice'
-import type { RootState } from 'store/store'
+import type { AppDispatch, RootState } from 'store/store'
 import { sanitizeOptionGroups } from 'utils/sanitizeOptionGroups'
 
+import { ImageAttachButton } from '@/ui/ImageAttachButton/ImageAttachButton'
 import { OptionSelect } from '@/ui/OptionSelect/OptionSelect'
 import { SeedInput } from '@/ui/Seed/SeedInput'
 import { ToggleSwitch } from '@/ui/ToggleSwitch/ToggleSwitch'
 
-interface PromptSettingsRowProps {
-	onFileSelect: (file: File) => void
-	isFileUploaded?: boolean
-	setIsFileUploaded: (value: boolean) => void
-}
+const selectPS = createSelector(
+	[
+		(s: RootState) => s.generation.selectedModel?.id,
+		(s: RootState) => s.generation.selectedParams.attachmentFilename,
+		(s: RootState) => s.generation.selectedParams.instrumental
+	],
+	(id, attachmentFilename, instrumental) => ({ id, attachmentFilename, instrumental })
+)
 
-const toastStyle = { style: { borderRadius: '10px', background: '#333', color: '#fff' } }
+export const PromptSettingsRow = memo(
+	({ onFileSelect }: { onFileSelect: (file: File) => void }) => {
+		const dispatch = useDispatch<AppDispatch>()
 
-export const PromptSettingsRow = ({
-	onFileSelect,
-	isFileUploaded,
-	setIsFileUploaded
-}: PromptSettingsRowProps) => {
-	const dispatch = useDispatch()
-	const selectedModelId = useSelector((state: RootState) => state.generation.selectedModel?.id)
-	const selectedModel = ModelConfigurations.find(model => model.id === selectedModelId)
-	const instrumental = useSelector(
-		(state: RootState) => state.generation.selectedParams.instrumental
-	)
+		const { id: selectedModelId, attachmentFilename, instrumental } = useSelector(selectPS)
 
-	// console.log('Selected Model:', selectedModelId)
-	// console.log('Selected Model:', selectedModel)
-	// const customModel = useSelector(
-	// 	(state: RootState) => state.generation.selectedParams.custom_model
-	// )
+		const selectedModel = useMemo(
+			() => ModelConfigurations.find(m => m.id === selectedModelId) ?? null,
+			[selectedModelId]
+		)
 
-	useEffect(() => {
-		if (!selectedModel || !selectedModel.options) return
+		useInitDefaults(selectedModel, dispatch)
 
-		const payload: {
-			quantity?: number
-			duration?: number | 'auto'
-			quality?: string
-			aspectRatio?: string | null
-			audioModel?: string | null
-		} = {}
+		const handleOptionChange = useCallback(
+			(groupId: string, value: string | number) => {
+				const payload: Record<string, string | number> = {}
 
-		const { quantity, duration, quality, aspectRatio, audioModel } = selectedModel.options
+				if (groupId === 'quantity') payload.quantity = Number(value)
+				else if (groupId === 'duration')
+					payload.duration = value === 'auto' ? 'auto' : Number(value)
+				else payload[groupId] = String(value)
 
-		if (quantity?.options?.[0]) {
-			payload.quantity = quantity.options[0].value
-		}
+				dispatch(setGenerationParams(payload))
+			},
+			[dispatch]
+		)
 
-		if (duration?.options?.[0]) {
-			const val = duration.options[0].value
-			payload.duration = typeof val === 'number' || val === 'auto' ? val : 'auto'
-		}
+		const handleInstrumentalChange = useCallback(
+			(v: boolean) => {
+				dispatch(setInstrumental(v))
+			},
+			[dispatch]
+		)
 
-		if (quality?.options?.[0]) {
-			payload.quality = quality.options[0].value
-		}
+		const sanitizedOptions = useMemo(() => {
+			if (!selectedModel?.options) return undefined
 
-		if (aspectRatio?.name?.[0]) {
-			payload.aspectRatio = aspectRatio.options[0].name
-		}
+			const opts =
+				attachmentFilename && selectedModel.type_generation !== 'img-to-img'
+					? { ...selectedModel.options, quantity: undefined }
+					: selectedModel.options
 
-		if (selectedModel.options.audioModel?.options?.[0]) {
-			payload.audioModel = selectedModel.options.audioModel.options[0].value
-		}
+			return sanitizeOptionGroups(opts)
+		}, [selectedModelId, selectedModel?.type_generation, attachmentFilename])
 
-		dispatch(setGenerationParams(payload))
-	}, [selectedModel, dispatch])
+		const isTextAudio = selectedModel?.type_generation === 'text-audio'
 
-	const handleInstrumentalChange = (value: boolean) => {
-		dispatch(setInstrumental(value))
-	}
+		return (
+			<div className='flex items-center justify-between gap-1'>
+				{selectedModel?.supportImage ? <ImageAttachButton onSelect={onFileSelect} /> : <div></div>}
 
-	// const handleCustomModelChange = (value: boolean) => {
-	// 	dispatch(setCustomModel(value))
-	// }
-
-	const handleFileUploadClick = () => {
-		const input = document.createElement('input')
-		input.type = 'file'
-		input.accept = '.jpg,.jpeg,.png'
-		input.onchange = e => {
-			const file = (e.target as HTMLInputElement).files?.[0]
-			if (!file) return
-
-			const allowedExtensions = ['jpg', 'jpeg', 'png']
-			const fileExtension = file.name.split('.').pop()?.toLowerCase()
-
-			if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
-				toast.error(
-					`❌ $Неподдерживаемый формат. Загрузите изображения в формате JPG, JPEG или PNG.`,
-					toastStyle
-				)
-				return
-			}
-			setIsFileUploaded(true)
-			onFileSelect(file)
-		}
-		input.click()
-	}
-	const handleOptionChange = (optionType: string, value: string | number) => {
-		const payload: Record<string, string | number> = {}
-
-		if (optionType === 'quantity') payload.quantity = Number(value)
-		if (optionType === 'duration') payload.duration = value === 'auto' ? 'auto' : Number(value)
-		if (optionType === 'quality') payload.quality = String(value)
-		if (optionType === 'model') payload.model = String(value)
-		if (optionType === 'aspectRatio') payload.aspectRatio = String(value)
-		if (optionType === 'audioModel') payload.audioModel = String(value)
-
-		dispatch(setGenerationParams(payload))
-	}
-
-	return (
-		<div className='flex items-center justify-between gap-1'>
-			{selectedModel?.type_generation !== 'text-audio' && (
-				<button
-					onClick={handleFileUploadClick}
-					className='flex items-center justify-center w-[30px] h-[30px] rounded-full border border-dark-bg-transparency-12  bg-dark-bg-transparency-4 hover:bg-dark-bg-transparency-8 transition-colors duration-200'
+				<div
+					className={cn('flex items-center gap-1', {
+						'w-full justify-between': isTextAudio
+					})}
 				>
-					<Image
-						src='/icons/attach.svg'
-						alt='Attach Icon'
-						width={16}
-						height={16}
-					/>
-				</button>
-			)}
+					{isTextAudio && (
+						<ToggleSwitch
+							label='Instrumental'
+							checked={instrumental}
+							onChange={handleInstrumentalChange}
+						/>
+					)}
 
-			<div
-				className={cn('flex items-center gap-1', {
-					'w-full justify-between': selectedModel?.type_generation === 'text-audio'
-				})}
-			>
-				{selectedModel?.type_generation === 'text-audio' && (
-					<ToggleSwitch
-						label='Instrumental'
-						checked={instrumental}
-						onChange={handleInstrumentalChange}
-					/>
-				)}
-				{/* {selectedModel?.type_generation === 'text-audio' && (
-					<ToggleSwitch
-						label='Custom Mode'
-						checked={customModel}
-						onChange={handleCustomModelChange}
-					/>
-				)} */}
-				{selectedModel?.options && (
-					<OptionSelect
-						data={sanitizeOptionGroups(
-							isFileUploaded && selectedModel?.type_generation !== 'img-to-img'
-								? {
-										...selectedModel.options,
-										quantity: undefined
-									}
-								: selectedModel.options
-						)}
-						onChange={handleOptionChange}
-					/>
-				)}
+					{sanitizedOptions && (
+						<OptionSelect
+							data={sanitizedOptions}
+							onChange={handleOptionChange}
+						/>
+					)}
 
-				{selectedModel?.type_generation !== 'text-audio' && <SeedInput />}
+					{!isTextAudio && <SeedInput />}
+				</div>
 			</div>
-		</div>
-	)
-}
+		)
+	}
+)
+
+PromptSettingsRow.displayName = 'PromptSettingsRow'

@@ -24,6 +24,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		name: 'Suno',
 		price: 60,
 		type_icon: 'suno',
+		supportImage: false,
 		instrumental: false,
 		custom_model: false,
 		options: {
@@ -48,6 +49,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		type_generation: 'img-to-img',
 		title: 'Img To Img',
 		name: 'Flux Pro',
+		supportImage: true,
 		price: 40,
 		type_icon: 'flux',
 		options: {
@@ -83,6 +85,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		type_generation: 'text-video',
 		title: 'Video Generation',
 		type_icon: 'Hailuo02',
+		supportImage: true,
 		name: 'Hailuo02 Standard',
 		price: 20,
 		options: {
@@ -112,6 +115,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		type_generation: 'text-video',
 		type_icon: 'Hailuo02',
 		name: 'Hailuo02 Pro',
+		supportImage: true,
 		price: 20,
 		options: {
 			quantity: {
@@ -131,6 +135,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		type_generation: 'text-video',
 		title: 'Video Generation',
 		type_icon: 'Seedance',
+		supportImage: true,
 		name: 'Seedance Lite',
 		price: 20,
 		options: {
@@ -159,6 +164,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		type_generation: 'text-video',
 		title: 'Video Generation',
 		type_icon: 'Seedance',
+		supportImage: true,
 		name: 'Seedance V1 Pro',
 		price: 40,
 		options: {
@@ -197,6 +203,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		title: 'Video Generation',
 		type_icon: 'Veo',
 		name: 'Veo 3',
+		supportImage: true,
 		price: 40,
 		options: {
 			quantity: {
@@ -224,6 +231,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		title: 'Video Generation',
 		type_icon: 'Veo',
 		name: 'Veo Fast',
+		supportImage: false,
 		price: 40,
 		options: {
 			quantity: {
@@ -251,6 +259,7 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 		type_generation: 'text-video',
 		title: 'Video Generation',
 		type_icon: 'kling',
+		supportImage: false,
 		name: 'Kling v2.1 Master',
 		price: 60,
 		options: {

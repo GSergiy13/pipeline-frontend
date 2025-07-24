@@ -1,8 +1,11 @@
 'use client'
 
+import { toastStyle } from 'constants/toast.const'
 import { useRef, useState } from 'react'
 import toast from 'react-hot-toast'
-import { generateT2VService } from 'services/gnerate.service'
+import { useDispatch } from 'react-redux'
+import { generateT2VService } from 'services/generate.service'
+import { setAttachmentFilename, setFocusInput } from 'store/slices/generationSlice'
 import { persistor } from 'store/store'
 import { handleVibrate } from 'utils/handleVibrate'
 
@@ -15,21 +18,13 @@ import { PromptInputField } from './PromptInputField/PromptInputField'
 interface PromptWrapperProps {
 	prompt: string
 	setPrompt: (value: string) => void
-	attachmentFilename: string | null
-	setAttachmentFilename: (filename: string | null) => void
+	attachmentFilename?: string | null
 }
 
-const toastStyle = { style: { borderRadius: '10px', background: '#333', color: '#fff' } }
-
-export const PromptWrapper = ({
-	prompt,
-	setPrompt,
-	attachmentFilename,
-	setAttachmentFilename
-}: PromptWrapperProps) => {
+export const PromptWrapper = ({ prompt, setPrompt, attachmentFilename }: PromptWrapperProps) => {
 	const inputRef = useRef<{ toggleExpand: () => void }>(null)
 	const [isExpanded, setIsExpanded] = useState(false)
-	const [isFileUploaded, setIsFileUploaded] = useState(false)
+	const dispatch = useDispatch()
 
 	const handleExpand = () => {
 		inputRef.current?.toggleExpand()
@@ -37,22 +32,23 @@ export const PromptWrapper = ({
 		handleVibrate('light', 100)
 	}
 
+	const handleFocusState = (focused: boolean) => dispatch(setFocusInput(focused))
+
 	const handleFileSelect = async (file: File) => {
 		handleVibrate('light', 100)
 
 		try {
 			const { url } = await generateT2VService.uploadImage(file)
 
-			setAttachmentFilename(url)
+			dispatch(setAttachmentFilename(url))
 		} catch (err) {
 			toast.error(`❌ ${err}`, toastStyle)
 		}
 	}
 
 	const handleRemoveAttachment = () => {
-		setAttachmentFilename(null)
+		dispatch(setAttachmentFilename(null))
 		handleVibrate('light', 100)
-		setIsFileUploaded(false)
 	}
 
 	return (
@@ -79,17 +75,14 @@ export const PromptWrapper = ({
 				ref={inputRef}
 				value={prompt}
 				onChange={setPrompt}
+				handleFocusState={handleFocusState}
 			/>
 			<ExpandButton
 				onExpand={handleExpand}
 				isExpanded={isExpanded}
 			/>
 
-			<PromptSettingsRow
-				onFileSelect={handleFileSelect}
-				setIsFileUploaded={setIsFileUploaded}
-				isFileUploaded={isFileUploaded}
-			/>
+			<PromptSettingsRow onFileSelect={handleFileSelect} />
 		</div>
 	)
 }

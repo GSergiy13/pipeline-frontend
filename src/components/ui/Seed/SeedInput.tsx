@@ -1,8 +1,8 @@
 'use client'
 
+import clsx from 'clsx'
 import Image from 'next/image'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSeed } from 'store/slices/generationSlice'
 import type { RootState } from 'store/store'
@@ -10,72 +10,20 @@ import { debounce } from 'utils/debounce'
 import { handleVibrate } from 'utils/handleVibrate'
 
 export const SeedInput = () => {
-	const [isOpen, setIsOpen] = useState(false)
-	const [mounted, setMounted] = useState(false)
-	const [position, setPosition] = useState<{ top: number; left: number } | null>(null)
+	const [open, setOpen] = useState(false)
+	const [seedInput, setSeedInput] = useState<number | ''>('')
 
-	const buttonRef = useRef<HTMLButtonElement>(null)
-	const portalRef = useRef<HTMLDivElement>(null)
+	const wrapperRef = useRef<HTMLDivElement>(null)
+	const panelRef = useRef<HTMLDivElement>(null)
+	const inputRef = useRef<HTMLInputElement>(null)
+	const btnRef = useRef<HTMLButtonElement>(null)
 
 	const dispatch = useDispatch()
 	const currentSeed = useSelector((s: RootState) => s.generation.selectedParams.seed)
-	const [seedInput, setSeedInput] = useState<number | ''>(currentSeed ?? '')
-
-	useEffect(() => setMounted(true), [])
 
 	useEffect(() => {
-		if (!isOpen) return
-		const prev = document.body.style.overflow
-		document.body.style.overflow = 'hidden'
-		return () => {
-			document.body.style.overflow = prev
-		}
-	}, [isOpen])
-
-	useEffect(() => {
-		if (!isOpen || !buttonRef.current) return
-		const rect = buttonRef.current.getBoundingClientRect()
-		const overlayH = 230
-		const preferTop = rect.bottom + 8
-		const safeTop =
-			preferTop + overlayH > window.innerHeight ? Math.max(rect.top - overlayH - 8, 16) : preferTop
-
-		setPosition({
-			top: safeTop,
-			left: rect.left + rect.width / 2
-		})
-	}, [isOpen])
-
-	useEffect(() => {
-		if (isOpen) setSeedInput(currentSeed ?? '')
-	}, [isOpen, currentSeed])
-
-	const handleOutside = useCallback(
-		(e: MouseEvent | TouchEvent) => {
-			if (
-				isOpen &&
-				portalRef.current &&
-				!portalRef.current.contains(e.target as Node) &&
-				!buttonRef.current?.contains(e.target as Node)
-			) {
-				setIsOpen(false)
-			}
-		},
-		[isOpen]
-	)
-
-	useEffect(() => {
-		if (!isOpen) return
-		document.addEventListener('mousedown', handleOutside)
-		document.addEventListener('touchstart', handleOutside)
-		const esc = (e: KeyboardEvent) => e.key === 'Escape' && setIsOpen(false)
-		document.addEventListener('keydown', esc)
-		return () => {
-			document.removeEventListener('mousedown', handleOutside)
-			document.removeEventListener('touchstart', handleOutside)
-			document.removeEventListener('keydown', esc)
-		}
-	}, [isOpen, handleOutside])
+		if (open) setSeedInput(currentSeed ?? '')
+	}, [open, currentSeed])
 
 	const debouncedSetSeed = useMemo(
 		() =>
@@ -99,34 +47,79 @@ export const SeedInput = () => {
 		}
 	}
 
-	const handlerOpen = () => {
-		setIsOpen(prev => !prev)
-		handleVibrate('light', 100)
+	const close = useCallback(() => {
+		// спочатку забираємо фокус із інпута
+		inputRef.current?.blur()
+		setOpen(false)
+		// повертаємо фокус на кнопку (для доступності)
+		btnRef.current?.focus()
+	}, [])
+
+	const toggle = () => {
+		if (open) close()
+		else {
+			setOpen(true)
+			handleVibrate('light', 100)
+			// фокус в інпут після відкриття
+			setTimeout(() => inputRef.current?.focus(), 0)
+		}
 	}
 
-	const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
-
-	const portalContent = (
-		<div
-			ref={portalRef}
-			className='fixed z-[9999] pointer-events-none w-[90%] md:w-auto'
-			style={
-				isMobile
-					? {
-							bottom: '15%',
-							left: '50%',
-							transform: 'translateX(-50%)'
-						}
-					: position
-						? {
-								top: position.top,
-								left: position.left,
-								transform: 'translateX(-50%)'
-							}
-						: {}
+	const handleOutside = useCallback(
+		(e: MouseEvent | TouchEvent) => {
+			if (open && wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+				close()
 			}
-		>
-			<div className='relative w-full bg-white/20 backdrop-blur-2xl p-3 rounded-xl shadow-seed-shadow pointer-events-auto'>
+		},
+		[open, close]
+	)
+
+	useEffect(() => {
+		if (!open) return
+		document.addEventListener('mousedown', handleOutside)
+		document.addEventListener('touchstart', handleOutside)
+		const esc = (e: KeyboardEvent) => e.key === 'Escape' && close()
+		document.addEventListener('keydown', esc)
+		return () => {
+			document.removeEventListener('mousedown', handleOutside)
+			document.removeEventListener('touchstart', handleOutside)
+			document.removeEventListener('keydown', esc)
+		}
+	}, [open, handleOutside, close])
+
+	// (опційно) керуємо inert
+	useEffect(() => {
+		if (panelRef.current) {
+			;(panelRef.current as any).inert = !open
+		}
+	}, [open])
+
+	return (
+		<div ref={wrapperRef}>
+			<button
+				ref={btnRef}
+				onClick={toggle}
+				className='flex items-center justify-center w-[30px] h-[30px] rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4 hover:bg-dark-bg-transparency-8 transition-colors duration-200'
+			>
+				<Image
+					src='/icons/grow.svg'
+					alt='Grow'
+					width={16}
+					height={16}
+				/>
+			</button>
+
+			<div
+				ref={panelRef}
+				role='dialog'
+				aria-modal='true'
+				className={clsx(
+					'absolute top-0 left-1/2 w-[90%] mt-2 z-50 -translate-x-1/2 -translate-y-[60%] shadow-seed-shadow bg-[#232327]/90 backdrop-blur-2xl p-3 rounded-xl transform-gpu transition-[opacity,transform] duration-200 ease-out',
+					open
+						? 'opacity-100 scale-100 -translate-y-1/2 pointer-events-auto'
+						: 'opacity-0 scale-95 -translate-y-2 pointer-events-none'
+				)}
+			>
 				<div className='flex items-center justify-between mb-5'>
 					<span className='text-xs text-dark-text-transparency-12 text-center'>Seed</span>
 					<Image
@@ -135,12 +128,13 @@ export const SeedInput = () => {
 						width={16}
 						height={16}
 						className='cursor-pointer'
-						onClick={() => setIsOpen(false)}
+						onClick={close}
 					/>
 				</div>
 
 				<div className='w-full rounded-2xl bg-black/20 p-2 border border-black/15'>
 					<input
+						ref={inputRef}
 						className='bg-transparent outline-none text-base w-full appearance-none'
 						type='number'
 						inputMode='numeric'
@@ -151,24 +145,5 @@ export const SeedInput = () => {
 				</div>
 			</div>
 		</div>
-	)
-
-	return (
-		<>
-			<button
-				ref={buttonRef}
-				onClick={handlerOpen}
-				className='relative flex items-center justify-center w-[30px] h-[30px] rounded-full border border-dark-bg-transparency-12 bg-dark-bg-transparency-4 hover:bg-dark-bg-transparency-8 transition-colors duration-200'
-			>
-				<Image
-					src='/icons/grow.svg'
-					alt='Grow'
-					width={16}
-					height={16}
-				/>
-			</button>
-
-			{isOpen && mounted && createPortal(portalContent, document.body)}
-		</>
 	)
 }

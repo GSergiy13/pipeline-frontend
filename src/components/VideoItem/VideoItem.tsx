@@ -31,8 +31,6 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 		handleVibrate('light', 100)
 	}, [])
 
-	console.log('VideoItem data:', data)
-
 	return (
 		<>
 			<div className={cn('relative flex items-center justify-center cursor-pointer', className)}>

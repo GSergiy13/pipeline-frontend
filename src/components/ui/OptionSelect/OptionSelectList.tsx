@@ -1,76 +1,35 @@
+'use client'
+
 import cn from 'clsx'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
 import type { OptionGroup } from 'types/ModelConfigurations.type'
 
 interface OptionSelectListProps {
 	group: OptionGroup
-	anchorRect: DOMRect | null
 	selectedId: string
 	onSelect: (optionId: string) => void
 }
 
-export const OptionSelectList = ({
-	group,
-	anchorRect,
-	selectedId,
-	onSelect
-}: OptionSelectListProps) => {
-	const [mounted, setMounted] = useState(false)
+export const OptionSelectList = ({ group, selectedId, onSelect }: OptionSelectListProps) => {
 	const [visible, setVisible] = useState(false)
 	const contentRef = useRef<HTMLDivElement>(null)
-	const [contentHeight, setContentHeight] = useState(0)
 
 	useEffect(() => {
-		setMounted(true)
-		const timeout = setTimeout(() => {
-			setVisible(true)
-			if (contentRef.current) {
-				setContentHeight(contentRef.current.getBoundingClientRect().height)
-			}
-		}, 10)
-		return () => clearTimeout(timeout)
+		const r = requestAnimationFrame(() => setVisible(true))
+		return () => cancelAnimationFrame(r)
 	}, [])
 
-	if (!mounted || !anchorRect) return null
-
-	const dropdownWidth = 160
-	const minSpacing = 16
-	const additionalSpacing = 10
-
-	const actualContentHeight = contentHeight || 160
-
-	const baseSpacing = Math.max(66, actualContentHeight + additionalSpacing)
-
-	const maxTop = window.scrollY + anchorRect.top - minSpacing
-	const neededTop = window.scrollY + anchorRect.top - baseSpacing
-	const top = Math.max(minSpacing, Math.min(neededTop, maxTop))
-
-	const left = anchorRect.left + anchorRect.width / 2 - dropdownWidth / 2 + window.scrollX
-	const safeLeft = Math.max(
-		minSpacing,
-		Math.min(left, window.innerWidth - dropdownWidth - minSpacing)
-	)
-
-	const styles: React.CSSProperties = {
-		position: 'absolute',
-		top,
-		left: safeLeft,
-		width: dropdownWidth,
-		zIndex: 100,
-		maxHeight: `calc(100vh - ${top + minSpacing}px)`
-	}
-
-	return createPortal(
+	return (
 		<div
 			ref={contentRef}
-			style={styles}
 			className={cn(
-				'rounded-2xl bg-black/30 backdrop-blur-xl shadow-2xl text-white p-3 transition-all duration-300 transform isolate will-change-[transform,opacity,backdrop-filter] overflow-y-auto',
+				' absolute bottom-0 -right-5 min-w-[150px] rounded-2xl shadow-seed-shadow bg-[#232327]/90 text-white p-3 ' +
+					'transition-all duration-500  ' +
+					'overflow-y-auto max-h-[calc(100vh-32px)]',
 				{
-					'opacity-0 translate-y-2 pointer-events-none': !visible,
-					'opacity-100 translate-y-0 pointer-events-auto': visible
+					'opacity-0 translate-y-1 pointer-events-none': !visible,
+					'opacity-100 -translate-y-[40px] pointer-events-auto': visible
 				}
 			)}
 		>
@@ -97,9 +56,9 @@ export const OptionSelectList = ({
 								width={24}
 								height={24}
 							/>
-
 							<span className='text-sm'>{option.name}</span>
 						</div>
+
 						<div
 							className={cn('w-6 h-6 flex items-center justify-center border rounded-full', {
 								'bg-white/20 border-white/5': option.id === selectedId,
@@ -116,7 +75,6 @@ export const OptionSelectList = ({
 					</li>
 				))}
 			</ul>
-		</div>,
-		document.body
+		</div>
 	)
 }

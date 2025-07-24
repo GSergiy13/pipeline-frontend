@@ -1,6 +1,6 @@
 'use client'
 
-import { useGenerateVideo } from 'hooks/useGenerateVideo'
+import { useGenerateMedia } from 'hooks/useGenerateMedia'
 import { type Ref, forwardRef, memo } from 'react'
 import { shallowEqual, useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
@@ -13,27 +13,20 @@ const useGenerationContext = () =>
 		(s: RootState) => ({
 			selectedModel: s.generation.selectedModel,
 			selectedParams: s.generation.selectedParams,
-			isLoading: s.generation.videoLoadingMap
+			isLoading: s.generation.videoLoadingMap,
+			attachmentFilename: s.generation.selectedParams.attachmentFilename
 		}),
 		shallowEqual
 	)
 
 const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
-	const { selectedModel, selectedParams, isLoading } = useGenerationContext()
+	const { selectedModel, selectedParams, isLoading, attachmentFilename } = useGenerationContext()
 
-	// console.log('Selected Model:', selectedModel)
-	// console.log('Selected Params:', selectedParams)
-	// console.log('Is Loading:', isLoading)
-
-	const {
-		prompt,
-		setPrompt,
-		attachmentFilename,
-		setAttachmentFilename,
-		handleGenerate,
-		price,
-		disabled
-	} = useGenerateVideo({ selectedModel, selectedParams })
+	const { prompt, setPrompt, handleGenerate, price, disabled } = useGenerateMedia({
+		selectedModel,
+		selectedParams,
+		attachmentFilename
+	})
 
 	const allDone =
 		isLoading && typeof isLoading === 'object'
@@ -47,9 +40,8 @@ const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
 		>
 			<PromptWrapper
 				prompt={prompt}
-				setPrompt={setPrompt}
 				attachmentFilename={attachmentFilename}
-				setAttachmentFilename={setAttachmentFilename}
+				setPrompt={setPrompt}
 			/>
 
 			<PromptGenerateButton

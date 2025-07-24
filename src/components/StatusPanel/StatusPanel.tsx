@@ -3,6 +3,7 @@
 import { GuidesCarousel } from 'components/GuidesCarousel/GuidesCarousel'
 import { useProgress } from 'hooks/useProgress'
 import Image from 'next/image'
+import { type JSX, useEffect, useState } from 'react'
 
 import { ButtonBasic } from '@/ui/ButtonBasic/buttonBasic'
 
@@ -14,8 +15,14 @@ type StatusState =
 
 export const StatusPanel = ({ state }: { state?: StatusState }) => {
 	if (!state) return null
-	let loadingTime
 
+	const [visible, setVisible] = useState(false)
+	useEffect(() => {
+		const id = requestAnimationFrame(() => setVisible(true))
+		return () => cancelAnimationFrame(id)
+	}, [])
+
+	let loadingTime: string
 	const loadingState = state.isLoadingState ?? []
 	const total = loadingState.length
 
@@ -28,12 +35,13 @@ export const StatusPanel = ({ state }: { state?: StatusState }) => {
 	}
 
 	const completed = loadingState.filter(item => !item.status).length
-
 	const fakeProgress = useProgress(loadingState)
 
+	let content: JSX.Element | null = null
+
 	if (state.type === 'insufficient_funds') {
-		return (
-			<div className='flex flex-col items-center justify-center text-center p-4 w-full max-w-[400px]'>
+		content = (
+			<div className='h-full flex flex-col items-center justify-center text-center p-4 w-full max-w-[400px]'>
 				<Image
 					src='/icons/warning.svg'
 					alt='Insufficient Funds'
@@ -49,10 +57,8 @@ export const StatusPanel = ({ state }: { state?: StatusState }) => {
 				</ButtonBasic>
 			</div>
 		)
-	}
-
-	if (state.type === 'loading') {
-		return (
+	} else if (state.type === 'loading') {
+		content = (
 			<div className='h-full flex flex-col items-center text-center p-4 w-full'>
 				<GuidesCarousel />
 				<div className='flex flex-col items-center justify-center text-center mt-14 w-full'>
@@ -73,5 +79,12 @@ export const StatusPanel = ({ state }: { state?: StatusState }) => {
 		)
 	}
 
-	return null
+	return (
+		<div
+			className={`transition-[opacity,transform] duration-300 ease-out 
+         ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}
+		>
+			{content}
+		</div>
+	)
 }

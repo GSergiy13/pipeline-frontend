@@ -1,12 +1,12 @@
+import { toastStyle } from 'constants/toast.const'
 import toast from 'react-hot-toast'
-import { generateT2VService } from 'services/gnerate.service'
+import { generateT2VService } from 'services/generate.service'
 import { clearVideoCollection } from 'store/slices/generationSlice'
 import type { AppDispatch } from 'store/store'
 import type { GenerationDetails } from 'types/IVideo.type'
 
 const POLL_FIRST_DELAY = 40000
 const POLL_NEXT_DELAY = 30000
-const toastStyle = { style: { borderRadius: '10px', background: '#333', color: '#fff' } }
 
 export function waitUntilAnyVideoReady(
 	ids: string[],

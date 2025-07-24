@@ -7,8 +7,6 @@ interface EmptyStubProps {
 }
 
 const EmptyStub = ({ typeGeneration }: EmptyStubProps) => {
-	console.log('EmptyStub rendered with typeGeneration:', typeGeneration)
-
 	return (
 		<div className='flex flex-col gap-10 items-center justify-center w-full h-full text-gray-500 text-lg'>
 			<Image

@@ -10,11 +10,20 @@ interface PromptInputFieldProps {
 	maxHeight?: number
 	value: string
 	onChange: (val: string) => void
+	handleFocusState?: (focused: boolean) => void
 }
 
 export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptInputFieldProps>(
 	(
-		{ onToggle, maxExpandedHeight = 450, minHeight = 40, maxHeight = 300, value, onChange },
+		{
+			onToggle,
+			maxExpandedHeight = 450,
+			minHeight = 40,
+			maxHeight = 300,
+			value,
+			onChange,
+			handleFocusState
+		},
 		ref
 	) => {
 		const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -61,6 +70,7 @@ export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptI
 		}
 
 		const handleFocus = () => {
+			handleFocusState?.(true)
 			if (keyboardVisible && !isExpanded) {
 				const visualViewportHeight = window.visualViewport?.height ?? maxHeight
 				const newHeight = Math.min(visualViewportHeight * 0.4, maxHeight)
@@ -69,6 +79,7 @@ export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptI
 		}
 
 		const handleBlur = () => {
+			handleFocusState?.(false)
 			if (!isExpanded) {
 				setHeight(minHeight)
 			}

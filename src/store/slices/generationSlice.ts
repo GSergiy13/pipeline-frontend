@@ -28,9 +28,11 @@ interface GenerationState {
 		custom_model?: boolean
 		aspectRatio?: string | null
 		audioModel?: string | null
+		attachmentFilename?: string | null
 	}
 	videoCollectionIds: string[]
 	videoLoadingMap: Record<string, boolean>
+	focusInput: boolean
 }
 export type SelectedParams = GenerationState['selectedParams']
 
@@ -56,7 +58,8 @@ const initialState: GenerationState = {
 		audioModel: null
 	},
 	videoCollectionIds: [],
-	videoLoadingMap: {}
+	videoLoadingMap: {},
+	focusInput: false
 }
 
 const generationSlice = createSlice({
@@ -94,6 +97,9 @@ const generationSlice = createSlice({
 		setQuality(state, action: PayloadAction<QualityType>) {
 			state.selectedParams.quality = action.payload
 		},
+		setFocusInput(state, action: PayloadAction<boolean>) {
+			state.focusInput = action.payload
+		},
 		setSeed(state, action: PayloadAction<number | null>) {
 			state.selectedParams.seed = action.payload
 		},
@@ -102,6 +108,9 @@ const generationSlice = createSlice({
 		},
 		setPrompt(state, action: PayloadAction<string>) {
 			state.selectedParams.prompt = action.payload
+		},
+		setAttachmentFilename(state, action: PayloadAction<string | null>) {
+			state.selectedParams.attachmentFilename = action.payload
 		},
 		resetGeneration(state) {
 			state.selectedModel = null
@@ -150,6 +159,7 @@ export const {
 	setDuration,
 	setQuality,
 	setSeed,
+	setFocusInput,
 	clearSeed,
 	setPrompt,
 	resetGeneration,
@@ -161,6 +171,7 @@ export const {
 	clearAllVideoLoading,
 	setModel,
 	setInstrumental,
+	setAttachmentFilename,
 	setCustomModel
 } = generationSlice.actions
 
