@@ -4,6 +4,7 @@ import cn from 'clsx'
 import { ModelConfigurations } from 'constants/modelconfigurations.const'
 import Image from 'next/image'
 import { useEffect } from 'react'
+import toast from 'react-hot-toast'
 import { useDispatch, useSelector } from 'react-redux'
 import { setCustomModel, setGenerationParams, setInstrumental } from 'store/slices/generationSlice'
 import type { RootState } from 'store/store'
@@ -16,6 +17,8 @@ import { ToggleSwitch } from '@/ui/ToggleSwitch/ToggleSwitch'
 interface PromptSettingsRowProps {
 	onFileSelect: (file: File) => void
 }
+
+const toastStyle = { style: { borderRadius: '10px', background: '#333', color: '#fff' } }
 
 export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 	const dispatch = useDispatch()
@@ -70,16 +73,26 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 	const handleFileUploadClick = () => {
 		const input = document.createElement('input')
 		input.type = 'file'
-		input.accept = 'image/*'
+		input.accept = '.jpg,.jpeg,.png'
 		input.onchange = e => {
 			const file = (e.target as HTMLInputElement).files?.[0]
-			if (file) {
-				onFileSelect(file)
+			if (!file) return
+
+			const allowedExtensions = ['jpg', 'jpeg', 'png']
+			const fileExtension = file.name.split('.').pop()?.toLowerCase()
+
+			if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+				toast.error(
+					`❌ $Неподдерживаемый формат. Загрузите изображения в формате JPG, JPEG или PNG.`,
+					toastStyle
+				)
+				return
 			}
+
+			onFileSelect(file)
 		}
 		input.click()
 	}
-
 	const handleOptionChange = (optionType: string, value: string | number) => {
 		const payload: Record<string, string | number> = {}
 
