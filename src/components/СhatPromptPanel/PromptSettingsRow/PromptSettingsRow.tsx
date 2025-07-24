@@ -34,7 +34,7 @@ export const PromptSettingsRow = ({
 		(state: RootState) => state.generation.selectedParams.instrumental
 	)
 
-	console.log('Selected Model:', selectedModelId)
+	// console.log('Selected Model:', selectedModelId)
 
 	// const customModel = useSelector(
 	// 	(state: RootState) => state.generation.selectedParams.custom_model
@@ -159,10 +159,10 @@ export const PromptSettingsRow = ({
 				{selectedModel?.options && (
 					<OptionSelect
 						data={sanitizeOptionGroups(
-							isFileUploaded
+							isFileUploaded && selectedModel?.type_generation !== 'img-to-img'
 								? {
 										...selectedModel.options,
-										quantity: undefined // <-- Прибираємо quantity, якщо файл вже є
+										quantity: undefined
 									}
 								: selectedModel.options
 						)}
