@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
 	const cookieStore = await cookies()
-
 	const tgId = cookieStore.get('telegramId')?.value
 	const payload = await req.json()
 

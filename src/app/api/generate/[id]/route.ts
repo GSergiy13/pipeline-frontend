@@ -8,7 +8,6 @@ export const dynamic = 'force-dynamic'
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
 	const cookieStore = await cookies()
 	const { id: generationId } = await params
-
 	const tgId = cookieStore.get('telegramId')?.value
 
 	if (!generationId) {

@@ -12,29 +12,30 @@ type BaseGenerationItem = GenerationDetails | AudioGenerationDetails | Generatio
 
 export function useGenerations(ids: string[]) {
 	const [map, setMap] = useState<Record<string, BaseGenerationItem>>({})
-	const stopsRef = useRef<(() => void)[]>([])
 	const dispatch = useDispatch()
+	const stopRef = useRef<(() => void) | undefined>(undefined)
 
 	useEffect(() => {
 		if (!ids.length) return
 
-		// console.log('useGenerations effect', ids)
-
-		stopsRef.current.forEach(stop => stop())
-		stopsRef.current = []
+		stopRef.current?.()
+		stopRef.current = undefined
 		setMap({})
 
-		ids.forEach(id => {
-			const stop = waitUntilAnyVideoReady([id], (readyId, generation) => {
-				dispatch(setVideoLoading({ videoId: readyId, isLoading: false }))
-				setMap(prev => (prev[readyId] ? prev : { ...prev, [readyId]: generation }))
-			})
-			stopsRef.current.push(stop)
-		})
+		const stop = waitUntilAnyVideoReady(
+			[...ids],
+			(id, generation) => {
+				dispatch(setVideoLoading({ videoId: id, isLoading: false }))
+				setMap(prev => (prev[id] ? prev : { ...prev, [id]: generation }))
+			},
+			dispatch
+		)
+
+		stopRef.current = stop
 
 		return () => {
-			stopsRef.current.forEach(stop => stop())
-			stopsRef.current = []
+			stop?.()
+			stopRef.current = undefined
 		}
 	}, [ids.join(',')])
 

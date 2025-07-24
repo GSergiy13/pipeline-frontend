@@ -1,53 +1,56 @@
 import toast from 'react-hot-toast'
 import { generateT2VService } from 'services/gnerate.service'
+import { clearVideoCollection } from 'store/slices/generationSlice'
+import type { AppDispatch } from 'store/store'
 import type { GenerationDetails } from 'types/IVideo.type'
 
-const POLL_INTERVAL = 30000
+const POLL_FIRST_DELAY = 40000
+const POLL_NEXT_DELAY = 30000
 const toastStyle = { style: { borderRadius: '10px', background: '#333', color: '#fff' } }
 
 export function waitUntilAnyVideoReady(
 	ids: string[],
-	onReady: (id: string, generation: GenerationDetails) => void
+	onReady: (id: string, generation: GenerationDetails) => void,
+	dispatch?: AppDispatch
 ) {
 	let cancelled = false
-	const checkedSet = new Set<string>()
+	const pendingQueue = [...ids]
 
-	const check = async () => {
-		if (cancelled) return
+	const processNext = async (isFirst = true) => {
+		if (cancelled || !pendingQueue.length) return
 
-		const pendingIds = ids.filter(id => !checkedSet.has(id))
-		if (!pendingIds.length) return
+		const id = pendingQueue[0]
 
-		const results = await Promise.all(
-			pendingIds.map(async id => {
-				try {
-					const res = await generateT2VService.getGenerationInfo(id)
-					return { id, generation: res.generation }
-				} catch (err) {
-					console.error(`❌ Помилка перевірки статусу ${id}`, err)
-					toast.error(`❌ ${err}`, toastStyle)
-					return null
-				}
-			})
-		)
-
-		for (const result of results) {
-			if (!result) continue
-			const { id, generation } = result
+		try {
+			const res = await generateT2VService.getGenerationInfo(id)
+			const generation = res.generation
 
 			if (generation.status === 'completed') {
-				checkedSet.add(id)
 				onReady(id, generation)
-			} else if (generation.status === 'failed') {
-				checkedSet.add(id)
-				toast.error(`⚠️ Генерація з ID ${id} завершилась з помилкою.`, toastStyle)
+				pendingQueue.shift()
+				processNext(false)
+				return
 			}
+
+			if (generation.status === 'failed') {
+				toast.error(`⚠️ Генерація з ID ${id} завершилась з помилкою.`, toastStyle)
+				dispatch?.(clearVideoCollection())
+				cancelled = true
+				return
+			}
+		} catch (err) {
+			console.error(`❌ Помилка перевірки статусу ${id}`, err)
+			toast.error(`❌ ${err}`, toastStyle)
+			dispatch?.(clearVideoCollection())
+			cancelled = true
+			return
 		}
 
-		setTimeout(check, POLL_INTERVAL)
+		const delay = isFirst ? POLL_FIRST_DELAY : POLL_NEXT_DELAY
+		setTimeout(() => processNext(false), delay)
 	}
 
-	check()
+	processNext(true)
 
 	return () => {
 		cancelled = true

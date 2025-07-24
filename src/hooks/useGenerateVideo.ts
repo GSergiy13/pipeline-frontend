@@ -37,12 +37,12 @@ export const useGenerateVideo = ({ selectedModel, selectedParams }: Params) => {
 		const isImageMode = Boolean(attachmentFilename)
 
 		let modelType = selectedModel.type
-		if (opts?.quality && quality) modelType += `-${quality}`
+		if (opts?.quality && quality) modelType += `-${quality}p`
 
 		dispatch(decreaseBalance(price))
 		dispatch(clearVideoCollection())
-		dispatch(clearSeed())
 		dispatch(clearAllVideoLoading())
+		dispatch(clearSeed())
 
 		try {
 			if (selectedModel.type_generation === 'text-audio') {
@@ -111,6 +111,8 @@ export const useGenerateVideo = ({ selectedModel, selectedParams }: Params) => {
 							...(opts?.duration && duration != null && { duration }),
 							...(seed != null && { seed })
 						}
+
+				console.log('Payload for video generation:', payload)
 
 				const res = await generateT2VService.postExploreVideos(payload, isImageMode)
 
