@@ -24,8 +24,8 @@ export const OptionSelectList = ({ group, selectedId, onSelect }: OptionSelectLi
 		<div
 			ref={contentRef}
 			className={cn(
-				' absolute bottom-0 -right-5 min-w-[150px] rounded-2xl shadow-seed-shadow bg-[#232327]/90 text-white p-3 ' +
-					'transition-all duration-500  ' +
+				' absolute bottom-0 -right-5 min-w-[150px] rounded-2xl shadow-seed-shadow bg-[#232327]/95 text-white p-3 ' +
+					'transition-all duration-300  ' +
 					'overflow-y-auto max-h-[calc(100vh-32px)]',
 				{
 					'opacity-0 translate-y-1 pointer-events-none': !visible,
