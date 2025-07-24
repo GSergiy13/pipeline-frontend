@@ -30,8 +30,17 @@ export const useGenerateVideo = ({ selectedModel, selectedParams }: Params) => {
 		const text = prompt.trim()
 		if (!selectedModel || !text) return
 
-		const { quantity, duration, quality, seed, aspectRatio, model, instrumental, custom_model } =
-			selectedParams
+		const {
+			quantity,
+			duration,
+			quality,
+			seed,
+			aspectRatio,
+			model,
+			audioModel,
+			instrumental,
+			custom_model
+		} = selectedParams
 
 		const opts = selectedModel.options
 		const isImageMode = Boolean(attachmentFilename)
@@ -48,7 +57,8 @@ export const useGenerateVideo = ({ selectedModel, selectedParams }: Params) => {
 			if (selectedModel.type_generation === 'text-audio') {
 				const audioPayload: T2ARequest = {
 					seedPrompt: text,
-					model: modelType,
+					// model: audioModel,
+					...(audioModel && { model: audioModel }),
 					customMode: custom_model,
 					instrumental,
 					...(custom_model && {
@@ -57,6 +67,8 @@ export const useGenerateVideo = ({ selectedModel, selectedParams }: Params) => {
 						negativeTags: ['rock', 'heavy metal']
 					})
 				}
+
+				console.log('Payload for Text to Audio generation:', audioPayload, modelType)
 
 				const res = await generateT2VService.postAudioGeneration(audioPayload)
 				const ids = res.generations?.map(g => g.generationId)?.filter(Boolean)

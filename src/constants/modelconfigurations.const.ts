@@ -30,13 +30,14 @@ export const ModelConfigurations: ModelConfigurationsItem[] = [
 			quantity: null,
 			duration: null,
 			quality: null,
-			model: {
-				id: 'model',
+			model: null,
+			audioModel: {
+				id: 'audioModel',
 				name: 'Model',
 				options: [
-					{ id: uuidv4(), name: 'v3_5', value: 'v3_5' },
-					{ id: uuidv4(), name: 'v4', value: 'v4' },
-					{ id: uuidv4(), name: 'v4_5', value: 'v4_5' }
+					{ id: uuidv4(), name: 'v3_5', value: 'V3_5' },
+					{ id: uuidv4(), name: 'v4', value: 'V4' },
+					{ id: uuidv4(), name: 'v4_5', value: 'V4_5' }
 				]
 			}
 		}

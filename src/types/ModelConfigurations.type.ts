@@ -27,5 +27,6 @@ export type ModelConfigurationsItem = {
 		quality: OptionGroup<string> | null
 		model?: OptionGroup<string> | null
 		aspectRatio?: OptionGroup<string> | null
+		audioModel?: OptionGroup<string> | null
 	}
 }

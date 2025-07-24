@@ -42,9 +42,10 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 			duration?: number | 'auto'
 			quality?: string
 			aspectRatio?: string | null
+			audioModel?: string | null
 		} = {}
 
-		const { quantity, duration, quality, aspectRatio } = selectedModel.options
+		const { quantity, duration, quality, aspectRatio, audioModel } = selectedModel.options
 
 		if (quantity?.options?.[0]) {
 			payload.quantity = quantity.options[0].value
@@ -61,6 +62,10 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 
 		if (aspectRatio?.name?.[0]) {
 			payload.aspectRatio = aspectRatio.options[0].name
+		}
+
+		if (selectedModel.options.audioModel?.options?.[0]) {
+			payload.audioModel = selectedModel.options.audioModel.options[0].value
 		}
 
 		dispatch(setGenerationParams(payload))
@@ -105,6 +110,7 @@ export const PromptSettingsRow = ({ onFileSelect }: PromptSettingsRowProps) => {
 		if (optionType === 'quality') payload.quality = String(value)
 		if (optionType === 'model') payload.model = String(value)
 		if (optionType === 'aspectRatio') payload.aspectRatio = String(value)
+		if (optionType === 'audioModel') payload.audioModel = String(value)
 
 		dispatch(setGenerationParams(payload))
 	}
