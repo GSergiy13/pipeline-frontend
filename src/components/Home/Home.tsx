@@ -50,7 +50,7 @@ const HomePage = memo(() => {
 
 	return (
 		<div
-			className='relative px-1 pt-1 w-full bg-chat-gradient rounded-t-[32px] max-w-[640px] mx-auto min-h-lvh'
+			className='relative px-1 pt-1 w-full bg-chat-gradient rounded-t-[32px] max-w-[640px] mx-auto'
 			style={{ paddingBottom: `${promptHeight + 26}px` }}
 		>
 			{balanceEmpty ? (
@@ -58,7 +58,7 @@ const HomePage = memo(() => {
 			) : (
 				<div
 					className={cn(
-						`w-full overflow-y-auto h-full`,
+						`w-full overflow-y-auto h-full min-h-lvh`,
 						isCompactLayout ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col gap-1.5'
 					)}
 				>
