@@ -10,57 +10,34 @@ import type { RootState } from 'store/store'
 
 import GenerationsGrid from './GenerationsGrid/GenerationsGrid'
 
-const useBalance = () =>
-	useSelector(
-		(s: RootState) => s.user.user?.balance,
-		(a, b) => a === b
-	)
-
-const useSelectedModel = () =>
-	useSelector(
-		(s: RootState) => s.generation.selectedModel,
-		(a, b) => a?.id === b?.id
-	)
-
-const useVideoLoadingMap = () => useSelector((s: RootState) => s.generation.videoLoadingMap)
-
-const useVideoIds = () =>
-	useSelector(
-		(s: RootState) => s.generation.videoCollectionIds,
-		(a, b) => a.length === b.length && a.every((id, i) => id === b[i])
-	)
-
 const HomePage = memo(() => {
 	const promptRef = useRef<HTMLDivElement>(null)
 	const promptHeight = useInitialHeight(promptRef, 150)
 
-	const balance = useBalance()
-	const videoIds = useVideoIds()
-	const selectedModel = useSelectedModel()
-	const videoLoadingMap = useVideoLoadingMap()
+	const videoIds = useSelector((s: RootState) => s.generation.videoCollectionIds)
+	const balance = useSelector((s: RootState) => s.user.user?.balance)
+	const selectedModel = useSelector((s: RootState) => s.generation.selectedModel)
+	const videoLoadingMap = useSelector((s: RootState) => s.generation.videoLoadingMap)
+
+	const isCompactLayout = videoIds.length > 2
+	const isLoadingArray = useMemo(
+		() => Object.entries(videoLoadingMap || {}).map(([id, status]) => ({ id, status })),
+		[videoLoadingMap]
+	)
 
 	const balanceEmpty = balance === 0
-	const videoCount = videoIds.length
-	const isCompactLayout = videoCount > 2
-
-	const isLoadingArray = useMemo(() => {
-		if (!videoLoadingMap || typeof videoLoadingMap !== 'object') return []
-		return Object.entries(videoLoadingMap).map(([id, status]) => ({ id, status }))
-	}, [videoLoadingMap])
 
 	return (
-		<div
-			className='relative px-1 pt-1 w-full bg-chat-gradient rounded-t-[32px] max-w-[640px] mx-auto'
-			style={{ paddingBottom: `${promptHeight + 26}px` }}
-		>
+		<div className='relative flex flex-col w-full h-full max-w-[640px] mx-auto bg-chat-gradient rounded-t-[32px]'>
 			{balanceEmpty ? (
 				<StatusPanel state={{ type: 'insufficient_funds' }} />
 			) : (
 				<div
 					className={cn(
-						`w-full overflow-y-auto h-full`,
+						'flex-1 overflow-y-auto',
 						isCompactLayout ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col gap-1.5'
 					)}
+					style={{ paddingBottom: `${promptHeight + 26}px` }}
 				>
 					<GenerationsGrid
 						ids={videoIds}
