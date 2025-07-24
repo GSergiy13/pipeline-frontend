@@ -50,7 +50,7 @@ const HomePage = memo(() => {
 
 	return (
 		<div
-			className='relative px-1 pt-1 w-full bg-chat-gradient rounded-t-[32px] max-w-[640px] mx-auto'
+			className='relative px-1 pt-1 w-full bg-chat-gradient rounded-t-[32px] max-w-[640px] mx-auto min-h-lvh'
 			style={{ paddingBottom: `${promptHeight + 26}px` }}
 		>
 			{balanceEmpty ? (
