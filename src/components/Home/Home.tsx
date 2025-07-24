@@ -4,7 +4,7 @@ import cn from 'clsx'
 import { StatusPanel } from 'components/StatusPanel/StatusPanel'
 import { ChatPromptPanel } from 'components/СhatPromptPanel/СhatPromptPanel'
 import { useInitialHeight } from 'hooks/useInitialHeight'
-import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, useMemo, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import type { RootState } from 'store/store'
 
@@ -32,9 +32,9 @@ const useVideoIds = () =>
 
 const HomePage = memo(() => {
 	const promptRef = useRef<HTMLDivElement>(null)
-	const heightRef = useRef<HTMLDivElement>(null)
+	// const heightRef = useRef<HTMLDivElement>(null)
 	const promptHeight = useInitialHeight(promptRef, 150)
-	const [minHeight, setMinHeight] = useState(0)
+	// const [minHeight, setMinHeight] = useState(0)
 
 	const balance = useBalance()
 	const videoIds = useVideoIds()
@@ -45,15 +45,15 @@ const HomePage = memo(() => {
 	const videoCount = videoIds.length
 	const isCompactLayout = videoCount > 2
 
-	useEffect(() => {
-		if (heightRef.current) {
-			const height = heightRef.current.clientHeight
+	// useEffect(() => {
+	// 	if (heightRef.current) {
+	// 		const height = heightRef.current.clientHeight
 
-			setMinHeight(height)
-		}
-	}, [])
+	// 		setMinHeight(height)
+	// 	}
+	// }, [])
 
-	console.log(minHeight)
+	// console.log(minHeight)
 
 	const isLoadingArray = useMemo(() => {
 		if (!videoLoadingMap || typeof videoLoadingMap !== 'object') return []
@@ -69,12 +69,12 @@ const HomePage = memo(() => {
 				<StatusPanel state={{ type: 'insufficient_funds' }} />
 			) : (
 				<div
-					ref={heightRef}
+					// ref={heightRef}
 					className={cn(
 						`w-full overflow-y-auto h-full`,
 						isCompactLayout ? 'grid grid-cols-2 gap-1.5' : 'flex flex-col gap-1.5'
 					)}
-					style={{ minHeight: `${minHeight}px` }}
+					// style={{ minHeight: `${minHeight}px` }}
 				>
 					<GenerationsGrid
 						ids={videoIds}
