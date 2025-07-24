@@ -36,7 +36,7 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 			<div className={cn('relative flex items-center justify-center cursor-pointer', className)}>
 				<div className='absolute inset-0 bg-video-gradient flex items-center justify-center will-change-transform rounded-[30px] pointer-events-none overflow-hidden'>
 					<DownloadButton
-						className='absolute left-3 top-3'
+						className='absolute left-3 top-3 z-20'
 						href={`${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`}
 						fileName='Hailuo02.mp4'
 					/>
