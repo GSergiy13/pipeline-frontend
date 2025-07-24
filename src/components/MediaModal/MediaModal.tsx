@@ -67,7 +67,9 @@ export const MediaModal = ({ isOpen, onClose, data, type, herf }: MediaModalProp
 								? `${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`
 								: `${NEXT_PUBLIC_API_URL}/${herf}`
 						}
-						fileName={`Generated-${Date.now()}.png`}
+						fileName={
+							type !== 'image' ? `Generated-${Date.now()}.mp4` : `Generated-${Date.now()}.png`
+						}
 					/>
 
 					{data.seed !== null && data.seed !== undefined && data.seed !== 0 && (

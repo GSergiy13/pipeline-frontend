@@ -31,6 +31,8 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 		handleVibrate('light', 100)
 	}, [])
 
+	console.log('VideoItem data:', data)
+
 	return (
 		<>
 			<div className={cn('relative flex items-center justify-center cursor-pointer', className)}>
@@ -38,7 +40,7 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 					<DownloadButton
 						className='absolute left-3 top-3 z-20'
 						href={`${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`}
-						fileName='Hailuo02.mp4'
+						fileName={`Generated-${Date.now()}.mp4`}
 					/>
 
 					<div className='relative w-full h-full bg-video-gradient z-10' />
