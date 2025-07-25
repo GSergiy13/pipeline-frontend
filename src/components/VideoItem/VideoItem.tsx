@@ -43,7 +43,7 @@ export const VideoItem = ({ className, isCompactLayout = false, data }: VideoIte
 
 					<div className='relative w-full h-full bg-video-gradient z-10' />
 
-					<VideoPreview videoUrl={`${process.env.NEXT_PUBLIC_API_URL}/${data.downloadUrl}`} />
+					<VideoPreview videoUrl={`${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`} />
 
 					<div
 						className={cn(

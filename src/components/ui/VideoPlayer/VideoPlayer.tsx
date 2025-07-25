@@ -1,5 +1,6 @@
 'use client'
 
+import { NEXT_PUBLIC_API_URL } from 'constants/CONST_API'
 import { useEffect, useRef, useState } from 'react'
 import { handleVibrate } from 'utils/handleVibrate'
 
@@ -71,7 +72,7 @@ const VideoPlayer = ({ src }: VideoPlayerProps) => {
 
 			<video
 				ref={videoRef}
-				src={`${process.env.NEXT_PUBLIC_API_URL}/${src}`}
+				src={`${NEXT_PUBLIC_API_URL}/${src}`}
 				playsInline
 				className='w-full h-full rounded-2xl object-contain'
 				onCanPlay={() => setIsLoading(false)}
