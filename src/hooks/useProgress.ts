@@ -61,7 +61,7 @@ export function useProgress(
 					}
 					return next
 				})
-			}, 800)
+			}, 400)
 			intervalRef.current = interval
 		} else {
 			setFakeProgress(100)
