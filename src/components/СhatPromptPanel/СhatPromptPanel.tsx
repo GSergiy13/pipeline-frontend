@@ -1,36 +1,31 @@
 'use client'
 
 import { useGenerateMedia } from 'hooks/useGenerateMedia'
+import { useSelectedModel } from 'hooks/useSelectedModel'
 import { type Ref, forwardRef, memo } from 'react'
 import { shallowEqual, useSelector } from 'react-redux'
-import type { RootState } from 'store/store'
+import { selectSelected } from 'store/slices/controlPanelSlice'
+import { progressSelectors } from 'store/slices/generationProgressSlice'
 
 import { PromptGenerateButton } from './PromptGenerateButton/PromptGenerateButton'
 import { PromptWrapper } from './PromptWrapper/PromptWrapper'
 
-const useGenerationContext = () =>
-	useSelector(
-		(s: RootState) => ({
-			selectedModel: s.generation.selectedModel,
-			selectedParams: s.generation.selectedParams,
-			isLoading: s.generation.videoLoadingMap,
-			attachmentFilename: s.generation.selectedParams.attachmentFilename
-		}),
-		shallowEqual
-	)
-
 const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
-	const { selectedModel, selectedParams, isLoading, attachmentFilename } = useGenerationContext()
+	const selectedModel = useSelectedModel()
+	const selectedParams = useSelector(selectSelected, shallowEqual)
+	const videoStatusMap = useSelector(progressSelectors.selectEntities, shallowEqual)
 
-	const { prompt, setPrompt, handleGenerate, price, disabled } = useGenerateMedia({
+	const attachmentFilename = selectedParams.attachmentFilename
+
+	const { handleGenerate, price, disabled } = useGenerateMedia({
 		selectedModel,
 		selectedParams,
 		attachmentFilename
 	})
 
 	const allDone =
-		isLoading && typeof isLoading === 'object'
-			? Object.values(isLoading).every(value => value.isLoading === false)
+		videoStatusMap && typeof videoStatusMap === 'object'
+			? Object.values(videoStatusMap).every(v => v?.isLoading === false)
 			: true
 
 	return (
@@ -38,11 +33,7 @@ const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
 			ref={ref}
 			className='absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col mt-auto w-full z-40 transition-all duration-150 max-w-[640px] mx-auto px-3'
 		>
-			<PromptWrapper
-				prompt={prompt}
-				attachmentFilename={attachmentFilename}
-				setPrompt={setPrompt}
-			/>
+			<PromptWrapper />
 
 			<PromptGenerateButton
 				handleGenerate={handleGenerate}

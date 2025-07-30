@@ -4,7 +4,7 @@ import { GuidesCarousel } from 'components/GuidesCarousel/GuidesCarousel'
 import { useProgress } from 'hooks/useProgress'
 import Image from 'next/image'
 import { type JSX, useEffect, useState } from 'react'
-import type { VideoLoadingStatus } from 'store/slices/generationSlice'
+import type { ProgressStatus } from 'store/slices/generationProgressSlice'
 
 import { ButtonBasic } from '@/ui/ButtonBasic/buttonBasic'
 
@@ -13,12 +13,12 @@ export type StatusItem = { id: string; status: boolean }
 type StatusState =
 	| {
 			type: 'insufficient_funds'
-			isLoadingState?: { id: string; status: VideoLoadingStatus }[]
+			isLoadingState?: { id: string; status: ProgressStatus }[]
 			typeGeneration?: string
 	  }
 	| {
 			type: 'loading'
-			isLoadingState?: { id: string; status: VideoLoadingStatus }[]
+			isLoadingState?: { id: string; status: ProgressStatus }[]
 			typeGeneration?: string
 	  }
 

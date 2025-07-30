@@ -23,11 +23,11 @@ interface MediaModalProps {
 		href?: string
 		seed?: number | null
 	}
-	herf?: string
+	href?: string
 	type?: 'video' | 'image' | 'audio'
 }
 
-export const MediaModal = ({ isOpen, onClose, data, type, herf }: MediaModalProps) => {
+export const MediaModal = ({ isOpen, onClose, data, type, href }: MediaModalProps) => {
 	const isMobileTelegram = useSelector((state: RootState) => state.user.isMobileTelegram)
 	const [mounted, setMounted] = useState(false)
 
@@ -65,7 +65,7 @@ export const MediaModal = ({ isOpen, onClose, data, type, herf }: MediaModalProp
 						href={
 							type !== 'image'
 								? `${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`
-								: `${NEXT_PUBLIC_API_URL}/${herf}`
+								: `${NEXT_PUBLIC_API_URL}/${href}`
 						}
 						fileName={
 							type !== 'image' ? `Generated-${Date.now()}.mp4` : `Generated-${Date.now()}.png`
@@ -95,7 +95,6 @@ export const MediaModal = ({ isOpen, onClose, data, type, herf }: MediaModalProp
 						/>
 					</button>
 				</div>
-				{/* <div className='fixed inset-0  bg-black'> */}
 				{type === 'image' && (
 					<Image
 						src={`${NEXT_PUBLIC_API_URL}/${data.downloadUrl}`}
@@ -104,7 +103,6 @@ export const MediaModal = ({ isOpen, onClose, data, type, herf }: MediaModalProp
 						className='absolute top-1/2 left-1/2 w-[90%] h-auto object-contain '
 					/>
 				)}
-				{/* </div> */}
 
 				{type !== 'image' && <VideoPlayer src={data.downloadUrl} />}
 			</motion.div>

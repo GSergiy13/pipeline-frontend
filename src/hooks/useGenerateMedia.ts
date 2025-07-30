@@ -4,31 +4,24 @@ import { useCallback, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
 import { generateT2VService } from 'services/generate.service'
-import {
-	type SelectedParams,
-	addVideosToCollection,
-	clearAllVideoLoading,
-	clearSeed,
-	clearVideoCollection,
-	setAttachmentFilename,
-	setVideoLoading
-} from 'store/slices/generationSlice'
+import type { ControlPanelState } from 'store/slices/controlPanelSlice'
+import { setSelected } from 'store/slices/controlPanelSlice'
+import { clearAllProgress, upsertStatus } from 'store/slices/generationProgressSlice'
 import { decreaseBalance } from 'store/slices/userSlice'
 import type { I2IRequest, T2ARequest, T2VRequest } from 'types/IVideo.type'
 import type { ModelConfigurationsItem } from 'types/ModelConfigurations.type'
 
 interface Params {
 	selectedModel: ModelConfigurationsItem | null
-	selectedParams: SelectedParams
+	selectedParams: ControlPanelState['selected']
 	attachmentFilename?: string | null
 }
 
 export const useGenerateMedia = ({ selectedModel, selectedParams, attachmentFilename }: Params) => {
-	const [prompt, setPrompt] = useState('')
-
+	const prompt = selectedParams.prompt
 	const [isSubmitting, setIsSubmitting] = useState(false)
-
 	const dispatch = useDispatch()
+
 	const price = usePrice(selectedModel, selectedParams)
 
 	const disabled = useMemo(
@@ -37,14 +30,23 @@ export const useGenerateMedia = ({ selectedModel, selectedParams, attachmentFile
 	)
 
 	const resetInputs = useCallback(() => {
-		setPrompt('')
-		dispatch(setAttachmentFilename(null))
-	}, [])
+		dispatch(setSelected({ key: 'attachmentFilename', value: null }))
+		dispatch(setSelected({ key: 'prompt', value: '' }))
+		dispatch(setSelected({ key: 'titleAudio', value: '' }))
+		dispatch(setSelected({ key: 'lyricsAudio', value: '' }))
+	}, [dispatch])
 
 	const setLoadingForIds = useCallback(
 		(ids: string[]) => {
-			ids.forEach(id => dispatch(setVideoLoading({ videoId: id, isLoading: true })))
-			dispatch(addVideosToCollection(ids))
+			ids.forEach(id =>
+				dispatch(
+					upsertStatus({
+						id,
+						isLoading: true,
+						isComplete: false
+					})
+				)
+			)
 		},
 		[dispatch]
 	)
@@ -64,7 +66,9 @@ export const useGenerateMedia = ({ selectedModel, selectedParams, attachmentFile
 			aspectRatio,
 			audioModel,
 			instrumental,
-			custom_model
+			customModel,
+			titleAudio,
+			lyricsAudio
 		} = selectedParams
 
 		const opts = selectedModel.options
@@ -75,24 +79,31 @@ export const useGenerateMedia = ({ selectedModel, selectedParams, attachmentFile
 		let modelType = selectedModel.type
 		if (opts?.quality && quality) modelType += `-${quality}p`
 
-		dispatch(clearVideoCollection())
-		dispatch(clearAllVideoLoading())
-		dispatch(clearSeed())
+		dispatch(clearAllProgress())
+		dispatch(setSelected({ key: 'seed', value: null }))
 
 		setIsSubmitting(true)
 
 		try {
 			if (isAudioMode) {
 				const audioPayload: T2ARequest = {
-					seedPrompt: text,
-					...(audioModel && { model: audioModel }),
-					customMode: custom_model,
+					model: audioModel || undefined,
+					customMode: customModel,
 					instrumental,
-					...(custom_model && {
-						style: quality || 'Default',
-						title: text.slice(0, 40),
-						negativeTags: ['rock', 'heavy metal']
-					})
+					...(!customModel && {
+						seedPrompt: text
+					}),
+					...(customModel &&
+						instrumental && {
+							style: text,
+							title: titleAudio
+						}),
+					...(customModel &&
+						!instrumental && {
+							seedPrompt: lyricsAudio || 'Default',
+							style: text,
+							title: titleAudio
+						})
 				}
 
 				const res = await generateT2VService.postAudioGeneration(audioPayload)
@@ -160,7 +171,7 @@ export const useGenerateMedia = ({ selectedModel, selectedParams, attachmentFile
 			console.log('Video generation payload:', payload)
 		} catch (err: any) {
 			toast.error(`❌ ${err?.message || err}`, toastStyle)
-			dispatch(clearVideoCollection())
+			dispatch(clearAllProgress())
 		} finally {
 			setIsSubmitting(false)
 			resetInputs()
@@ -177,8 +188,6 @@ export const useGenerateMedia = ({ selectedModel, selectedParams, attachmentFile
 	])
 
 	return {
-		prompt,
-		setPrompt,
 		handleGenerate,
 		price,
 		disabled,

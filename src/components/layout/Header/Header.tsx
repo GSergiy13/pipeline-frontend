@@ -4,7 +4,7 @@ import cn from 'clsx'
 import { ModelConfigurations } from 'constants/modelconfigurations.const'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setSelectedModel } from 'store/slices/generationSlice'
+import { setSelected } from 'store/slices/controlPanelSlice'
 import type { RootState } from 'store/store'
 
 import { DropDown } from '@/ui/DropDown/Dropdown'
@@ -17,11 +17,11 @@ export const Header = () => {
 	const user_data = useSelector((state: RootState) => state.user)
 
 	useEffect(() => {
-		dispatch(setSelectedModel(ModelConfigurations[0]))
+		dispatch(setSelected({ key: 'modelId', value: ModelConfigurations[0].id }))
 	}, [dispatch])
 
 	const handleModelSelect = (model: (typeof ModelConfigurations)[number]) => {
-		dispatch(setSelectedModel(model))
+		dispatch(setSelected({ key: 'modelId', value: model.id }))
 	}
 
 	return (

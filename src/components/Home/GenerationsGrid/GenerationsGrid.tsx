@@ -7,7 +7,7 @@ import { StatusPanel } from 'components/StatusPanel/StatusPanel'
 import { VideoItem } from 'components/VideoItem/VideoItem'
 import { useGenerationSSE } from 'hooks/useGenerationSSE'
 import { memo } from 'react'
-import type { VideoLoadingStatus } from 'store/slices/generationSlice'
+import type { ProgressStatus } from 'store/slices/generationProgressSlice'
 import type {
 	AudioGenerationDetails,
 	GenerationDetails,
@@ -21,7 +21,7 @@ import SkeletonVideoItem from '../SkeletonLoading/SkeletonVideoItem'
 interface Props {
 	ids: string[]
 	isCompact: boolean
-	isLoadingArray: { id: string; status: VideoLoadingStatus }[]
+	isLoadingArray: { id: string; status: ProgressStatus }[]
 	typeGeneration: string
 }
 
@@ -64,7 +64,6 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 				}
 
 				if (item.type === 't2a') {
-					console.log('AudioItem', item)
 					return (
 						<div
 							key={id}

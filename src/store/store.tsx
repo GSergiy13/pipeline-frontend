@@ -12,18 +12,20 @@ import {
 } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 
-import generationReducer from './slices/generationSlice'
+import controlPanelReducer from './slices/controlPanelSlice'
+import generationProgressReducer from './slices/generationProgressSlice'
 import userReducer from './slices/userSlice'
 
 const rootReducer = combineReducers({
 	user: userReducer,
-	generation: generationReducer
+	controlPanel: controlPanelReducer,
+	generationProgress: generationProgressReducer
 })
 
 const persistConfig = {
 	key: 'root',
 	storage,
-	whitelist: ['user', 'generation']
+	whitelist: ['user']
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

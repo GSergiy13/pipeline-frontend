@@ -1,6 +1,6 @@
 import type { ModelConfigurations } from 'constants/modelconfigurations.const'
 import { useEffect, useRef } from 'react'
-import { setGenerationParams } from 'store/slices/generationSlice'
+import { patchSelected } from 'store/slices/controlPanelSlice'
 import type { AppDispatch } from 'store/store'
 
 export function useInitDefaults(
@@ -33,6 +33,6 @@ export function useInitDefaults(
 		if (aspectRatio?.options?.[0]) payload.aspectRatio = aspectRatio.options[0].name
 		if (audioModel?.options?.[0]) payload.audioModel = audioModel.options[0].value
 
-		dispatch(setGenerationParams(payload))
+		dispatch(patchSelected(payload))
 	}, [selectedModel, dispatch])
 }

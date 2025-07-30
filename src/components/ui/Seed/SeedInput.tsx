@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import Image from 'next/image'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setSeed } from 'store/slices/generationSlice'
+import { setSelected } from 'store/slices/controlPanelSlice'
 import type { RootState } from 'store/store'
 import { debounce } from 'utils/debounce'
 import { handleVibrate } from 'utils/handleVibrate'
@@ -19,7 +19,7 @@ export const SeedInput = () => {
 	const btnRef = useRef<HTMLButtonElement>(null)
 
 	const dispatch = useDispatch()
-	const currentSeed = useSelector((s: RootState) => s.generation.selectedParams.seed)
+	const currentSeed = useSelector((s: RootState) => s.controlPanel.selected.seed)
 
 	useEffect(() => {
 		if (open) setSeedInput(currentSeed ?? '')
@@ -28,7 +28,7 @@ export const SeedInput = () => {
 	const debouncedSetSeed = useMemo(
 		() =>
 			debounce((seed: number | null) => {
-				dispatch(setSeed(seed))
+				dispatch(setSelected({ key: 'seed', value: seed }))
 			}, 500),
 		[dispatch]
 	)
@@ -48,10 +48,8 @@ export const SeedInput = () => {
 	}
 
 	const close = useCallback(() => {
-		// спочатку забираємо фокус із інпута
 		inputRef.current?.blur()
 		setOpen(false)
-		// повертаємо фокус на кнопку (для доступності)
 		btnRef.current?.focus()
 	}, [])
 
@@ -60,7 +58,6 @@ export const SeedInput = () => {
 		else {
 			setOpen(true)
 			handleVibrate('light', 100)
-			// фокус в інпут після відкриття
 			setTimeout(() => inputRef.current?.focus(), 0)
 		}
 	}
@@ -87,7 +84,6 @@ export const SeedInput = () => {
 		}
 	}, [open, handleOutside, close])
 
-	// (опційно) керуємо inert
 	useEffect(() => {
 		if (panelRef.current) {
 			;(panelRef.current as any).inert = !open

@@ -3,8 +3,9 @@
 import cn from 'clsx'
 import { NEXT_PUBLIC_API_URL } from 'constants/CONST_API'
 import Image from 'next/image'
-import { useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import type { AudioGenerationDetails } from 'types/IVideo.type'
+import { handleVibrate } from 'utils/handleVibrate'
 
 import { DownloadButton } from '@/ui/DownloadButton/DownloadButton'
 
@@ -21,6 +22,7 @@ export const AudioItem = ({ data }: AudioItemProps) => {
 					audioUrl={`${item.link}`}
 					posterUrl={`${NEXT_PUBLIC_API_URL}${item.image}`}
 					createdAt={data.createdAt}
+					title={data.title || 'Generated Audio'}
 				/>
 			))}
 		</>
@@ -31,11 +33,23 @@ interface SingleAudioCardProps {
 	audioUrl: string
 	posterUrl: string
 	createdAt: string
+	title?: string
 }
 
-const SingleAudioCard = ({ audioUrl, createdAt, posterUrl }: SingleAudioCardProps) => {
+const SingleAudioCard = ({ audioUrl, createdAt, posterUrl, title }: SingleAudioCardProps) => {
 	const audioRef = useRef<HTMLAudioElement>(null)
+
 	const [isPlaying, setIsPlaying] = useState(false)
+
+	const handleOpen = useCallback(() => {
+		setIsPlaying(true)
+		handleVibrate('light', 100)
+	}, [])
+
+	const handleClose = useCallback(() => {
+		setIsPlaying(false)
+		handleVibrate('light', 100)
+	}, [])
 
 	const togglePlay = () => {
 		const audio = audioRef.current
@@ -93,9 +107,10 @@ const SingleAudioCard = ({ audioUrl, createdAt, posterUrl }: SingleAudioCardProp
 				className='absolute w-full h-full m-auto object-cover opacity-40'
 			/>
 
-			<span className='absolute bottom-3 left-3 z-20 text-white text-sm'>
-				{new Date(createdAt).toLocaleString()}
-			</span>
+			<div className='absolute bottom-3 left-3 z-20 flex flex-col gap-1'>
+				{title && <span className='text-white text-sm'>{title}</span>}
+				<span className=' text-white text-sm'>{new Date(createdAt).toLocaleString()}</span>
+			</div>
 		</div>
 	)
 }

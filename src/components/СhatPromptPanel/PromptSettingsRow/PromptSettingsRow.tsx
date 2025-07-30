@@ -6,7 +6,7 @@ import { ModelConfigurations } from 'constants/modelconfigurations.const'
 import { useInitDefaults } from 'hooks/useInitDefaults'
 import { memo, useCallback, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setGenerationParams, setInstrumental } from 'store/slices/generationSlice'
+import { patchSelected, setSelected } from 'store/slices/controlPanelSlice'
 import type { AppDispatch, RootState } from 'store/store'
 import { sanitizeOptionGroups } from 'utils/sanitizeOptionGroups'
 
@@ -15,24 +15,31 @@ import { OptionSelect } from '@/ui/OptionSelect/OptionSelect'
 import { SeedInput } from '@/ui/Seed/SeedInput'
 import { ToggleSwitch } from '@/ui/ToggleSwitch/ToggleSwitch'
 
-const selectPS = createSelector(
+const selectPromptSettings = createSelector(
 	[
-		(s: RootState) => s.generation.selectedModel?.id,
-		(s: RootState) => s.generation.selectedParams.attachmentFilename,
-		(s: RootState) => s.generation.selectedParams.instrumental
+		(s: RootState) => s.controlPanel.selected.modelId,
+		(s: RootState) => s.controlPanel.selected.attachmentFilename,
+		(s: RootState) => s.controlPanel.selected.instrumental,
+		(s: RootState) => s.controlPanel.selected.customModel
 	],
-	(id, attachmentFilename, instrumental) => ({ id, attachmentFilename, instrumental })
+	(modelId, attachmentFilename, instrumental, customModel) => ({
+		modelId,
+		attachmentFilename,
+		instrumental,
+		customModel
+	})
 )
 
 export const PromptSettingsRow = memo(
 	({ onFileSelect }: { onFileSelect: (file: File) => void }) => {
 		const dispatch = useDispatch<AppDispatch>()
 
-		const { id: selectedModelId, attachmentFilename, instrumental } = useSelector(selectPS)
+		const { modelId, attachmentFilename, instrumental, customModel } =
+			useSelector(selectPromptSettings)
 
 		const selectedModel = useMemo(
-			() => ModelConfigurations.find(m => m.id === selectedModelId) ?? null,
-			[selectedModelId]
+			() => ModelConfigurations.find(m => m.id === modelId) ?? null,
+			[modelId]
 		)
 
 		useInitDefaults(selectedModel, dispatch)
@@ -46,14 +53,21 @@ export const PromptSettingsRow = memo(
 					payload.duration = value === 'auto' ? 'auto' : Number(value)
 				else payload[groupId] = String(value)
 
-				dispatch(setGenerationParams(payload))
+				dispatch(patchSelected(payload))
 			},
 			[dispatch]
 		)
 
 		const handleInstrumentalChange = useCallback(
 			(v: boolean) => {
-				dispatch(setInstrumental(v))
+				dispatch(setSelected({ key: 'instrumental', value: v }))
+			},
+			[dispatch]
+		)
+
+		const handleCustomModelChange = useCallback(
+			(v: boolean) => {
+				dispatch(setSelected({ key: 'customModel', value: v }))
 			},
 			[dispatch]
 		)
@@ -67,7 +81,7 @@ export const PromptSettingsRow = memo(
 					: selectedModel.options
 
 			return sanitizeOptionGroups(opts)
-		}, [selectedModelId, selectedModel?.type_generation, attachmentFilename])
+		}, [modelId, selectedModel?.type_generation, attachmentFilename])
 
 		const isTextAudio = selectedModel?.type_generation === 'text-audio'
 
@@ -85,6 +99,14 @@ export const PromptSettingsRow = memo(
 							label='Instrumental'
 							checked={instrumental}
 							onChange={handleInstrumentalChange}
+						/>
+					)}
+
+					{isTextAudio && (
+						<ToggleSwitch
+							label='Custom mode'
+							checked={customModel}
+							onChange={handleCustomModelChange}
 						/>
 					)}
 

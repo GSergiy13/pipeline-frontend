@@ -1,5 +1,9 @@
+'use client'
+
 import { motion, useWillChange } from 'framer-motion'
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectPrompt, setFocusInput, setSelected } from 'store/slices/controlPanelSlice'
 import { debounce } from 'utils/debounce'
 import { handleVibrate } from 'utils/handleVibrate'
 
@@ -8,36 +12,29 @@ interface PromptInputFieldProps {
 	maxExpandedHeight?: number
 	minHeight?: number
 	maxHeight?: number
-	value: string
-	onChange: (val: string) => void
-	handleFocusState?: (focused: boolean) => void
 }
 
 export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptInputFieldProps>(
-	(
-		{
-			onToggle,
-			maxExpandedHeight = 450,
-			minHeight = 40,
-			maxHeight = 300,
-			value,
-			onChange,
-			handleFocusState
-		},
-		ref
-	) => {
+	({ onToggle, maxExpandedHeight = 450, minHeight = 40, maxHeight = 300 }, ref) => {
+		const dispatch = useDispatch()
+		const prompt = useSelector(selectPrompt)
+
 		const textareaRef = useRef<HTMLTextAreaElement>(null)
 		const [isExpanded, setIsExpanded] = useState(false)
 		const [height, setHeight] = useState<number | string>(minHeight)
 		const willChange = useWillChange()
 		const [keyboardVisible, setKeyboardVisible] = useState(false)
-		const [localValue, setLocalValue] = useState(value)
-
-		const debouncedChange = useRef(debounce(onChange, 600)).current
+		const [promptLocal, setPromptLocal] = useState(prompt)
 
 		useEffect(() => {
-			setLocalValue(value)
-		}, [value])
+			setPromptLocal(prompt)
+		}, [prompt])
+
+		const debouncedChange = useRef(
+			debounce((val: string) => {
+				dispatch(setSelected({ key: 'prompt', value: val }))
+			}, 600)
+		).current
 
 		useEffect(() => {
 			const handleResize = () => {
@@ -70,7 +67,7 @@ export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptI
 		}
 
 		const handleFocus = () => {
-			handleFocusState?.(true)
+			dispatch(setFocusInput(true))
 			if (keyboardVisible && !isExpanded) {
 				const visualViewportHeight = window.visualViewport?.height ?? maxHeight
 				const newHeight = Math.min(visualViewportHeight * 0.4, maxHeight)
@@ -79,7 +76,7 @@ export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptI
 		}
 
 		const handleBlur = () => {
-			handleFocusState?.(false)
+			dispatch(setFocusInput(false))
 			if (!isExpanded) {
 				setHeight(minHeight)
 			}
@@ -107,14 +104,14 @@ export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptI
 		}))
 
 		const handleChange = (val: string) => {
-			setLocalValue(val)
+			setPromptLocal(val)
 			debouncedChange(val)
 		}
 
 		return (
 			<motion.textarea
 				ref={textareaRef}
-				value={localValue}
+				value={promptLocal}
 				onChange={e => handleChange(e.target.value)}
 				onInput={updateHeight}
 				onFocus={handleFocus}

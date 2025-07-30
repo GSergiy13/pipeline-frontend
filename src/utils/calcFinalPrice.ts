@@ -1,4 +1,4 @@
-import type { SelectedParams } from 'store/slices/generationSlice'
+import type { ControlPanelState } from 'store/slices/controlPanelSlice'
 import type { ModelConfigurationsItem } from 'types/ModelConfigurations.type'
 
 const ORDER_BASE = 0.2
@@ -20,7 +20,7 @@ const getOrderedMultiplier = <T>(
 
 export const calcPrice = (
 	model: ModelConfigurationsItem | null,
-	params: SelectedParams
+	params: ControlPanelState['selected']
 ): number => {
 	if (!model) return 0
 

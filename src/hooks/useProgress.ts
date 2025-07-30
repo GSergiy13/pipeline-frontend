@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { VideoLoadingStatus } from 'store/slices/generationSlice'
+import type { ProgressStatus } from 'store/slices/generationProgressSlice'
 
 type Interval = ReturnType<typeof setInterval>
 
 export function useProgress(
-	loadingState: { id: string; status: VideoLoadingStatus }[],
+	loadingState: { id: string; status: ProgressStatus }[],
 	persist = true
 ) {
 	const storageKey = useMemo(

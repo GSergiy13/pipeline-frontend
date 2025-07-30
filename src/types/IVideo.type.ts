@@ -113,6 +113,7 @@ export interface AudioGenerationDetails {
 	prompt: string
 	model: string
 	service: string
+	title?: string
 	audioDownloadUrls: AudioDownloadItem[]
 	audioResultUrls: string[]
 	startTime: string // ISO 8601 date
@@ -167,7 +168,7 @@ export interface ImageUploadError {
 	message: string
 }
 export interface T2ARequest {
-	seedPrompt: string
+	seedPrompt?: string
 	model?: string
 	customMode?: boolean
 	style?: string

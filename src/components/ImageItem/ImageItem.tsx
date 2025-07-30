@@ -65,7 +65,7 @@ export const ImageItem = memo(
 
 				<MediaModal
 					type='image'
-					herf={url}
+					href={url}
 					data={data}
 					isOpen={isPlaying}
 					onClose={handleClose}
