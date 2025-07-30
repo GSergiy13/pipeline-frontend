@@ -110,18 +110,18 @@ export const PromptInputField = forwardRef<{ toggleExpand: () => void }, PromptI
 
 		return (
 			<motion.textarea
-				ref={textareaRef}
-				value={promptLocal}
-				onChange={e => handleChange(e.target.value)}
-				onInput={updateHeight}
-				onFocus={handleFocus}
-				onBlur={handleBlur}
+				// ref={textareaRef}
+				// value={promptLocal}
+				// onChange={e => handleChange(e.target.value)}
+				// onInput={updateHeight}
+				// onFocus={handleFocus}
+				// onBlur={handleBlur}
 				className='w-[90%] resize-none pl-2 pr-2 py-1 text-base text-white placeholder:text-white/40 bg-transparent focus:outline-none focus:ring-0 placeholder:text-sm'
 				placeholder='Составьте промпт запрос'
 				rows={1}
-				animate={{ height }}
+				// animate={{ height }}
 				transition={{ duration: 0.3, ease: 'easeInOut', bounce: 0.1 }}
-				style={{ overflowY: height === 'auto' ? 'hidden' : 'auto', willChange }}
+				// style={{ overflowY: height === 'auto' ? 'hidden' : 'auto', willChange }}
 			/>
 		)
 	}
