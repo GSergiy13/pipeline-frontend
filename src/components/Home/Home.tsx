@@ -44,9 +44,7 @@ const HomePage = memo(() => {
 
 	return (
 		<div
-			className={cn(
-				'relative px-1 pt-1 w-full bg-chat-gradient rounded-t-[32px] max-w-[640px] mx-auto '
-			)}
+			className={cn('relative px-1 pt-1 w-full bg-chat-gradient rounded-t-[32px] mx-auto')}
 			style={{ paddingBottom }}
 		>
 			{balanceEmpty ? (

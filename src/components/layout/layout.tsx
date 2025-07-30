@@ -16,7 +16,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 		<>
 			<div className='flex flex-col min-h-lvh max-h-lvh overflow-hidden'>
 				{!isWelcome && <Header />}
-				<main className='flex flex-grow w-full h-full px-1 min-h-[400px]'>{children}</main>
+				<main className='flex flex-grow w-full h-full px-1'>{children}</main>
 				{!isWelcome && <Footer />}
 			</div>
 
