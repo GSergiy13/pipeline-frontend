@@ -1,9 +1,12 @@
-import type { StatusItem } from 'components/StatusPanel/StatusPanel'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import type { VideoLoadingStatus } from 'store/slices/generationSlice'
 
 type Interval = ReturnType<typeof setInterval>
 
-export function useProgress(loadingState: StatusItem[], persist = true) {
+export function useProgress(
+	loadingState: { id: string; status: VideoLoadingStatus }[],
+	persist = true
+) {
 	const storageKey = useMemo(
 		() =>
 			persist
@@ -31,7 +34,7 @@ export function useProgress(loadingState: StatusItem[], persist = true) {
 			return
 		}
 
-		const completed = loadingState.filter(item => !item.status).length
+		const completed = loadingState.filter(item => !item.status.isLoading).length
 		const step = 100 / total
 		const baseTarget = step * completed
 		const maxFakeStop = step * (completed + 0.99)

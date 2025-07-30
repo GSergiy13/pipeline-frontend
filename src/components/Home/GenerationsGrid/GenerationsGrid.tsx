@@ -3,10 +3,11 @@
 import cn from 'clsx'
 import { AudioItem } from 'components/AudioItem/AudioItem'
 import { ImageItem } from 'components/ImageItem/ImageItem'
-import { type StatusItem, StatusPanel } from 'components/StatusPanel/StatusPanel'
+import { StatusPanel } from 'components/StatusPanel/StatusPanel'
 import { VideoItem } from 'components/VideoItem/VideoItem'
-import { useGenerations } from 'hooks/useGenerations'
+import { useGenerationSSE } from 'hooks/useGenerationSSE'
 import { memo } from 'react'
+import type { VideoLoadingStatus } from 'store/slices/generationSlice'
 import type {
 	AudioGenerationDetails,
 	GenerationDetails,
@@ -20,13 +21,14 @@ import SkeletonVideoItem from '../SkeletonLoading/SkeletonVideoItem'
 interface Props {
 	ids: string[]
 	isCompact: boolean
-	isLoadingArray: StatusItem[]
+	isLoadingArray: { id: string; status: VideoLoadingStatus }[]
 	typeGeneration: string
 }
 
 const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }: Props) => {
-	const readyMap = useGenerations(ids)
-	const allDone = isLoadingArray.every(item => !item.status)
+	const readyMap = useGenerationSSE(ids, isLoadingArray)
+
+	const allDone = isLoadingArray.every(item => !item.status.isLoading)
 
 	if (ids.length === 0) return <EmptyStub typeGeneration={typeGeneration} />
 	if (!allDone)
@@ -75,7 +77,6 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 				if (item.type === 'i2i') {
 					const items = item as GenerationDetailsImgToImg
 
-					// Якщо <= 2 — просто повертаємо ImageItem як є
 					if (items.imageDownloadUrls.length <= 2) {
 						return items.imageDownloadUrls.map((url, index) => (
 							<ImageItem
@@ -87,7 +88,6 @@ const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }
 						))
 					}
 
-					// Якщо > 2 — групуємо по 2 в один <div>
 					const grouped = []
 					for (let i = 0; i < items.imageDownloadUrls.length; i += 2) {
 						grouped.push(

@@ -32,6 +32,7 @@ interface SingleAudioCardProps {
 	posterUrl: string
 	createdAt: string
 }
+
 const SingleAudioCard = ({ audioUrl, createdAt, posterUrl }: SingleAudioCardProps) => {
 	const audioRef = useRef<HTMLAudioElement>(null)
 	const [isPlaying, setIsPlaying] = useState(false)

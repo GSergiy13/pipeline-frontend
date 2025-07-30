@@ -30,7 +30,7 @@ const ChatPromptPanelInner = (_: unknown, ref: Ref<HTMLDivElement>) => {
 
 	const allDone =
 		isLoading && typeof isLoading === 'object'
-			? Object.values(isLoading).every(value => value === false)
+			? Object.values(isLoading).every(value => value.isLoading === false)
 			: true
 
 	return (

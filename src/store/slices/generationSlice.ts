@@ -14,6 +14,15 @@ interface ModelOptions {
 	audioModel?: ModelType[]
 }
 
+export interface VideoLoadingStatus {
+	isLoading: boolean
+	isComplete: boolean
+}
+
+export interface VideoLoadingMap {
+	[videoId: string]: VideoLoadingStatus
+}
+
 interface GenerationState {
 	selectedModel: ModelConfigurationsItem | null
 	availableOptions: ModelOptions
@@ -31,7 +40,7 @@ interface GenerationState {
 		attachmentFilename?: string | null
 	}
 	videoCollectionIds: string[]
-	videoLoadingMap: Record<string, boolean>
+	videoLoadingMap: VideoLoadingMap
 	focusInput: boolean
 }
 export type SelectedParams = GenerationState['selectedParams']
@@ -134,9 +143,12 @@ const generationSlice = createSlice({
 		addVideosToCollection(state, action: PayloadAction<string[]>) {
 			state.videoCollectionIds = [...new Set([...state.videoCollectionIds, ...action.payload])]
 		},
-		setVideoLoading(state, action: PayloadAction<{ videoId: string; isLoading: boolean }>) {
-			const { videoId, isLoading } = action.payload
-			state.videoLoadingMap[videoId] = isLoading
+		setVideoLoading(
+			state,
+			action: PayloadAction<{ videoId: string; isLoading: boolean; isComplete?: boolean }>
+		) {
+			const { videoId, isLoading, isComplete = false } = action.payload
+			state.videoLoadingMap[videoId] = { isLoading, isComplete }
 		},
 		clearAllVideoLoading(state) {
 			state.videoLoadingMap = {}

@@ -4,14 +4,23 @@ import { GuidesCarousel } from 'components/GuidesCarousel/GuidesCarousel'
 import { useProgress } from 'hooks/useProgress'
 import Image from 'next/image'
 import { type JSX, useEffect, useState } from 'react'
+import type { VideoLoadingStatus } from 'store/slices/generationSlice'
 
 import { ButtonBasic } from '@/ui/ButtonBasic/buttonBasic'
 
 export type StatusItem = { id: string; status: boolean }
 
 type StatusState =
-	| { type: 'insufficient_funds'; isLoadingState?: StatusItem[]; typeGeneration?: string }
-	| { type: 'loading'; isLoadingState?: StatusItem[]; typeGeneration?: string }
+	| {
+			type: 'insufficient_funds'
+			isLoadingState?: { id: string; status: VideoLoadingStatus }[]
+			typeGeneration?: string
+	  }
+	| {
+			type: 'loading'
+			isLoadingState?: { id: string; status: VideoLoadingStatus }[]
+			typeGeneration?: string
+	  }
 
 export const StatusPanel = ({ state }: { state?: StatusState }) => {
 	if (!state) return null
@@ -34,7 +43,7 @@ export const StatusPanel = ({ state }: { state?: StatusState }) => {
 		loadingTime = '5 мин.'
 	}
 
-	const completed = loadingState.filter(item => !item.status).length
+	const completed = loadingState.filter(item => !item.status.isLoading).length
 	const fakeProgress = useProgress(loadingState)
 
 	let content: JSX.Element | null = null

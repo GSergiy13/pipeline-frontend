@@ -30,6 +30,8 @@ export interface I2VResponse {
 
 export interface GenerationDetails {
 	id: string
+	_id?: string
+	flowId: string
 	userId: string
 	telegramId: string
 	status: 'pending' | 'completed' | 'failed'
@@ -50,6 +52,7 @@ export interface GenerationDetails {
 
 export interface GenerationDetailsImgToImg {
 	id: string
+	_id?: string
 	userId: string
 	telegramId: string
 	flowId: string
@@ -101,6 +104,7 @@ export interface AudioDownloadItem {
 
 export interface AudioGenerationDetails {
 	userId: string
+	_id?: string
 	telegramId: string
 	flowId: string
 	generationIndex: number
