@@ -27,7 +27,6 @@ interface Props {
 
 const GenerationsGrid = memo(({ ids, isCompact, typeGeneration, isLoadingArray }: Props) => {
 	const readyMap = useGenerationSSE(ids, isLoadingArray)
-
 	const allDone = isLoadingArray.every(item => !item.status.isLoading)
 
 	if (ids.length === 0) return <EmptyStub typeGeneration={typeGeneration} />

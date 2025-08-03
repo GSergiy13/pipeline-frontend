@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { generateT2VService } from 'services/generate.service'
 import type { ControlPanelState } from 'store/slices/controlPanelSlice'
 import { setSelected } from 'store/slices/controlPanelSlice'
+import { clearAllGenerations } from 'store/slices/generationDetailsSlice'
 import { clearAllProgress, upsertStatus } from 'store/slices/generationProgressSlice'
 import { decreaseBalance } from 'store/slices/userSlice'
 import type { I2IRequest, T2ARequest, T2VRequest } from 'types/IVideo.type'
@@ -80,6 +81,7 @@ export const useGenerateMedia = ({ selectedModel, selectedParams, attachmentFile
 		if (opts?.quality && quality) modelType += `-${quality}p`
 
 		dispatch(clearAllProgress())
+		dispatch(clearAllGenerations())
 		dispatch(setSelected({ key: 'seed', value: null }))
 
 		setIsSubmitting(true)
