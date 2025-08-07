@@ -63,8 +63,7 @@ export function useGenerationSSE(
 						const id = (data.generation as BaseGeneration)?._id
 						if (!id || receivedIds.current.has(id)) return
 
-						// data.generation?.errorMessage ||
-						toast.error(`${'Generation error'}`, toastStyle)
+						toast.error(`${data.generation?.errorMessage || 'Generation error'}`, toastStyle)
 
 						dispatch(removeStatus(id))
 

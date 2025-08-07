@@ -16,7 +16,7 @@ export interface BaseGeneration {
 	telegramId: string
 	type: GenerationKind
 	status: GenerationStatus
-	// errorMessage?: string
+	errorMessage?: string
 	prompt: string
 	model: string
 	service: string
