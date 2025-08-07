@@ -40,6 +40,7 @@ export function useGenerationSSE(
 			onMessage: ev => {
 				try {
 					const data: SSEEvent = JSON.parse(ev.data)
+
 					if (data.type === 'ping') return
 					if (data.type === 'generation_completed') {
 						const id = (data.generation as BaseGeneration)?._id

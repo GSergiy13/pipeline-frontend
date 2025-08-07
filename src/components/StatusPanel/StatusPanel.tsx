@@ -68,7 +68,7 @@ export const StatusPanel = ({ state }: { state?: StatusState }) => {
 		)
 	} else if (state.type === 'loading') {
 		content = (
-			<div className='h-full flex flex-col items-center text-center p-4 w-full'>
+			<div className='h-full flex flex-col items-center text-center p-4  w-full max-w-[640px] mx-auto'>
 				<GuidesCarousel />
 				<div className='flex flex-col items-center justify-center text-center mt-14 w-full'>
 					<div className='mb-8'>
