@@ -30,6 +30,8 @@ export const PromptWrapper = () => {
 	const handleFileSelect = async (file: File) => {
 		handleVibrate('light', 100)
 
+		console.log('Selected file for upload:', file)
+
 		try {
 			const { url } = await generateT2VService.uploadImage(file)
 

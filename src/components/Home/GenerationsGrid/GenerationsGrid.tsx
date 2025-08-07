@@ -12,7 +12,7 @@ import type {
 	AudioGenerationDetails,
 	GenerationDetails,
 	GenerationDetailsImgToImg
-} from 'types/IVideo.type'
+} from 'types/Generation.type'
 
 import EmptyStub from '../EmptyStub/EmptyStub'
 import SkeletonAudioItem from '../SkeletonLoading/SkeletonAudioItem'

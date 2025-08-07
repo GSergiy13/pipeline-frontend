@@ -7,8 +7,6 @@ export async function POST(req: NextRequest) {
 	const tgId = cookieStore.get('telegramId')?.value
 	const payload = await req.json()
 
-	console.log('Received payload:', payload)
-
 	if (!tgId) {
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 	}
@@ -21,7 +19,15 @@ export async function POST(req: NextRequest) {
 			}
 		})
 
-		return NextResponse.json(data, { status: 200 })
+		return NextResponse.json({
+			success: true,
+			data: {
+				message: data.message,
+				flowId: data.flowId,
+				generations: data.generations,
+				status: data.status
+			}
+		})
 	} catch (e: any) {
 		console.error('Server Error:', e.message)
 		return NextResponse.json({ message: 'Error generating video' }, { status: 500 })

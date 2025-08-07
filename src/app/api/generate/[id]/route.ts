@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
-import type { GetGenerationError, GetGenerationResponse } from 'types/IVideo.type'
+import type { ApiResponse, GenerationDetails } from 'types/Generation.type'
 
 export const dynamic = 'force-dynamic'
 
@@ -11,7 +11,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 	const tgId = cookieStore.get('telegramId')?.value
 
 	if (!generationId) {
-		const error: GetGenerationError = {
+		const error: ApiResponse<null> = {
 			success: false,
 			message: 'Missing generationId'
 		}
@@ -19,11 +19,15 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 	}
 
 	if (!tgId) {
-		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+		const error: ApiResponse<null> = {
+			success: false,
+			message: 'Unauthorized'
+		}
+		return NextResponse.json(error, { status: 401 })
 	}
 
 	try {
-		const { data } = await axios.get<GetGenerationResponse>(
+		const { data } = await axios.get<ApiResponse<GenerationDetails>>(
 			`${process.env.API_URL}/generate/${generationId}`,
 			{
 				headers: {
@@ -37,7 +41,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
 	} catch (err: any) {
 		console.error('❌ Помилка при отриманні генерації:', err?.response?.data || err.message)
 
-		const error: GetGenerationError = {
+		const error: ApiResponse<null> = {
 			success: false,
 			message: err?.response?.data?.message || err?.message || 'Failed to fetch generation'
 		}

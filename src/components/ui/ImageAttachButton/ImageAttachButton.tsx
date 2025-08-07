@@ -24,12 +24,18 @@ export const ImageAttachButton = memo(
 				const file = e.target.files?.[0]
 				if (!file) return
 
+				console.log('Selected file:', file)
+
 				const ext = file.name.split('.').pop()?.toLowerCase()
 				if (!ext || !allowedExtensions.includes(ext as (typeof allowedExtensions)[number])) {
 					toast.error('❌ Непідтримуваний формат. JPG, JPEG або PNG.', toastStyle)
 					return
 				}
 				onSelect(file)
+
+				if (inputRef.current) {
+					inputRef.current.value = ''
+				}
 			},
 			[onSelect]
 		)

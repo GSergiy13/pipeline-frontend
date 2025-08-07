@@ -22,7 +22,15 @@ export async function POST(req: NextRequest) {
 			}
 		})
 
-		return NextResponse.json(data, { status: 200 })
+		return NextResponse.json({
+			success: true,
+			data: {
+				message: data.message,
+				flowId: data.flowId,
+				generations: data.generations,
+				status: data.status
+			}
+		})
 	} catch (e: any) {
 		console.error('Server Error:', e.message)
 		return NextResponse.json({ message: 'Error generating video' }, { status: 500 })

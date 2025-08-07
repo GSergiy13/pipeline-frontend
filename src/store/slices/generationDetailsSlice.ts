@@ -1,15 +1,9 @@
 import { createEntityAdapter, createSlice } from '@reduxjs/toolkit'
-import type {
-	AudioGenerationDetails,
-	GenerationDetails,
-	GenerationDetailsImgToImg
-} from 'types/IVideo.type'
+import type { BaseGeneration } from 'types/Generation.type'
 
 import type { RootState } from '../store'
 
-type GenerationData = GenerationDetails | AudioGenerationDetails | GenerationDetailsImgToImg
-
-const adapter = createEntityAdapter<GenerationData, string>({
+const adapter = createEntityAdapter<BaseGeneration, string>({
 	selectId: item => (item._id || item.id) as string
 })
 

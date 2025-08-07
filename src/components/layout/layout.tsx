@@ -28,7 +28,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 				reverseOrder={false}
 				toastOptions={{
 					error: {
-						duration: 6000
+						duration: 12000
 					},
 					success: {
 						duration: 3000

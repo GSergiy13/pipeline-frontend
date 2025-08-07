@@ -9,7 +9,7 @@ import { setSelected } from 'store/slices/controlPanelSlice'
 import { clearAllGenerations } from 'store/slices/generationDetailsSlice'
 import { clearAllProgress, upsertStatus } from 'store/slices/generationProgressSlice'
 import { decreaseBalance } from 'store/slices/userSlice'
-import type { I2IRequest, T2ARequest, T2VRequest } from 'types/IVideo.type'
+import type { I2IRequest, T2ARequest, T2VRequest } from 'types/Generation.type'
 import type { ModelConfigurationsItem } from 'types/ModelConfigurations.type'
 
 interface Params {
@@ -109,14 +109,11 @@ export const useGenerateMedia = ({ selectedModel, selectedParams, attachmentFile
 				}
 
 				const res = await generateT2VService.postAudioGeneration(audioPayload)
-				const ids = extractIds(res.generations, 'generationId')
+				const ids = extractIds(res.data?.generations, 'generationId')
 				dispatch(decreaseBalance(price))
 
 				if (ids.length) setLoadingForIds(ids)
 				else toast.error('ID not found in audio response.', toastStyle)
-
-				console.log('Audio generation payload:', audioPayload)
-
 				return
 			}
 
@@ -138,7 +135,7 @@ export const useGenerateMedia = ({ selectedModel, selectedParams, attachmentFile
 				console.log('Image generation payload:', payload)
 
 				const res = await generateT2VService.postImageToImage(payload)
-				const ids = extractIds(res.generations, 'id')
+				const ids = extractIds(res.data?.generations, 'id')
 				dispatch(decreaseBalance(price))
 
 				if (ids.length) setLoadingForIds(ids)
@@ -165,7 +162,8 @@ export const useGenerateMedia = ({ selectedModel, selectedParams, attachmentFile
 					}
 
 			const res = await generateT2VService.postExploreVideos(payload, withImage)
-			const ids = extractIds(res.generations, withImage ? 'id' : 'generationId')
+
+			const ids = extractIds(res.data?.generations, withImage ? 'id' : 'generationId')
 			dispatch(decreaseBalance(price))
 
 			if (ids.length) setLoadingForIds(ids)

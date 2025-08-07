@@ -8,27 +8,25 @@ import {
 	upsertGeneration,
 	upsertManyGenerations
 } from 'store/slices/generationDetailsSlice'
-import { type ProgressStatus, upsertStatus } from 'store/slices/generationProgressSlice'
-import type {
-	AudioGenerationDetails,
-	GenerationDetails,
-	GenerationDetailsImgToImg
-} from 'types/IVideo.type'
+import {
+	type ProgressStatus,
+	removeStatus,
+	upsertStatus
+} from 'store/slices/generationProgressSlice'
+import type { BaseGeneration } from 'types/Generation.type'
 import { createSSEConnection } from 'utils/sseConnection'
-
-type BaseGenerationItem = GenerationDetails | AudioGenerationDetails | GenerationDetailsImgToImg
 
 interface SSEEvent {
 	type: 'connected' | 'ping' | 'generation_completed' | 'generation_failed'
-	generation?: BaseGenerationItem
+	generation?: BaseGeneration
 	message?: string
 }
 
 export function useGenerationSSE(
 	watchedIds: string[],
 	isLoadingArray: { id: string; status: ProgressStatus }[]
-): Record<string, BaseGenerationItem> {
-	const [map, setMap] = useState<Record<string, BaseGenerationItem>>({})
+): Record<string, BaseGeneration> {
+	const [map, setMap] = useState<Record<string, BaseGeneration>>({})
 	const dispatch = useDispatch()
 	const existingGenerations = useSelector(generationSelectors.selectEntities)
 
@@ -43,15 +41,15 @@ export function useGenerationSSE(
 				try {
 					const data: SSEEvent = JSON.parse(ev.data)
 					if (data.type === 'ping') return
-					if (data.type === 'generation_completed' || data.type === 'generation_failed') {
-						const id = (data.generation as BaseGenerationItem)?._id
+					if (data.type === 'generation_completed') {
+						const id = (data.generation as BaseGeneration)?._id
 						if (!id || receivedIds.current.has(id)) return
 
 						dispatch(
 							upsertStatus({
 								id,
 								isLoading: false,
-								isComplete: data.type === 'generation_completed'
+								isComplete: true
 							})
 						)
 
@@ -59,6 +57,27 @@ export function useGenerationSSE(
 						setMap(prev => ({ ...prev, [id]: data.generation! }))
 						receivedIds.current.add(id)
 						if (receivedIds.current.size === totalExpected.current) sse.current.close()
+					}
+
+					if (data.type === 'generation_failed') {
+						const id = (data.generation as BaseGeneration)?._id
+						if (!id || receivedIds.current.has(id)) return
+
+						// data.generation?.errorMessage ||
+						toast.error(`${'Generation error'}`, toastStyle)
+
+						dispatch(removeStatus(id))
+
+						console.log('[SSE] Generation failed:', data)
+
+						dispatch(upsertGeneration(data.generation!))
+						receivedIds.current.add(id)
+
+						if (receivedIds.current.size === totalExpected.current) {
+							sse.current.close()
+						} else {
+							console.log('[SSE] Still waiting for more...')
+						}
 					}
 				} catch (err) {
 					toast.error(`Помилка SSE: ${err}`, toastStyle)
@@ -86,11 +105,11 @@ export function useGenerationSSE(
 	}, [watchedIds.join('|'), isLoadingArray])
 
 	useEffect(() => {
-		const initialMap: Record<string, BaseGenerationItem> = {}
+		const initialMap: Record<string, BaseGeneration> = {}
 
 		for (const id of watchedIds) {
 			if (existingGenerations[id]) {
-				initialMap[id] = existingGenerations[id] as BaseGenerationItem
+				initialMap[id] = existingGenerations[id] as BaseGeneration
 			}
 		}
 
@@ -111,8 +130,9 @@ export function useGenerationSSE(
 			const res = await Promise.all(
 				missingIds.map(async id => {
 					try {
-						const { generation } = await generateT2VService.getGenerationInfo(id)
-						return { id, generation: generation as BaseGenerationItem }
+						const res = await generateT2VService.getGenerationInfo(id)
+
+						return res.data ? { id, generation: res.data as BaseGeneration } : null
 					} catch {
 						return null
 					}

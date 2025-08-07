@@ -5,11 +5,16 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
 	const cookieStore = await cookies()
-
 	const tgId = cookieStore.get('telegramId')?.value
 
 	if (!tgId) {
-		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+		return NextResponse.json(
+			{
+				success: false,
+				message: 'Unauthorized'
+			},
+			{ status: 401 }
+		)
 	}
 
 	try {
@@ -17,7 +22,13 @@ export async function POST(req: NextRequest) {
 		const file = formData.get('image') as File | null
 
 		if (!file) {
-			return NextResponse.json({ success: false, message: 'Image not provided' }, { status: 400 })
+			return NextResponse.json(
+				{
+					success: false,
+					message: 'Image not provided'
+				},
+				{ status: 400 }
+			)
 		}
 
 		const arrayBuffer = await file.arrayBuffer()
@@ -33,9 +44,21 @@ export async function POST(req: NextRequest) {
 			}
 		})
 
-		return NextResponse.json(data, { status: 200 })
+		return NextResponse.json(
+			{
+				success: true,
+				data
+			},
+			{ status: 200 }
+		)
 	} catch (err: any) {
 		console.error('Forward upload error:', err.message)
-		return NextResponse.json({ success: false, message: 'Upload failed' }, { status: 500 })
+		return NextResponse.json(
+			{
+				success: false,
+				message: 'Upload failed'
+			},
+			{ status: 500 }
+		)
 	}
 }

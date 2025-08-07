@@ -1,15 +1,14 @@
 import { NEXT_PUBLIC_BASE_URL } from 'constants/CONST_API'
 import type {
-	GetGenerationError,
-	GetGenerationResponse,
+	ApiResponse,
+	GenerationDetails,
 	I2IRequest,
-	ImageUploadError,
-	ImageUploadResponse,
+	ImageUploadSuccess,
 	T2ARequest,
 	T2AResponse,
 	T2VRequest,
 	T2VResponse
-} from 'types/IVideo.type'
+} from 'types/Generation.type'
 
 class GenerateT2VService {
 	async postExploreVideos(payload: T2VRequest, isImageMode = false): Promise<T2VResponse> {
@@ -23,8 +22,13 @@ class GenerateT2VService {
 			body: JSON.stringify(payload)
 		})
 
-		if (!res.ok) throw new Error(`Failed to generate video from ${endpoint}`)
-		return (await res.json()) as T2VResponse
+		const data: T2VResponse = await res.json()
+		console.log('Video generation response:', data)
+		if (!res.ok || !data.success || !data.data) {
+			throw new Error(data.message || `Failed to generate video from ${endpoint}`)
+		}
+
+		return data
 	}
 
 	async postImageToImage(payload: I2IRequest): Promise<T2VResponse> {
@@ -38,13 +42,15 @@ class GenerateT2VService {
 			body: JSON.stringify(payload)
 		})
 
-		if (!res.ok) throw new Error(`Failed to generate video from ${endpoint}`)
-		return (await res.json()) as T2VResponse
+		const data: T2VResponse = await res.json()
+		if (!res.ok || !data.success || !data.data) {
+			throw new Error(data.message || `Failed to generate video from ${endpoint}`)
+		}
+
+		return data
 	}
 
 	async postAudioGeneration(payload: T2ARequest): Promise<T2AResponse> {
-		console.log('Sending request to generate T2A with payload:', payload)
-
 		const endpoint = '/api/generate/t2a'
 
 		const res = await fetch(endpoint, {
@@ -55,20 +61,26 @@ class GenerateT2VService {
 			body: JSON.stringify(payload)
 		})
 
-		if (!res.ok) throw new Error(`Failed to generate audio from ${endpoint}`)
-		return (await res.json()) as T2AResponse
+		const data: T2AResponse = await res.json()
+		if (!res.ok || !data.success || !data.data) {
+			throw new Error(data.message || `Failed to generate audio from ${endpoint}`)
+		}
+
+		return data
 	}
 
-	async getGenerationInfo(generationId: string): Promise<GetGenerationResponse> {
+	async getGenerationInfo(generationId: string): Promise<ApiResponse<GenerationDetails>> {
 		const res = await fetch(`${NEXT_PUBLIC_BASE_URL}/api/generate/${generationId}`, {
 			method: 'GET'
 		})
 
-		const data = (await res.json()) as GetGenerationResponse | GetGenerationError
-		if (!res.ok || !data.success) {
-			throw new Error((data as GetGenerationError).message || 'Unknown error')
+		const data: ApiResponse<GenerationDetails> = await res.json()
+
+		if (!res.ok || !data.success || !data.data) {
+			throw new Error(data.message || 'Unknown error')
 		}
-		return data as GetGenerationResponse
+
+		return data
 	}
 
 	async uploadImage(file: File): Promise<{ url: string; filename: string }> {
@@ -80,13 +92,15 @@ class GenerateT2VService {
 			body: formData
 		})
 
-		const data = (await res.json()) as ImageUploadResponse | ImageUploadError
+		const data: ImageUploadSuccess = await res.json()
 
-		if (!res.ok || !data.success) throw new Error(data.message)
+		if (!res.ok || !data.success || !data.data) {
+			throw new Error(data.message || 'Image upload failed')
+		}
 
 		return {
-			url: data.url,
-			filename: data.filename
+			url: data.data.url,
+			filename: data.data.filename
 		}
 	}
 }

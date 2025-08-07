@@ -3,7 +3,7 @@ import { MediaModal } from 'components/MediaModal/MediaModal'
 import { NEXT_PUBLIC_API_URL } from 'constants/CONST_API'
 import Image from 'next/image'
 import { memo, useCallback, useState } from 'react'
-import type { GenerationDetailsImgToImg } from 'types/IVideo.type'
+import type { GenerationDetailsImgToImg } from 'types/Generation.type'
 import { handleVibrate } from 'utils/handleVibrate'
 
 import { DownloadButton } from '@/ui/DownloadButton/DownloadButton'

@@ -4,7 +4,7 @@ import cn from 'clsx'
 import { NEXT_PUBLIC_API_URL } from 'constants/CONST_API'
 import Image from 'next/image'
 import { useCallback, useRef, useState } from 'react'
-import type { AudioGenerationDetails } from 'types/IVideo.type'
+import type { AudioGenerationDetails } from 'types/Generation.type'
 import { handleVibrate } from 'utils/handleVibrate'
 
 import { DownloadButton } from '@/ui/DownloadButton/DownloadButton'
